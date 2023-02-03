@@ -181,3 +181,45 @@ func (s *sTestDB) TestGetMapRCacheById(ctx context.Context, in model.TestGetById
 		Expire:      300,
 	})
 }
+
+// TestGetStructByIds
+//
+// @Title 按ID查询多条数据
+// @Description 按ID查询多条数据，返回struct
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-03 18:23:02
+// @receiver s
+// @param ctx
+// @param in
+// @param output
+// @return code
+// @return message
+// @return err
+func (s *sTestDB) TestGetStructByIds(ctx context.Context, in model.TestGetByIdsInput, output interface{}) (code int32, message string, err error) {
+	return utility.DBGetStructByIds(dao.DbTest.Ctx(ctx), utility.DBGetByIdsInput{
+		Column: "id",
+		In:     in.Ids,
+		Order:  "id desc",
+	}, output)
+}
+
+// TestGetMapByIds
+//
+// @Title 按ID查询多条数据
+// @Description 按ID查询多条数据，返回map
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-03 18:53:35
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sTestDB) TestGetMapByIds(ctx context.Context, in model.TestGetByIdsInput) (code int32, message string, output interface{}, err error) {
+	return utility.DBGetMapByIds(dao.DbTest.Ctx(ctx), utility.DBGetByIdsInput{
+		Column: "id",
+		In:     in.Ids,
+		Order:  "id desc",
+	})
+}

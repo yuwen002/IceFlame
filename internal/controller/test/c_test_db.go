@@ -6,6 +6,7 @@ import (
 	"ice_flame/api/test"
 	"ice_flame/internal/model"
 	"ice_flame/internal/service"
+	"strings"
 )
 
 var TestDB = cTestDB{}
@@ -252,5 +253,66 @@ func (c *cTestDB) TestGetMapRCacheById(ctx context.Context, req *test.DBGetMapRC
 		"message": message,
 		"data":    output,
 	})
+	return
+}
+
+// TestGetStructByIds
+//
+// @Title 按ID查询多条信息
+// @Description 按ID查询信息，返回类型struct数组
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-03 18:38:39
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cTestDB) TestGetStructByIds(ctx context.Context, req *test.DBGetStructByIdsReq) (res *test.DBGetStructByIdsRes, err error) {
+	var output []*model.TestGetByIdOutput
+	code, message, err := service.TestDB().TestGetStructByIds(ctx, model.TestGetByIdsInput{Ids: strings.Split(req.Ids, ",")}, &output)
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    output,
+	})
+
+	return
+}
+
+// TestGetMapByIds
+//
+// @Title 按ID查询多条信息
+// @Description 按ID查询信息，返回类型map数组
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-03 18:54:37
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cTestDB) TestGetMapByIds(ctx context.Context, req *test.DBGetMapByIdsReq) (res *test.DBGetMapByIdsRes, err error) {
+	code, message, output, err := service.TestDB().TestGetMapByIds(ctx, model.TestGetByIdsInput{Ids: strings.Split(req.Ids, ",")})
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    output,
+	})
+
 	return
 }

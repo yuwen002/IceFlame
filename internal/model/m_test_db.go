@@ -24,3 +24,11 @@ type TestGetByIdOutput struct {
 	Id       int64  `json:"id"`
 	TestData string `json:"test_data"`
 }
+
+// TestGetByIdsInput
+// @Description: 按ID查询多条信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-03 18:19:26
+type TestGetByIdsInput struct {
+	Ids interface{}
+}

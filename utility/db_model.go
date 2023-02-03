@@ -63,10 +63,10 @@ type DBGetByIdInput struct {
 // @Author liuxingyu <yuwen002@163.com>
 // @TestData 2023-01-31 23:50:39
 type DBGetByIdsInput struct {
-	Field  string        // 查询字段
-	Column string        // In主键字段
-	In     []interface{} // In条件信息
-	Order  string        // 排序
+	Field  string      // 查询字段
+	Column string      // In主键字段
+	In     interface{} // In条件信息
+	Order  string      // 排序
 }
 
 // DBGetOneByWhereInput
@@ -620,7 +620,7 @@ func (db *DB) ConditionGetByIds(condition DBGetByIdsInput) *gdb.Model {
 // @return code
 // @return message
 // @return err
-func (db *DB) GetStructByIds(condition DBGetByIdsInput, output []interface{}) (code int32, message string, err error) {
+func (db *DB) GetStructByIds(condition DBGetByIdsInput, output interface{}) (code int32, message string, err error) {
 
 	err = db.ConditionGetByIds(condition).WhereIn(condition.Column, condition.In).Scan(output)
 	if err != nil {
@@ -646,7 +646,7 @@ func (db *DB) GetStructByIds(condition DBGetByIdsInput, output []interface{}) (c
 // @return message
 // @return output
 // @return err
-func (db *DB) GetMapByIds(condition DBGetByIdsInput) (code int32, message string, output gdb.List, err error) {
+func (db *DB) GetMapByIds(condition DBGetByIdsInput) (code int32, message string, output interface{}, err error) {
 	// 数据查询
 	res, err := db.ConditionGetByIds(condition).WhereIn(condition.Column, condition.In).All()
 	if err != nil {
@@ -1235,7 +1235,7 @@ func DBGetMapRCacheById(m *gdb.Model, condition DBGetByIdInput) (code int32, mes
 // @return code
 // @return message
 // @return err
-func DBGetStructByIds(m *gdb.Model, condition DBGetByIdsInput, output []interface{}) (code int32, message string, err error) {
+func DBGetStructByIds(m *gdb.Model, condition DBGetByIdsInput, output interface{}) (code int32, message string, err error) {
 	db := DB{M: m}
 	return db.GetStructByIds(condition, output)
 }
@@ -1252,7 +1252,7 @@ func DBGetStructByIds(m *gdb.Model, condition DBGetByIdsInput, output []interfac
 // @return message
 // @return output
 // @return err
-func DBGetMapByIds(m *gdb.Model, condition DBGetByIdsInput) (code int32, message string, output gdb.List, err error) {
+func DBGetMapByIds(m *gdb.Model, condition DBGetByIdsInput) (code int32, message string, output interface{}, err error) {
 	db := DB{M: m}
 	return db.GetMapByIds(condition)
 }
