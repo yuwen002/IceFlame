@@ -32,3 +32,32 @@ type DBGetStructGCacheByIdReq struct {
 
 type DBGetStructGCacheByIdRes struct {
 }
+
+type DBGetStructRCacheByIdReq struct {
+	g.Meta `path:"/test/get_struct_rcache_by_id" tags:"测试GetStructRCacheById" method:"post" summary:"测试GetStructRCacheById，按ID返回数据,redis缓存"`
+	Id     int64 `p:"id" v:"required#ID不能为空"`
+}
+
+type DBGetStructRCacheByIdRes struct {
+}
+
+type DBGetMapByIdReq struct {
+	g.Meta `path:"/test/get_map_by_id" tags:"测试GetMapById" method:"post" summary:"测试GetMapById，按ID返回数据"`
+	Id     int64 `p:"id" v:"required#ID不能为空"`
+}
+type DBGetMapByIdRes struct {
+}
+
+type DBGetMapGCacheByIdReq struct {
+	g.Meta `path:"/test/get_map_gcache_by_id" tags:"测试GetMapGCacheById" method:"post" summary:"测试GetMapGCacheById，按ID返回数据"`
+	Id     int64 `p:"id" v:"required#ID不能为空"`
+}
+type DBGetMapGCacheByIdRes struct {
+}
+
+type DBGetMapRCacheByIdReq struct {
+	g.Meta `path:"/test/get_map_rcache_by_id" tags:"测试GetMapRCacheById" method:"post" summary:"测试GetMapRCacheById，按ID返回数据"`
+	Id     int64 `p:"id" v:"required#ID不能为空"`
+}
+type DBGetMapRCacheByIdRes struct {
+}

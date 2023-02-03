@@ -135,3 +135,122 @@ func (c *cTestDB) TestGetStructGCacheById(ctx context.Context, req *test.DBGetSt
 
 	return
 }
+
+// TestGetStructRCacheById
+//
+// @Title 按ID查询信息
+// @Description 按ID查询信息，带redis缓存，返回类型struct
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-03 17:08:15
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c cTestDB) TestGetStructRCacheById(ctx context.Context, req *test.DBGetStructRCacheByIdReq) (res *test.DBGetStructRCacheByIdRes, err error) {
+	var output *model.TestGetByIdOutput
+	code, message, err := service.TestDB().TestGetStructRCacheById(ctx, model.TestGetByIdInput{Id: req.Id}, &output)
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    output,
+	})
+
+	return
+}
+
+// TestGetMapById
+//
+// @Title 按ID查询信息
+// @Description 按ID查询信息，返回类型map
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-03 17:14:45
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cTestDB) TestGetMapById(ctx context.Context, req *test.DBGetMapByIdReq) (res *test.DBGetMapByIdRes, err error) {
+	code, message, output, err := service.TestDB().TestGetMapById(ctx, model.TestGetByIdInput{Id: req.Id})
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    output,
+	})
+
+	return
+}
+
+// TestGetMapGCacheById
+//
+// @Title 按ID查询信息
+// @Description 按ID查询信息，带gcache缓存，返回类型map
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-03 17:28:33
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cTestDB) TestGetMapGCacheById(ctx context.Context, req *test.DBGetMapGCacheByIdReq) (res *test.DBGetMapGCacheByIdRes, err error) {
+	code, message, output, err := service.TestDB().TestGetMapGCacheById(ctx, model.TestGetByIdInput{Id: req.Id})
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    output,
+	})
+	return
+}
+
+// TestGetMapRCacheById
+//
+// @Title 按ID查询信息
+// @Description 按ID查询信息，带redis缓存，返回类型map
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-03 17:40:58
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cTestDB) TestGetMapRCacheById(ctx context.Context, req *test.DBGetMapRCacheByIdReq) (res *test.DBGetMapRCacheByIdRes, err error) {
+	code, message, output, err := service.TestDB().TestGetMapRCacheById(ctx, model.TestGetByIdInput{Id: req.Id})
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    output,
+	})
+	return
+}

@@ -99,3 +99,85 @@ func (s *sTestDB) TestGetStructGCacheById(ctx context.Context, in model.TestGetB
 		Expire:      300,
 	}, output)
 }
+
+// TestGetStructRCacheById
+//
+// @Title 按ID查询数据
+// @Description  按ID查询数据，redis缓存,返回struct
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-03 16:55:09
+// @receiver s
+// @param ctx
+// @param in
+// @param output
+func (s *sTestDB) TestGetStructRCacheById(ctx context.Context, in model.TestGetByIdInput, output interface{}) (code int32, message string, err error) {
+	return utility.DBGetStructRCacheById(dao.DbTest.Ctx(ctx), utility.DBGetByIdInput{
+		Where:       in.Id,
+		CacheKey:    dao.DbTest.Table() + ":id-" + gconv.String(in.Id),
+		RedisConfig: "test",
+		Expire:      300,
+	}, output)
+}
+
+// TestGetMapById
+//
+// @Title 按ID查询数据
+// @Description  按ID查询数据，返回map
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-03 17:07:38
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sTestDB) TestGetMapById(ctx context.Context, in model.TestGetByIdInput) (code int32, message string, output interface{}, err error) {
+	return utility.DBGetMapById(dao.DbTest.Ctx(ctx), utility.DBGetByIdInput{Where: in.Id})
+}
+
+// TestGetMapGCacheById
+//
+// @Title 按ID查询数据
+// @Description  按ID查询数据，gcache缓存，返回map
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-03 17:22:00
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sTestDB) TestGetMapGCacheById(ctx context.Context, in model.TestGetByIdInput) (code int32, message string, output interface{}, err error) {
+	return utility.DBGetMapGCacheById(dao.DbTest.Ctx(ctx), utility.DBGetByIdInput{
+		Where:       "id=?",
+		Args:        in.Id,
+		CacheKey:    dao.DbTest.Table() + ":id-" + gconv.String(in.Id),
+		RedisConfig: "test",
+		Expire:      300,
+	})
+}
+
+// TestGetMapRCacheById
+//
+// @Title 按ID查询数据
+// @Description  按ID查询数据，redis缓存，返回map
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-03 17:38:49
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sTestDB) TestGetMapRCacheById(ctx context.Context, in model.TestGetByIdInput) (code int32, message string, output interface{}, err error) {
+	return utility.DBGetMapRCacheById(dao.DbTest.Ctx(ctx), utility.DBGetByIdInput{
+		Where:       "id=?",
+		Args:        in.Id,
+		CacheKey:    dao.DbTest.Table() + ":id-" + gconv.String(in.Id),
+		RedisConfig: "test",
+		Expire:      300,
+	})
+}

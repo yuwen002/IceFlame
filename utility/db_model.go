@@ -222,7 +222,7 @@ func (db *DB) GetStructRedisCache(cache RedisData, output interface{}) (code int
 		return 1, "缓存信息不存在", nil
 	}
 
-	err = res.Struct(&output)
+	err = res.Struct(output)
 	if err != nil {
 		return -1, "", err
 	}
@@ -1151,7 +1151,7 @@ func DBGetStructById(m *gdb.Model, condition DBGetByIdInput, output interface{})
 // @return message
 // @return err
 func DBGetStructGCacheById(m *gdb.Model, condition DBGetByIdInput, output interface{}) (code int32, message string, err error) {
-	db := DB{M: m}
+	db := DB{M: m, RedisConfig: condition.RedisConfig}
 	return db.GetStructGCacheById(condition, output)
 }
 

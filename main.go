@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "ice_flame/internal/logic"
 	_ "ice_flame/internal/packed"
 
 	"github.com/gogf/gf/v2/os/gctx"

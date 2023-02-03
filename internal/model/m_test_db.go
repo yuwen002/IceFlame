@@ -21,6 +21,6 @@ type TestGetByIdInput struct {
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-02-03 12:55:58
 type TestGetByIdOutput struct {
-	Id       int64
-	TestData string
+	Id       int64  `json:"id"`
+	TestData string `json:"test_data"`
 }
