@@ -22,12 +22,14 @@ type DbTestDao struct {
 type DbTestColumns struct {
 	Id       string // 自增ID
 	TestData string // 数据
+	Title    string // 标题
 }
 
 // dbTestColumns holds the columns for table db_test.
 var dbTestColumns = DbTestColumns{
 	Id:       "id",
 	TestData: "test_data",
+	Title:    "title",
 }
 
 // NewDbTestDao creates and returns a new DAO object for table data access.

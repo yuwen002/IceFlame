@@ -32,3 +32,22 @@ type TestGetByIdOutput struct {
 type TestGetByIdsInput struct {
 	Ids interface{}
 }
+
+// TestGetOneByWhereInput
+// @Description:条件查询单条信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-02-05 23:29:27
+type TestGetOneByWhereInput struct {
+	Where string
+	Args  string
+}
+
+// TestGetOneByWhereOutput
+// @Description:条件查询单条信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-02-05 23:29:37
+type TestGetOneByWhereOutput struct {
+	Id       int64  `json:"id"`
+	TestData string `json:"test_data"`
+	Title    string `json:"title"`
+}

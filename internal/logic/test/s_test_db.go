@@ -223,3 +223,24 @@ func (s *sTestDB) TestGetMapByIds(ctx context.Context, in model.TestGetByIdsInpu
 		Order:  "id desc",
 	})
 }
+
+// TestGetOneStructByWhere
+//
+// @Title 条件查询单条信息
+// @Description 条件查询单条信息，返回struct
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-02-05 23:30:06
+// @receiver s
+// @param ctx
+// @param in
+// @param output
+// @return code
+// @return message
+// @return err
+func (s *sTestDB) TestGetOneStructByWhere(ctx context.Context, in model.TestGetOneByWhereInput, output interface{}) (code int32, message string, err error) {
+	return utility.DBGetOneStructByWhere(dao.DbTest.Ctx(ctx), utility.DBGetOneByWhereInput{
+		Where: in.Where,
+		Args:  in.Args,
+		Order: "id desc",
+	}, output)
+}

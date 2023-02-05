@@ -71,3 +71,10 @@ type DBGetMapByIdsReq struct {
 }
 type DBGetMapByIdsRes struct {
 }
+
+type DBGetOneStructByWhereReq struct {
+	g.Meta `path:"/test/get_map_by_ids" tags:"测试GetMapByIds" method:"post" summary:"测试GetMapByIds，按ID返回数据"`
+	Title  string `p:"title" v:"required#标题不能为空"`
+}
+type DBGetOneStructByWhereRes struct {
+}

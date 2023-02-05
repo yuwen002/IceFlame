@@ -8,4 +8,5 @@ package entity
 type DbTest struct {
 	Id       uint   `json:"id"        ` // 自增ID
 	TestData string `json:"test_data" ` // 数据
+	Title    string `json:"title"     ` // 标题
 }

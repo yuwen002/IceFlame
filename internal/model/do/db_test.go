@@ -13,4 +13,5 @@ type DbTest struct {
 	g.Meta   `orm:"table:db_test, do:true"`
 	Id       interface{} // 自增ID
 	TestData interface{} // 数据
+	Title    interface{} // 标题
 }

@@ -148,7 +148,7 @@ func (c *cTestDB) TestGetStructGCacheById(ctx context.Context, req *test.DBGetSt
 // @param req
 // @return res
 // @return err
-func (c cTestDB) TestGetStructRCacheById(ctx context.Context, req *test.DBGetStructRCacheByIdReq) (res *test.DBGetStructRCacheByIdRes, err error) {
+func (c *cTestDB) TestGetStructRCacheById(ctx context.Context, req *test.DBGetStructRCacheByIdReq) (res *test.DBGetStructRCacheByIdRes, err error) {
 	var output *model.TestGetByIdOutput
 	code, message, err := service.TestDB().TestGetStructRCacheById(ctx, model.TestGetByIdInput{Id: req.Id}, &output)
 	var json = g.RequestFromCtx(ctx).Response
@@ -300,6 +300,41 @@ func (c *cTestDB) TestGetStructByIds(ctx context.Context, req *test.DBGetStructB
 // @return err
 func (c *cTestDB) TestGetMapByIds(ctx context.Context, req *test.DBGetMapByIdsReq) (res *test.DBGetMapByIdsRes, err error) {
 	code, message, output, err := service.TestDB().TestGetMapByIds(ctx, model.TestGetByIdsInput{Ids: strings.Split(req.Ids, ",")})
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    output,
+	})
+
+	return
+}
+
+// TestGetOneStructByWhere
+//
+// @Title 条件查询单条信息
+// @Description 测试条件查询单条信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-02-05 23:30:39
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cTestDB) TestGetOneStructByWhere(ctx context.Context, req *test.DBGetOneStructByWhereReq) (res *test.DBGetOneStructByWhereRes, err error) {
+	var output []*model.TestGetByIdOutput
+	code, message, err := service.TestDB().TestGetOneStructByWhere(ctx, model.TestGetOneByWhereInput{
+		Where: "tetle=?",
+		Args:  req.Title,
+	}, &output)
+
 	var json = g.RequestFromCtx(ctx).Response
 	if err != nil {
 		json.WriteJsonExit(g.Map{
