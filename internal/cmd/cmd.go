@@ -36,6 +36,8 @@ var (
 					test.TestDB.TestGetMapRCacheById,
 					test.TestDB.TestGetStructByIds,
 					test.TestDB.TestGetMapByIds,
+					test.TestDB.TestGetOneStructByWhere,
+					test.TestDB.TestGetOneMapByWhere,
 				)
 			})
 			s.Run()

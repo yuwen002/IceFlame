@@ -51,3 +51,9 @@ type TestGetOneByWhereOutput struct {
 	TestData string `json:"test_data"`
 	Title    string `json:"title"`
 }
+
+type TestGetAllByWhereInput struct {
+	Where string
+	Args  string
+	Limit int
+}

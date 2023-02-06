@@ -320,7 +320,7 @@ func (c *cTestDB) TestGetMapByIds(ctx context.Context, req *test.DBGetMapByIdsRe
 // TestGetOneStructByWhere
 //
 // @Title 条件查询单条信息
-// @Description 测试条件查询单条信息
+// @Description 测试条件查询单条信息，返回struct
 // @Author liuxingyu <yuwen002@163.com>
 // @Data 2023-02-05 23:30:39
 // @receiver c
@@ -329,9 +329,9 @@ func (c *cTestDB) TestGetMapByIds(ctx context.Context, req *test.DBGetMapByIdsRe
 // @return res
 // @return err
 func (c *cTestDB) TestGetOneStructByWhere(ctx context.Context, req *test.DBGetOneStructByWhereReq) (res *test.DBGetOneStructByWhereRes, err error) {
-	var output []*model.TestGetByIdOutput
+	var output *model.TestGetOneByWhereOutput
 	code, message, err := service.TestDB().TestGetOneStructByWhere(ctx, model.TestGetOneByWhereInput{
-		Where: "tetle=?",
+		Where: "title=?",
 		Args:  req.Title,
 	}, &output)
 
@@ -348,6 +348,65 @@ func (c *cTestDB) TestGetOneStructByWhere(ctx context.Context, req *test.DBGetOn
 		"message": message,
 		"data":    output,
 	})
+
+	return
+}
+
+// TestGetOneMapByWhere
+//
+// @Title 条件查询单条信息
+// @Description 测试条件查询单条信息，返回map
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-06 12:16:16
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cTestDB) TestGetOneMapByWhere(ctx context.Context, req *test.DBGetOneMapByWhereReq) (res *test.DBGetOneMapByWhereRes, err error) {
+	code, message, output, err := service.TestDB().TestGetOneMapByWhere(ctx, model.TestGetOneByWhereInput{
+		Where: "title=?",
+		Args:  req.Title,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    output,
+	})
+
+	return
+}
+
+func (c *cTestDB) TestDBGetAllStructByWhere(ctx context.Context, req *test.DBGetAllStructByWhereReq) (res *test.DBGetAllStructByWhereRes, err error) {
+	//var output []*model.TestGetOneByWhereOutput
+	//code, message, err := service.TestDB().TestDBGetAllStructByWhereInput(ctx, model.TestGetAllByWhereInput{
+	//	Where: "classify=?",
+	//	Args:  req.Classify,
+	//	Limit: 0,
+	//}, &output)
+	//
+	//var json = g.RequestFromCtx(ctx).Response
+	//if err != nil {
+	//	json.WriteJsonExit(g.Map{
+	//		"code":    code,
+	//		"message": err.Error(),
+	//	})
+	//}
+	//
+	//json.WriteJsonExit(g.Map{
+	//	"code":    code,
+	//	"message": message,
+	//	"data":    output,
+	//})
 
 	return
 }

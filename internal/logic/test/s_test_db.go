@@ -244,3 +244,45 @@ func (s *sTestDB) TestGetOneStructByWhere(ctx context.Context, in model.TestGetO
 		Order: "id desc",
 	}, output)
 }
+
+// TestGetOneMapByWhere
+//
+// @Title 条件查询单条信息
+// @Description 条件查询单条信息，返回map
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-06 15:08:16
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sTestDB) TestGetOneMapByWhere(ctx context.Context, in model.TestGetOneByWhereInput) (code int32, message string, output interface{}, err error) {
+	return utility.DBGetOneMapByWhere(dao.DbTest.Ctx(ctx), utility.DBGetOneByWhereInput{
+		Where: in.Where,
+		Args:  in.Args,
+	})
+}
+
+// TestDBGetAllStructByWhereInput
+//
+// @Title 条件查询多条信息
+// @Description 条件查询多条信息，返回struct
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-06 17:14:25
+// @receiver s
+// @param ctx
+// @param in
+// @param output
+// @return code
+// @return message
+// @return err
+func (s *sTestDB) TestDBGetAllStructByWhereInput(ctx context.Context, in model.TestGetAllByWhereInput, output []interface{}) (code int32, message string, err error) {
+	var condition utility.DBGetAllByWhereInput
+	condition.Where = in.Where
+	condition.Args = in.Args
+	condition.PageType = 1
+	condition.Length = in.Limit
+	return utility.DBGetAllStructByWhere(dao.DbTest.Ctx(ctx), condition, output)
+}

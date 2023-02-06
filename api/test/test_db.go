@@ -73,8 +73,22 @@ type DBGetMapByIdsRes struct {
 }
 
 type DBGetOneStructByWhereReq struct {
-	g.Meta `path:"/test/get_map_by_ids" tags:"测试GetMapByIds" method:"post" summary:"测试GetMapByIds，按ID返回数据"`
+	g.Meta `path:"/test/get_one_struct_by_where" tags:"测试GetMapByIds" method:"post" summary:"测试GetMapByIds，按ID返回数据"`
 	Title  string `p:"title" v:"required#标题不能为空"`
 }
 type DBGetOneStructByWhereRes struct {
+}
+
+type DBGetOneMapByWhereReq struct {
+	g.Meta `path:"/test/get_one_map_by_where" tags:"测试GetMapByIds" method:"post" summary:"测试GetMapByIds，按ID返回数据"`
+	Title  string `p:"title" v:"required#标题不能为空"`
+}
+type DBGetOneMapByWhereRes struct {
+}
+
+type DBGetAllStructByWhereReq struct {
+	g.Meta   `path:"/test/get_one_struct_by_where" tags:"测试GetMapByIds" method:"post" summary:"测试GetMapByIds，按ID返回数据"`
+	Classify string `p:"classify" v:"required#分类不能为空"`
+}
+type DBGetAllStructByWhereRes struct {
 }

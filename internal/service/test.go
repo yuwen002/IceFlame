@@ -23,6 +23,8 @@ type (
 		TestGetStructByIds(ctx context.Context, in model.TestGetByIdsInput, output interface{}) (code int32, message string, err error)
 		TestGetMapByIds(ctx context.Context, in model.TestGetByIdsInput) (code int32, message string, output interface{}, err error)
 		TestGetOneStructByWhere(ctx context.Context, in model.TestGetOneByWhereInput, output interface{}) (code int32, message string, err error)
+		TestGetOneMapByWhere(ctx context.Context, in model.TestGetOneByWhereInput) (code int32, message string, output interface{}, err error)
+		TestDBGetAllStructByWhereInput(ctx context.Context, in model.TestGetAllByWhereInput, output []interface{}) (code int32, message string, err error)
 	}
 )
 
