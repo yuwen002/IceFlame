@@ -2,7 +2,6 @@ package utility
 
 import (
 	"context"
-	"fmt"
 	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/database/gredis"
 	"github.com/gogf/gf/v2/frame/g"
@@ -628,8 +627,7 @@ func (db *DB) GetStructByIds(condition DBGetByIdsInput, output interface{}) (cod
 	if err != nil {
 		return -1, "", err
 	}
-	fmt.Println(output)
-	fmt.Println(reflect.ValueOf(output).Elem().IsZero())
+
 	if reflect.ValueOf(output).Elem().Len() == 0 {
 		return 1, "无查询信息", nil
 	}
