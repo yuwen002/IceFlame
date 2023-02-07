@@ -38,6 +38,8 @@ var (
 					test.TestDB.TestGetMapByIds,
 					test.TestDB.TestGetOneStructByWhere,
 					test.TestDB.TestGetOneMapByWhere,
+					test.TestDB.TestDBGetAllStructByWhere,
+					test.TestDB.TestDBGetAllMapByWhere,
 				)
 			})
 			s.Run()

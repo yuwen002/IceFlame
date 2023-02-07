@@ -386,27 +386,73 @@ func (c *cTestDB) TestGetOneMapByWhere(ctx context.Context, req *test.DBGetOneMa
 	return
 }
 
+// TestDBGetAllStructByWhere
+//
+// @Title 条件查询多条信息
+// @Description 测试条件查询多条信息，返回struct
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-07 11:10:21
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
 func (c *cTestDB) TestDBGetAllStructByWhere(ctx context.Context, req *test.DBGetAllStructByWhereReq) (res *test.DBGetAllStructByWhereRes, err error) {
-	//var output []*model.TestGetOneByWhereOutput
-	//code, message, err := service.TestDB().TestDBGetAllStructByWhereInput(ctx, model.TestGetAllByWhereInput{
-	//	Where: "classify=?",
-	//	Args:  req.Classify,
-	//	Limit: 0,
-	//}, &output)
-	//
-	//var json = g.RequestFromCtx(ctx).Response
-	//if err != nil {
-	//	json.WriteJsonExit(g.Map{
-	//		"code":    code,
-	//		"message": err.Error(),
-	//	})
-	//}
-	//
-	//json.WriteJsonExit(g.Map{
-	//	"code":    code,
-	//	"message": message,
-	//	"data":    output,
-	//})
+	var output []*model.TestGetAllByWhereOutput
+	code, message, err := service.TestDB().TestDBGetAllStructByWhereInput(ctx, model.TestGetAllByWhereInput{
+		Where: "classify=?",
+		Args:  req.Classify,
+		Limit: 0,
+	}, &output)
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    output,
+	})
+
+	return
+}
+
+// TestDBGetAllMapByWhere
+//
+// @Title 条件查询多条信息
+// @Description 测试条件查询多条信息，返回map
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-07 11:20:18
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cTestDB) TestDBGetAllMapByWhere(ctx context.Context, req *test.DBGetAllMapByWhereReq) (res *test.DBGetAllMapByWhereRes, err error) {
+	code, message, output, err := service.TestDB().TestDBGetAllMapByWhereInput(ctx, model.TestGetAllByWhereInput{
+		Where: "classify=?",
+		Args:  req.Classify,
+		Limit: 10,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    output,
+	})
 
 	return
 }

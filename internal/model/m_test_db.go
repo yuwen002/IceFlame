@@ -52,8 +52,22 @@ type TestGetOneByWhereOutput struct {
 	Title    string `json:"title"`
 }
 
+// TestGetAllByWhereInput
+// @Description:条件查询多条信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-07 11:09:42
 type TestGetAllByWhereInput struct {
 	Where string
 	Args  string
 	Limit int
+}
+
+// TestGetAllByWhereOutput
+// @Description: 条件查询单条信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-07 11:09:56
+type TestGetAllByWhereOutput struct {
+	Id       int64  `json:"id"`
+	TestData string `json:"test_data"`
+	Title    string `json:"title"`
 }

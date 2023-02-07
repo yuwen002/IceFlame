@@ -806,14 +806,14 @@ func (db *DB) ConditionGetAllByWhere(condition DBGetAllByWhereInput) *gdb.Model 
 // @return code
 // @return message
 // @return err
-func (db *DB) GetAllStructByWhere(condition DBGetAllByWhereInput, output []interface{}) (code int32, message string, err error) {
+func (db *DB) GetAllStructByWhere(condition DBGetAllByWhereInput, output interface{}) (code int32, message string, err error) {
 	// 查询数据
 	err = db.ConditionGetAllByWhere(condition).Scan(output)
 	if err != nil {
 		return -1, "", err
 	}
 
-	if len(output) == 0 {
+	if reflect.ValueOf(output).Elem().IsZero() {
 		return 1, "查询数据不存在", nil
 	}
 
@@ -1304,7 +1304,7 @@ func DBGetOneMapByWhere(m *gdb.Model, condition DBGetOneByWhereInput) (code int3
 // @return code
 // @return message
 // @return err
-func DBGetAllStructByWhere(m *gdb.Model, condition DBGetAllByWhereInput, output []interface{}) (code int32, message string, err error) {
+func DBGetAllStructByWhere(m *gdb.Model, condition DBGetAllByWhereInput, output interface{}) (code int32, message string, err error) {
 	db := DB{M: m}
 	return db.GetAllStructByWhere(condition, output)
 }

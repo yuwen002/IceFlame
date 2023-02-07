@@ -59,36 +59,43 @@ type DBGetMapRCacheByIdRes struct {
 }
 
 type DBGetStructByIdsReq struct {
-	g.Meta `path:"/test/get_struct_by_ids" tags:"测试GetStructByIds" method:"post" summary:"测试GetStructByIds，按ID返回数据"`
+	g.Meta `path:"/test/get_struct_by_ids" tags:"测试GetStructByIds" method:"post" summary:"测试GetStructByIds，按Ids返回数据"`
 	Ids    string `p:"ids" v:"required#ID不能为空"`
 }
 type DBGetStructByIdsRes struct {
 }
 
 type DBGetMapByIdsReq struct {
-	g.Meta `path:"/test/get_map_by_ids" tags:"测试GetMapByIds" method:"post" summary:"测试GetMapByIds，按ID返回数据"`
+	g.Meta `path:"/test/get_map_by_ids" tags:"测试GetMapByIds" method:"post" summary:"测试GetMapByIds，按Ids返回数据"`
 	Ids    string `p:"ids" v:"required#ID不能为空"`
 }
 type DBGetMapByIdsRes struct {
 }
 
 type DBGetOneStructByWhereReq struct {
-	g.Meta `path:"/test/get_one_struct_by_where" tags:"测试GetMapByIds" method:"post" summary:"测试GetMapByIds，按ID返回数据"`
+	g.Meta `path:"/test/get_one_struct_by_where" tags:"测试GetMapByIds" method:"post" summary:"测试GetMapByIds，按条件返回数据"`
 	Title  string `p:"title" v:"required#标题不能为空"`
 }
 type DBGetOneStructByWhereRes struct {
 }
 
 type DBGetOneMapByWhereReq struct {
-	g.Meta `path:"/test/get_one_map_by_where" tags:"测试GetMapByIds" method:"post" summary:"测试GetMapByIds，按ID返回数据"`
+	g.Meta `path:"/test/get_one_map_by_where" tags:"测试GetMapByIds" method:"post" summary:"测试GetMapByIds，按条件返回数据"`
 	Title  string `p:"title" v:"required#标题不能为空"`
 }
 type DBGetOneMapByWhereRes struct {
 }
 
 type DBGetAllStructByWhereReq struct {
-	g.Meta   `path:"/test/get_one_struct_by_where" tags:"测试GetMapByIds" method:"post" summary:"测试GetMapByIds，按ID返回数据"`
+	g.Meta   `path:"/test/get_all_struct_by_where" tags:"测试GetAllStructByWhere" method:"post" summary:"测试GetAllStructByWhere，按条件返回数据"`
 	Classify string `p:"classify" v:"required#分类不能为空"`
 }
 type DBGetAllStructByWhereRes struct {
+}
+
+type DBGetAllMapByWhereReq struct {
+	g.Meta   `path:"/test/get_all_map_by_where" tags:"测试GetAllMapByWhere" method:"post" summary:"测试GetAllMapByWhere，按条件返回数据"`
+	Classify string `p:"classify" v:"required#分类不能为空"`
+}
+type DBGetAllMapByWhereRes struct {
 }
