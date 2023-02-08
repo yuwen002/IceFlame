@@ -411,3 +411,43 @@ func (s *sTestDB) TestDBModifyByWhere(ctx context.Context, in model.TestModifyBy
 func (s *sTestDB) TestDBDelById(ctx context.Context, in model.TestDelByIdInput) (code int32, message string, err error) {
 	return utility.DBDelById(dao.DbTest.Ctx(ctx), utility.DBDelByIdInput{Where: in.Id})
 }
+
+// TestDBDelByIds
+//
+// @Title 按ID删除多条数据
+// @Description 按ID删除多条数据
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-08 16:45:10
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sTestDB) TestDBDelByIds(ctx context.Context, in model.TestDelByIdsInput) (code int32, message string, err error) {
+	return utility.DBDelByIds(dao.DbTest.Ctx(ctx), utility.DBDelByIdsInput{
+		Column: "id",
+		In:     in.Ids,
+	})
+}
+
+// TestDBDelByWhere
+//
+// @Title 按条件删除数据
+// @Description 按条件删除数据
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-08 16:04:40
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sTestDB) TestDBDelByWhere(ctx context.Context, in model.TestDelByWhereInput) (code int32, message string, err error) {
+	return utility.DBDelByWhere(dao.DbTest.Ctx(ctx), utility.DBDelByWhereInput{
+		Where:    in.Where,
+		Args:     in.Args,
+		PageType: 1,
+		DBLimit:  utility.DBLimit{Offset: in.Limit},
+	})
+}

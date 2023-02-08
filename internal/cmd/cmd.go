@@ -45,6 +45,8 @@ var (
 					test.TestDB.TestDBModifyRCacheById,
 					test.TestDB.TestDBModifyByWhere,
 					test.TestDB.TestDBDelById,
+					test.TestDB.TestDBDelByIds,
+					test.TestDB.TestDBDelByWhere,
 				)
 			})
 			s.Run()

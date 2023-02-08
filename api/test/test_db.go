@@ -73,14 +73,14 @@ type DBGetMapByIdsRes struct {
 }
 
 type DBGetOneStructByWhereReq struct {
-	g.Meta `path:"/test/get_one_struct_by_where" tags:"测试GetMapByIds" method:"post" summary:"测试GetMapByIds，按条件返回数据"`
+	g.Meta `path:"/test/get_one_struct_by_where" tags:"测试GetOneStructByWhere" method:"post" summary:"测试GetOneStructByWhere，按条件返回数据"`
 	Title  string `p:"title" v:"required#标题不能为空"`
 }
 type DBGetOneStructByWhereRes struct {
 }
 
 type DBGetOneMapByWhereReq struct {
-	g.Meta `path:"/test/get_one_map_by_where" tags:"测试GetMapByIds" method:"post" summary:"测试GetMapByIds，按条件返回数据"`
+	g.Meta `path:"/test/get_one_map_by_where" tags:"测试GetOneMapByWhere" method:"post" summary:"测试GetOneMapByWhere，按条件返回数据"`
 	Title  string `p:"title" v:"required#标题不能为空"`
 }
 type DBGetOneMapByWhereRes struct {
@@ -141,8 +141,22 @@ type DBModifyByWhereRes struct {
 }
 
 type DBDelByIdReq struct {
-	g.Meta `path:"/test/del_by_id" tags:"测试DelById" method:"delete" summary:"测试DelById，按条件删除数据"`
+	g.Meta `path:"/test/del_by_id" tags:"测试DelById" method:"delete" summary:"测试DelById，按ID删除数据"`
 	Id     int64 `p:"id" v:"required#ID不能为空"`
 }
 type DBDelByIdRes struct {
+}
+
+type DBDelByIdsReq struct {
+	g.Meta `path:"/test/del_by_ids" tags:"测试DelByIds" method:"delete" summary:"测试DelByIds，按ID删除多条数据"`
+	Ids    string `p:"ids" v:"required#ID不能为空"`
+}
+type DBDelByIdsRes struct {
+}
+
+type DBDelByWhereReq struct {
+	g.Meta   `path:"/test/del_by_where" tags:"测试DelByWhere" method:"delete" summary:"测试DelByWhere，按条件删除数据"`
+	Classify string `p:"classify" v:"required#分类不能为空"`
+}
+type DBDelByWhereRes struct {
 }

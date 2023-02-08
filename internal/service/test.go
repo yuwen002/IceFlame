@@ -31,6 +31,8 @@ type (
 		TestDBModifyRCacheById(ctx context.Context, in model.TestModifyByIdInput) (code int32, message string, err error)
 		TestDBModifyByWhere(ctx context.Context, in model.TestModifyByWhereInput) (code int32, message string, err error)
 		TestDBDelById(ctx context.Context, in model.TestDelByIdInput) (code int32, message string, err error)
+		TestDBDelByIds(ctx context.Context, in model.TestDelByIdsInput) (code int32, message string, err error)
+		TestDBDelByWhere(ctx context.Context, in model.TestDelByWhereInput) (code int32, message string, err error)
 	}
 )
 

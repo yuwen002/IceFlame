@@ -93,6 +93,28 @@ type TestModifyByWhereInput struct {
 	Limit int
 }
 
+// TestDelByIdInput
+// @Description: 按ID删除数据
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-08 15:59:44
 type TestDelByIdInput struct {
 	Id int64
+}
+
+// TestDelByIdsInput
+// @Description: 按ID删除多条数据
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-08 16:43:23
+type TestDelByIdsInput struct {
+	Ids interface{}
+}
+
+// TestDelByWhereInput
+// @Description: 按条件删除数据
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-08 16:00:29
+type TestDelByWhereInput struct {
+	Where string
+	Args  string
+	Limit int
 }

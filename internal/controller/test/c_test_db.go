@@ -637,3 +637,66 @@ func (c *cTestDB) TestDBDelById(ctx context.Context, req *test.DBDelByIdReq) (re
 
 	return
 }
+
+// TestDBDelByIds
+//
+// @Title 按ID删除多条信息
+// @Description 按ID删除多条信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-08 16:47:51
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cTestDB) TestDBDelByIds(ctx context.Context, req *test.DBDelByIdsReq) (res *test.DBDelByIdsRes, err error) {
+	code, message, err := service.TestDB().TestDBDelByIds(ctx, model.TestDelByIdsInput{Ids: req.Ids})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}
+
+// TestDBDelByWhere
+//
+// @Title 按条件删除信息
+// @Description 按条件删除信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-08 16:53:39
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cTestDB) TestDBDelByWhere(ctx context.Context, req *test.DBDelByWhereReq) (res *test.DBDelByWhereRes, err error) {
+	code, message, err := service.TestDB().TestDBDelByWhere(ctx, model.TestDelByWhereInput{
+		Where: "classify=?",
+		Args:  req.Classify,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}

@@ -135,6 +135,21 @@ type DBDelByIdInput struct {
 	RedisConfig string      // 缓存配置信息
 }
 
+type DBDelByIdsInput struct {
+	Column string      // In主键字段
+	In     interface{} // In条件信息
+}
+
+type DBDelByWhereInput struct {
+	Where     interface{} // 查询条件
+	Args      interface{} // 查询参数
+	Order     string      // 排序
+	OmitEmpty bool        // 是否过滤空字段
+	PageType  int8        // 分页类型
+	DBLimit               // 分页，偏移量
+	DBPagination
+}
+
 // DB
 // @Description: 数据库常用操作结构体
 // @Author liuxingyu <yuwen002@163.com>
@@ -1089,6 +1104,96 @@ func (db *DB) DelById(condition DBDelByIdInput) (code int32, message string, err
 	return 0, "删除数据成功", nil
 }
 
+// DelByIds
+//
+// @Title 按ID删除多条数据
+// @Description 按ID删除多条数据
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-08 16:09:55
+// @receiver db
+// @param condition
+// @return code
+// @return message
+// @return err
+func (db DB) DelByIds(condition DBDelByIdsInput) (code int32, message string, err error) {
+	res, err := db.M.WhereIn(condition.Column, condition.In).Delete()
+	if err != nil {
+		return -1, "", err
+	}
+
+	affected, err := res.RowsAffected()
+	if err != nil {
+		return -1, "", err
+	}
+
+	if affected == 0 {
+		return 1, "删除数据不存在", nil
+	}
+
+	return 0, "删除数据成功", nil
+}
+
+// DelByWhere
+//
+// @Title 条件删除数据
+// @Description 条件删除数据
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-08 15:58:05
+// @receiver db
+// @param condition
+// @return code
+// @return message
+// @return err
+func (db *DB) DelByWhere(condition DBDelByWhereInput) (code int32, message string, err error) {
+	// 查询条件参数判断
+	if condition.Args == nil {
+		db.M = db.M.Where("id=?", condition.Where)
+	} else {
+		db.M = db.M.Where(condition.Where, condition.Args)
+	}
+
+	// 排序判断
+	if condition.Order != "" {
+		db.M = db.M.Order(condition.Order)
+	}
+
+	// 分页类型判断
+	switch condition.PageType {
+	case 1:
+		// 判断是否需要分页
+		if condition.Page > 0 {
+			if condition.Size == 0 {
+				// 分页默认长度
+				condition.Size = 10
+			}
+			db.M = db.M.Page(condition.Page, condition.Size)
+		}
+	case 2:
+		// 判断分页
+		if condition.Length > 0 {
+			db.M.Limit(condition.Offset, condition.Length)
+		} else if condition.Offset > 0 {
+			db.M.Limit(condition.Offset)
+		}
+	}
+
+	res, err := db.M.Delete()
+	if err != nil {
+		return -1, "", err
+	}
+
+	affected, err := res.RowsAffected()
+	if err != nil {
+		return -1, "", err
+	}
+
+	if affected == 0 {
+		return 1, "删除数据不存在", nil
+	}
+
+	return 0, "删除数据成功", nil
+}
+
 // DBInsert
 //
 // @Title: 数据写入
@@ -1404,4 +1509,36 @@ func DBModifyByWhere(m *gdb.Model, condition DBModifyByWhereInput) (code int32, 
 func DBDelById(m *gdb.Model, condition DBDelByIdInput) (code int32, message string, err error) {
 	db := DB{M: m, RedisConfig: condition.RedisConfig}
 	return db.DelById(condition)
+}
+
+// DBDelByIds
+//
+// @Title 按ID删除多条数据
+// @Description 按ID删除多条数据
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-08 16:10:58
+// @param m
+// @param condition
+// @return code
+// @return message
+// @return err
+func DBDelByIds(m *gdb.Model, condition DBDelByIdsInput) (code int32, message string, err error) {
+	db := DB{M: m}
+	return db.DelByIds(condition)
+}
+
+// DBDelByWhere
+//
+// @Title 按条件删除数据
+// @Description 按条件删除数据
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-08 16:02:46
+// @param m
+// @param condition
+// @return code
+// @return message
+// @return err
+func DBDelByWhere(m *gdb.Model, condition DBDelByWhereInput) (code int32, message string, err error) {
+	db := DB{M: m}
+	return db.DelByWhere(condition)
 }
