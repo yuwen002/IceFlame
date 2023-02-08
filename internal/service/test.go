@@ -24,8 +24,13 @@ type (
 		TestGetMapByIds(ctx context.Context, in model.TestGetByIdsInput) (code int32, message string, output interface{}, err error)
 		TestGetOneStructByWhere(ctx context.Context, in model.TestGetOneByWhereInput, output interface{}) (code int32, message string, err error)
 		TestGetOneMapByWhere(ctx context.Context, in model.TestGetOneByWhereInput) (code int32, message string, output interface{}, err error)
-		TestDBGetAllStructByWhereInput(ctx context.Context, in model.TestGetAllByWhereInput, output interface{}) (code int32, message string, err error)
-		TestDBGetAllMapByWhereInput(ctx context.Context, in model.TestGetAllByWhereInput) (code int32, message string, output interface{}, err error)
+		TestDBGetAllStructByWhere(ctx context.Context, in model.TestGetAllByWhereInput, output interface{}) (code int32, message string, err error)
+		TestDBGetAllMapByWhere(ctx context.Context, in model.TestGetAllByWhereInput) (code int32, message string, output interface{}, err error)
+		TestDBModifyById(ctx context.Context, in model.TestModifyByIdInput) (code int32, message string, err error)
+		TestDBModifyGCacheById(ctx context.Context, in model.TestModifyByIdInput) (code int32, message string, err error)
+		TestDBModifyRCacheById(ctx context.Context, in model.TestModifyByIdInput) (code int32, message string, err error)
+		TestDBModifyByWhere(ctx context.Context, in model.TestModifyByWhereInput) (code int32, message string, err error)
+		TestDBDelById(ctx context.Context, in model.TestDelByIdInput) (code int32, message string, err error)
 	}
 )
 

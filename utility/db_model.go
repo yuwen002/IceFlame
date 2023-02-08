@@ -856,9 +856,9 @@ func (db *DB) GetAllMapByWhere(condition DBGetAllByWhereInput) (code int32, mess
 func (db *DB) ConditionModifyById(condition DBModifyByIdInput) *gdb.Model {
 	// 判断条件
 	if condition.Args == nil {
-		db.M = db.M.Where("id=?", condition.Where)
-	} else {
 		db.M = db.M.Where(condition.Where, condition.Args)
+	} else {
+		db.M = db.M.Where("id=?", condition.Where)
 	}
 
 	// 过滤空字段是否开启

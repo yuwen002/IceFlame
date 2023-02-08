@@ -265,7 +265,7 @@ func (s *sTestDB) TestGetOneMapByWhere(ctx context.Context, in model.TestGetOneB
 	})
 }
 
-// TestDBGetAllStructByWhereInput
+// TestDBGetAllStructByWhere
 //
 // @Title 条件查询多条信息
 // @Description 条件查询多条信息，返回struct
@@ -278,7 +278,7 @@ func (s *sTestDB) TestGetOneMapByWhere(ctx context.Context, in model.TestGetOneB
 // @return code
 // @return message
 // @return err
-func (s *sTestDB) TestDBGetAllStructByWhereInput(ctx context.Context, in model.TestGetAllByWhereInput, output interface{}) (code int32, message string, err error) {
+func (s *sTestDB) TestDBGetAllStructByWhere(ctx context.Context, in model.TestGetAllByWhereInput, output interface{}) (code int32, message string, err error) {
 	var condition utility.DBGetAllByWhereInput
 	condition.Where = in.Where
 	condition.Args = in.Args
@@ -287,7 +287,7 @@ func (s *sTestDB) TestDBGetAllStructByWhereInput(ctx context.Context, in model.T
 	return utility.DBGetAllStructByWhere(dao.DbTest.Ctx(ctx), condition, output)
 }
 
-// TestDBGetAllMapByWhereInput
+// TestDBGetAllMapByWhere
 //
 // @Title 条件查询多条信息
 // @Description 条件查询多条信息，返回map
@@ -300,7 +300,7 @@ func (s *sTestDB) TestDBGetAllStructByWhereInput(ctx context.Context, in model.T
 // @return message
 // @return output
 // @return err
-func (s *sTestDB) TestDBGetAllMapByWhereInput(ctx context.Context, in model.TestGetAllByWhereInput) (code int32, message string, output interface{}, err error) {
+func (s *sTestDB) TestDBGetAllMapByWhere(ctx context.Context, in model.TestGetAllByWhereInput) (code int32, message string, output interface{}, err error) {
 	return utility.DBGetAllMapByWhere(dao.DbTest.Ctx(ctx), utility.DBGetAllByWhereInput{
 		Where:    in.Where,
 		Args:     in.Args,
@@ -308,4 +308,106 @@ func (s *sTestDB) TestDBGetAllMapByWhereInput(ctx context.Context, in model.Test
 		PageType: 1,
 		DBLimit:  utility.DBLimit{Offset: in.Limit},
 	})
+}
+
+// TestDBModifyById
+//
+// @Title 按ID修改信息
+// @Description 按ID修改信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-08 10:14:06
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sTestDB) TestDBModifyById(ctx context.Context, in model.TestModifyByIdInput) (code int32, message string, err error) {
+	return utility.DBModifyById(dao.DbTest.Ctx(ctx), utility.DBModifyByIdInput{
+		Data:  in.Data,
+		Where: in.Where,
+		Args:  in.Args,
+	})
+}
+
+// TestDBModifyGCacheById
+//
+// @Title 按ID修改信息
+// @Description 按ID修改信息,删除gcache缓存
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-08 11:17:45
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sTestDB) TestDBModifyGCacheById(ctx context.Context, in model.TestModifyByIdInput) (code int32, message string, err error) {
+	return utility.DBModifyGCacheById(dao.DbTest.Ctx(ctx), utility.DBModifyByIdInput{
+		Data:        in.Data,
+		Where:       in.Where,
+		Args:        in.Args,
+		CacheKey:    dao.DbTest.Table() + ":id-" + in.Where,
+		RedisConfig: "test",
+	})
+}
+
+// TestDBModifyRCacheById
+//
+// @Title 按ID修改信息
+// @Description 按ID修改信息,删除redis缓存
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-08 11:44:24
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sTestDB) TestDBModifyRCacheById(ctx context.Context, in model.TestModifyByIdInput) (code int32, message string, err error) {
+	return utility.DBModifyRCacheById(dao.DbTest.Ctx(ctx), utility.DBModifyByIdInput{
+		Data:        in.Data,
+		Where:       in.Where,
+		Args:        in.Args,
+		CacheKey:    dao.DbTest.Table() + ":id-" + in.Where,
+		RedisConfig: "test",
+	})
+}
+
+// TestDBModifyByWhere
+//
+// @Title 按条件修改信息
+// @Description 按条件修改信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-08 14:21:10
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sTestDB) TestDBModifyByWhere(ctx context.Context, in model.TestModifyByWhereInput) (code int32, message string, err error) {
+	return utility.DBModifyByWhere(dao.DbTest.Ctx(ctx), utility.DBModifyByWhereInput{
+		Data:     in.Data,
+		Where:    in.Where,
+		Args:     in.Args,
+		PageType: 1,
+		DBLimit:  utility.DBLimit{Offset: in.Limit},
+	})
+}
+
+// TestDBDelById
+//
+// @Title 按ID删除数据
+// @Description 按ID删除数据
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-08 14:39:24
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sTestDB) TestDBDelById(ctx context.Context, in model.TestDelByIdInput) (code int32, message string, err error) {
+	return utility.DBDelById(dao.DbTest.Ctx(ctx), utility.DBDelByIdInput{Where: in.Id})
 }

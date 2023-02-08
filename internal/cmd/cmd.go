@@ -40,6 +40,11 @@ var (
 					test.TestDB.TestGetOneMapByWhere,
 					test.TestDB.TestDBGetAllStructByWhere,
 					test.TestDB.TestDBGetAllMapByWhere,
+					test.TestDB.TestDBModifyById,
+					test.TestDB.TestDBModifyGCacheById,
+					test.TestDB.TestDBModifyRCacheById,
+					test.TestDB.TestDBModifyByWhere,
+					test.TestDB.TestDBDelById,
 				)
 			})
 			s.Run()

@@ -399,7 +399,7 @@ func (c *cTestDB) TestGetOneMapByWhere(ctx context.Context, req *test.DBGetOneMa
 // @return err
 func (c *cTestDB) TestDBGetAllStructByWhere(ctx context.Context, req *test.DBGetAllStructByWhereReq) (res *test.DBGetAllStructByWhereRes, err error) {
 	var output []*model.TestGetAllByWhereOutput
-	code, message, err := service.TestDB().TestDBGetAllStructByWhereInput(ctx, model.TestGetAllByWhereInput{
+	code, message, err := service.TestDB().TestDBGetAllStructByWhere(ctx, model.TestGetAllByWhereInput{
 		Where: "classify=?",
 		Args:  req.Classify,
 		Limit: 0,
@@ -434,7 +434,7 @@ func (c *cTestDB) TestDBGetAllStructByWhere(ctx context.Context, req *test.DBGet
 // @return res
 // @return err
 func (c *cTestDB) TestDBGetAllMapByWhere(ctx context.Context, req *test.DBGetAllMapByWhereReq) (res *test.DBGetAllMapByWhereRes, err error) {
-	code, message, output, err := service.TestDB().TestDBGetAllMapByWhereInput(ctx, model.TestGetAllByWhereInput{
+	code, message, output, err := service.TestDB().TestDBGetAllMapByWhere(ctx, model.TestGetAllByWhereInput{
 		Where: "classify=?",
 		Args:  req.Classify,
 		Limit: 10,
@@ -452,6 +452,187 @@ func (c *cTestDB) TestDBGetAllMapByWhere(ctx context.Context, req *test.DBGetAll
 		"code":    code,
 		"message": message,
 		"data":    output,
+	})
+
+	return
+}
+
+// TestDBModifyById
+//
+// @Title 按ID修改数据
+// @Description 按ID修改数据
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-08 11:08:28
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cTestDB) TestDBModifyById(ctx context.Context, req *test.DBModifyByIdReq) (res *test.DBModifyByIdRes, err error) {
+	code, message, err := service.TestDB().TestDBModifyById(ctx, model.TestModifyByIdInput{
+		Data: g.Map{
+			"test_data": req.TestData,
+			"title":     req.Title,
+			"classify":  req.Classify,
+		},
+		Where: req.Id,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}
+
+// TestDBModifyGCacheById
+//
+// @Title 按ID修改数据
+// @Description 按ID修改数据,删除gcache缓存
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-08 11:21:18
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cTestDB) TestDBModifyGCacheById(ctx context.Context, req *test.DBModifyGCacheByIdReq) (res *test.DBModifyGCacheByIdRes, err error) {
+	code, message, err := service.TestDB().TestDBModifyGCacheById(ctx, model.TestModifyByIdInput{
+		Data: g.Map{
+			"test_data": req.TestData,
+			"title":     req.Title,
+			"classify":  req.Classify,
+		},
+		Where: req.Id,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}
+
+// TestDBModifyRCacheById
+//
+// @Title 按ID修改数据
+// @Description 按ID修改数据,删除Redis缓存
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-08 13:36:09
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cTestDB) TestDBModifyRCacheById(ctx context.Context, req *test.DBModifyRCacheByIdReq) (res *test.DBModifyRCacheByIdRes, err error) {
+	code, message, err := service.TestDB().TestDBModifyRCacheById(ctx, model.TestModifyByIdInput{
+		Data: g.Map{
+			"test_data": req.TestData,
+			"title":     req.Title,
+			"classify":  req.Classify,
+		},
+		Where: req.Id,
+		Args:  "",
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}
+
+// TestDBModifyByWhere
+//
+// @Title 按条件修改数据
+// @Description 按条件修改数据,删除Redis缓存
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-08 14:28:10
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cTestDB) TestDBModifyByWhere(ctx context.Context, req *test.DBModifyByWhereReq) (res *test.DBModifyByWhereRes, err error) {
+	code, message, err := service.TestDB().TestDBModifyByWhere(ctx, model.TestModifyByWhereInput{
+		Data: g.Map{
+			"test_data": req.TestData,
+			"title":     req.Title,
+			"classify":  req.Classify,
+		},
+		Where: "id=?",
+		Args:  req.Id,
+		Limit: 1,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}
+
+// TestDBDelById
+//
+// @Title 按ID删除信息
+// @Description 按ID删除信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-08 15:07:04
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cTestDB) TestDBDelById(ctx context.Context, req *test.DBDelByIdReq) (res *test.DBDelByIdRes, err error) {
+	code, message, err := service.TestDB().TestDBDelById(ctx, model.TestDelByIdInput{Id: req.Id})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
 	})
 
 	return

@@ -71,3 +71,28 @@ type TestGetAllByWhereOutput struct {
 	TestData string `json:"test_data"`
 	Title    string `json:"title"`
 }
+
+// TestModifyByIdInput
+// @Description: 按ID修改数据
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-08 14:05:11
+type TestModifyByIdInput struct {
+	Data  interface{}
+	Where string
+	Args  string
+}
+
+// TestModifyByWhereInput
+// @Description: 按条件修改数据
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-08 14:08:18
+type TestModifyByWhereInput struct {
+	Data  interface{}
+	Where string
+	Args  string
+	Limit int
+}
+
+type TestDelByIdInput struct {
+	Id int64
+}

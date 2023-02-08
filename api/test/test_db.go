@@ -99,3 +99,50 @@ type DBGetAllMapByWhereReq struct {
 }
 type DBGetAllMapByWhereRes struct {
 }
+
+type DBModifyByIdReq struct {
+	g.Meta   `path:"/test/modify_by_id" tags:"测试ModifyById" method:"put" summary:"测试ModifyGCacheById，按Id修改数据"`
+	Id       string `p:"id" v:"required#ID不能为空"`
+	TestData string `p:"test_data"`
+	Title    string `p:"title"`
+	Classify string `p:"classify"`
+}
+type DBModifyByIdRes struct {
+}
+
+type DBModifyGCacheByIdReq struct {
+	g.Meta   `path:"/test/modify_gcache_by_id" tags:"测试ModifyGCacheById" method:"put" summary:"测试ModifyGCacheById，按Id修改数据"`
+	Id       string `p:"id" v:"required#ID不能为空"`
+	TestData string `p:"test_data"`
+	Title    string `p:"title"`
+	Classify string `p:"classify"`
+}
+type DBModifyGCacheByIdRes struct {
+}
+
+type DBModifyRCacheByIdReq struct {
+	g.Meta   `path:"/test/modify_rcache_by_id" tags:"测试ModifyGCacheById" method:"put" summary:"测试ModifyGCacheById，按Id修改数据"`
+	Id       string `p:"id" v:"required#ID不能为空"`
+	TestData string `p:"test_data"`
+	Title    string `p:"title"`
+	Classify string `p:"classify"`
+}
+type DBModifyRCacheByIdRes struct {
+}
+
+type DBModifyByWhereReq struct {
+	g.Meta   `path:"/test/modify_by_where" tags:"测试ModifyByWhere" method:"put" summary:"测试ModifyByWhere，按条件修改数据"`
+	Id       string `p:"id" v:"required#ID不能为空"`
+	TestData string `p:"test_data"`
+	Title    string `p:"title"`
+	Classify string `p:"classify"`
+}
+type DBModifyByWhereRes struct {
+}
+
+type DBDelByIdReq struct {
+	g.Meta `path:"/test/del_by_id" tags:"测试DelById" method:"delete" summary:"测试DelById，按条件删除数据"`
+	Id     int64 `p:"id" v:"required#ID不能为空"`
+}
+type DBDelByIdRes struct {
+}
