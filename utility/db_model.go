@@ -1215,7 +1215,7 @@ func (db *DB) DelById(condition DBDelByIdInput) (code int32, message string, err
 // @return code
 // @return message
 // @return err
-func (db DB) DelByIds(condition DBDelByIdsInput) (code int32, message string, err error) {
+func (db *DB) DelByIds(condition DBDelByIdsInput) (code int32, message string, err error) {
 	res, err := db.M.WhereIn(condition.Column, condition.In).Delete()
 	if err != nil {
 		return -1, "", err
