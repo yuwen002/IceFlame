@@ -1148,6 +1148,14 @@ func (db *DB) ModifyDecById(condition DBModifyDecByIdInput) (code int32, message
 	return 0, "更新数据成功", nil
 }
 
+func (db *DB) ModifyIncByWhere() {
+
+}
+
+func (db *DB) ModifyDecByWhere() {
+
+}
+
 // DelById
 //
 // @Title 按ID删除数据
