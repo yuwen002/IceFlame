@@ -700,3 +700,141 @@ func (c *cTestDB) TestDBDelByWhere(ctx context.Context, req *test.DBDelByWhereRe
 
 	return
 }
+
+// TestDBModifyIncById
+//
+// @Title 按ID自增
+// @Description 按ID自增
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-11 15:47:10
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cTestDB) TestDBModifyIncById(ctx context.Context, req *test.DBModifyIncByIdReq) (res *test.DBModifyIncByIdRes, err error) {
+	code, message, err := service.TestDB().TestDBModifyIncById(ctx, model.TestModifyIncByIdInput{
+		Id:     req.Id,
+		Column: "num",
+		Amount: 1,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}
+
+// TestDBModifyDecById
+//
+// @Title 按ID自减
+// @Description 按ID自减
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-11 16:18:09
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cTestDB) TestDBModifyDecById(ctx context.Context, req *test.DBModifyDecByIdReq) (res *test.DBModifyDecByIdRes, err error) {
+	code, message, err := service.TestDB().TestDBModifyDecById(ctx, model.TestModifyDecByIdInput{
+		Id:     req.Id,
+		Column: "num",
+		Amount: 1,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}
+
+// TestDBModifyIncByWhere
+//
+// @Title 按条件自增
+// @Description 按条件自增
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-11 17:27:23
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cTestDB) TestDBModifyIncByWhere(ctx context.Context, req *test.DBModifyIncByWhereReq) (res *test.DBModifyIncByWhereRes, err error) {
+	code, message, err := service.TestDB().TestDBModifyIncByWhere(ctx, model.TestModifyIncByWhereInput{
+		Where:  "classify=?",
+		Args:   req.Classify,
+		Column: "num",
+		Amount: 1,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}
+
+// TestDBModifyDecByWhere
+//
+// @Title 按条件自减
+// @Description按条件自减
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-11 17:27:40
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cTestDB) TestDBModifyDecByWhere(ctx context.Context, req *test.DBModifyDecByWhereReq) (res *test.DBModifyDecByWhereRes, err error) {
+	code, message, err := service.TestDB().TestDBModifyDecByWhere(ctx, model.TestModifyDecByWhereInput{
+		Where:  "classify=?",
+		Args:   req.Classify,
+		Column: "num",
+		Amount: 1,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}

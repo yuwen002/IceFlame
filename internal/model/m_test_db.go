@@ -118,3 +118,45 @@ type TestDelByWhereInput struct {
 	Args  string
 	Limit int
 }
+
+// TestModifyIncByIdInput
+// @Description: 按ID自增
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-11 14:46:22
+type TestModifyIncByIdInput struct {
+	Id     int64
+	Column string
+	Amount float64
+}
+
+// TestModifyDecByIdInput
+// @Description: 按ID自减
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-11 14:47:13
+type TestModifyDecByIdInput struct {
+	Id     int64
+	Column string
+	Amount float64
+}
+
+// TestModifyIncByWhereInput
+// @Description: 按条件自增
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-11 16:32:18
+type TestModifyIncByWhereInput struct {
+	Where  string
+	Args   string
+	Column string
+	Amount float64
+}
+
+// TestModifyDecByWhereInput
+// @Description: 按条件自减
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-11 16:32:27
+type TestModifyDecByWhereInput struct {
+	Where  string
+	Args   string
+	Column string
+	Amount float64
+}

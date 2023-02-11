@@ -451,3 +451,89 @@ func (s *sTestDB) TestDBDelByWhere(ctx context.Context, in model.TestDelByWhereI
 		DBLimit:  utility.DBLimit{Offset: in.Limit},
 	})
 }
+
+// TestDBModifyIncById
+//
+// @Title 按ID自增
+// @Description 按ID自增
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-11 14:53:06
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sTestDB) TestDBModifyIncById(ctx context.Context, in model.TestModifyIncByIdInput) (code int32, message string, err error) {
+	return utility.DBModifyIncById(dao.DbTest.Ctx(ctx), utility.DBModifyIncByIdInput{
+		Field:  in.Column,
+		Where:  in.Id,
+		Amount: in.Amount,
+	})
+}
+
+// TestDBModifyDecById
+//
+// @Title 按ID自减
+// @Description 按ID自减
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-11 16:14:48
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sTestDB) TestDBModifyDecById(ctx context.Context, in model.TestModifyDecByIdInput) (code int32, message string, err error) {
+	return utility.DBModifyDecById(dao.DbTest.Ctx(ctx), utility.DBModifyDecByIdInput{
+		Field:  in.Column,
+		Where:  in.Id,
+		Amount: in.Amount,
+	})
+}
+
+// TestDBModifyIncByWhere
+//
+// @Title
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-11 16:38:56
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sTestDB) TestDBModifyIncByWhere(ctx context.Context, in model.TestModifyIncByWhereInput) (code int32, message string, err error) {
+	return utility.DBModifyIncByWhere(dao.DbTest.Ctx(ctx), utility.DBModifyIncByWhereInput{
+		Field:    in.Column,
+		Where:    in.Where,
+		Args:     in.Args,
+		Amount:   in.Amount,
+		PageType: 1,
+		DBLimit:  utility.DBLimit{Offset: 2},
+	})
+}
+
+// TestDBModifyDecByWhere
+//
+// @Title
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-11 16:38:59
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sTestDB) TestDBModifyDecByWhere(ctx context.Context, in model.TestModifyDecByWhereInput) (code int32, message string, err error) {
+	return utility.DBModifyDecByWhere(dao.DbTest.Ctx(ctx), utility.DBModifyDecByWhereInput{
+		Field:    in.Column,
+		Where:    in.Where,
+		Args:     in.Args,
+		Amount:   in.Amount,
+		PageType: 1,
+		DBLimit:  utility.DBLimit{Offset: 2},
+	})
+}

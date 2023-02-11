@@ -33,6 +33,10 @@ type (
 		TestDBDelById(ctx context.Context, in model.TestDelByIdInput) (code int32, message string, err error)
 		TestDBDelByIds(ctx context.Context, in model.TestDelByIdsInput) (code int32, message string, err error)
 		TestDBDelByWhere(ctx context.Context, in model.TestDelByWhereInput) (code int32, message string, err error)
+		TestDBModifyIncById(ctx context.Context, in model.TestModifyIncByIdInput) (code int32, message string, err error)
+		TestDBModifyDecById(ctx context.Context, in model.TestModifyDecByIdInput) (code int32, message string, err error)
+		TestDBModifyIncByWhere(ctx context.Context, in model.TestModifyIncByWhereInput) (code int32, message string, err error)
+		TestDBModifyDecByWhere(ctx context.Context, in model.TestModifyDecByWhereInput) (code int32, message string, err error)
 	}
 )
 

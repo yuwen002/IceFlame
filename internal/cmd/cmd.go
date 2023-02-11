@@ -47,6 +47,10 @@ var (
 					test.TestDB.TestDBDelById,
 					test.TestDB.TestDBDelByIds,
 					test.TestDB.TestDBDelByWhere,
+					test.TestDB.TestDBModifyIncById,
+					test.TestDB.TestDBModifyDecById,
+					test.TestDB.TestDBModifyIncByWhere,
+					test.TestDB.TestDBModifyDecByWhere,
 				)
 			})
 			s.Run()

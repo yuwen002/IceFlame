@@ -145,6 +145,30 @@ type DBModifyDecByIdInput struct {
 	Amount float64
 }
 
+type DBModifyIncByWhereInput struct {
+	Field        string
+	Where        interface{}
+	Args         interface{}
+	Amount       float64
+	Order        string // 排序
+	OmitEmpty    bool   // 是否过滤空字段
+	PageType     int8   // 分页类型
+	DBLimit             // 分页，偏移量
+	DBPagination        // 分页，页码
+}
+
+type DBModifyDecByWhereInput struct {
+	Field        string
+	Where        interface{}
+	Args         interface{}
+	Amount       float64
+	Order        string // 排序
+	OmitEmpty    bool   // 是否过滤空字段
+	PageType     int8   // 分页类型
+	DBLimit             // 分页，偏移量
+	DBPagination        // 分页，页码
+}
+
 // DBDelByIdInput
 // @Description: 按ID删除数据
 // @Author liuxingyu <yuwen002@163.com>
@@ -1148,12 +1172,82 @@ func (db *DB) ModifyDecById(condition DBModifyDecByIdInput) (code int32, message
 	return 0, "更新数据成功", nil
 }
 
-func (db *DB) ModifyIncByWhere() {
+// ModifyIncByWhere
+//
+// @Title 按条件自增
+// @Description 按条件自增
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-11 10:57:21
+// @receiver db
+// @param condition
+// @return code
+// @return message
+// @return err
+func (db *DB) ModifyIncByWhere(condition DBModifyIncByWhereInput) (code int32, message string, err error) {
+	if condition.Amount == 0 {
+		condition.Amount = 1
+	}
 
+	if condition.Args == nil {
+		db.M = db.M.Where(condition.Where)
+	} else {
+		db.M = db.M.Where(condition.Where, condition.Args)
+	}
+
+	res, err := db.M.Increment(condition.Field, condition.Amount)
+	if err != nil {
+		return -1, "", err
+	}
+
+	affected, err := res.RowsAffected()
+	if err != nil {
+		return -1, "", err
+	}
+
+	if affected == 0 {
+		return 1, "无变更数据", nil
+	}
+
+	return 0, "更新数据成功", nil
 }
 
-func (db *DB) ModifyDecByWhere() {
+// ModifyDecByWhere
+//
+// @Title 按条件自减
+// @Description 按条件自减
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-11 10:57:41
+// @receiver db
+// @param condition
+// @return code
+// @return message
+// @return err
+func (db *DB) ModifyDecByWhere(condition DBModifyDecByWhereInput) (code int32, message string, err error) {
+	if condition.Amount == 0 {
+		condition.Amount = 1
+	}
 
+	if condition.Args == nil {
+		db.M = db.M.Where(condition.Where)
+	} else {
+		db.M = db.M.Where(condition.Where, condition.Args)
+	}
+
+	res, err := db.M.Decrement(condition.Field, condition.Amount)
+	if err != nil {
+		return -1, "", err
+	}
+
+	affected, err := res.RowsAffected()
+	if err != nil {
+		return -1, "", err
+	}
+
+	if affected == 0 {
+		return 1, "无变更数据", nil
+	}
+
+	return 0, "更新数据成功", nil
 }
 
 // DelById
@@ -1633,6 +1727,38 @@ func DBModifyIncById(m *gdb.Model, condition DBModifyIncByIdInput) (code int32, 
 func DBModifyDecById(m *gdb.Model, condition DBModifyDecByIdInput) (code int32, message string, err error) {
 	db := DB{M: m}
 	return db.ModifyDecById(condition)
+}
+
+// DBModifyIncByWhere
+//
+// @Title 按条件自增
+// @Description 按条件自增
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-11 13:54:04
+// @param m
+// @param condition
+// @return code
+// @return message
+// @return err
+func DBModifyIncByWhere(m *gdb.Model, condition DBModifyIncByWhereInput) (code int32, message string, err error) {
+	db := DB{M: m}
+	return db.ModifyIncByWhere(condition)
+}
+
+// DBModifyDecByWhere
+//
+// @Title 按条件自减
+// @Description 按条件自减
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-11 13:54:22
+// @param m
+// @param condition
+// @return code
+// @return message
+// @return err
+func DBModifyDecByWhere(m *gdb.Model, condition DBModifyDecByWhereInput) (code int32, message string, err error) {
+	db := DB{M: m}
+	return db.ModifyDecByWhere(condition)
 }
 
 // DBDelById

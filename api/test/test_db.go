@@ -160,3 +160,31 @@ type DBDelByWhereReq struct {
 }
 type DBDelByWhereRes struct {
 }
+
+type DBModifyIncByIdReq struct {
+	g.Meta `path:"/test/modify_inc_by_id" tags:"测试ModifyIncById" method:"put" summary:"测试ModifyIncById，按ID自增"`
+	Id     int64 `p:"id" v:"required#ID不能为空"`
+}
+type DBModifyIncByIdRes struct {
+}
+
+type DBModifyDecByIdReq struct {
+	g.Meta `path:"/test/modify_dec_by_id" tags:"测试ModifyIncById" method:"put" summary:"测试ModifyIncById，按ID自增"`
+	Id     int64 `p:"id" v:"required#ID不能为空"`
+}
+type DBModifyDecByIdRes struct {
+}
+
+type DBModifyIncByWhereReq struct {
+	g.Meta   `path:"/test/modify_inc_by_where" tags:"测试ModifyIncByWhere" method:"put" summary:"测试ModifyIncByWhere，按条件自增"`
+	Classify string `p:"id" v:"required#ID不能为空"`
+}
+type DBModifyIncByWhereRes struct {
+}
+
+type DBModifyDecByWhereReq struct {
+	g.Meta   `path:"/test/modify_dec_by_where" tags:"测试ModifyIncByWhere" method:"put" summary:"测试ModifyIncByWhere，按条件自增"`
+	Classify string `p:"id" v:"required#ID不能为空"`
+}
+type DBModifyDecByWhereRes struct {
+}
