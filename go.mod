@@ -1,6 +1,6 @@
 module ice_flame
 
-go 1.15
+go 1.20
 
 require (
 	github.com/gogf/gf/contrib/drivers/mysql/v2 v2.3.1
