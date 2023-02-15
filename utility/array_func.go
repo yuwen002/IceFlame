@@ -10,7 +10,7 @@ package utility
 // @param b
 // @return []T
 func Intersect[T IfInt | IfUint | string](array1, array2 []T) []T {
-	inter := make([]T, 0)
+	res := make([]T, 0)
 	tmp := make(map[T]bool, len(array1))
 
 	for _, s := range array1 {
@@ -20,9 +20,9 @@ func Intersect[T IfInt | IfUint | string](array1, array2 []T) []T {
 	}
 	for _, s := range array2 {
 		if _, ok := tmp[s]; ok {
-			inter = append(inter, s)
+			res = append(res, s)
 		}
 	}
 
-	return inter
+	return res
 }
