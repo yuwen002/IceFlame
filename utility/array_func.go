@@ -9,17 +9,17 @@ package utility
 // @param a
 // @param b
 // @return []T
-func Intersect[T IfInt | IfUint | string](a, b []T) []T {
+func Intersect[T IfInt | IfUint | string](array1, array2 []T) []T {
 	inter := make([]T, 0)
-	mp := make(map[T]bool)
+	tmp := make(map[T]bool, len(array1))
 
-	for _, s := range a {
-		if _, ok := mp[s]; !ok {
-			mp[s] = true
+	for _, s := range array1 {
+		if _, ok := tmp[s]; !ok {
+			tmp[s] = true
 		}
 	}
-	for _, s := range b {
-		if _, ok := mp[s]; ok {
+	for _, s := range array2 {
+		if _, ok := tmp[s]; ok {
 			inter = append(inter, s)
 		}
 	}
