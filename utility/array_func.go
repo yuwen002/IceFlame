@@ -9,7 +9,7 @@ package utility
 // @param a
 // @param b
 // @return []T
-func Intersect[T int | int8 | int16 | int32 | int64 | string](a, b []T) []T {
+func Intersect[T IfInt | IfUint | string](a, b []T) []T {
 	inter := make([]T, 0)
 	mp := make(map[T]bool)
 
