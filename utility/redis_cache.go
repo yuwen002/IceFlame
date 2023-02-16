@@ -42,7 +42,7 @@ func (rc *RedisCache) InitRedis() *gredis.Redis {
 	return redis
 }
 
-func (rc *RedisCache) ExistsData(data RedisExistsData, f func(condition interface{}) (code int32, message string, err error)) (code int32, message string, err error) {
+func (rc *RedisCache) ExistsSetData(data RedisExistsData, f func(condition interface{}) (code int32, message string, err error)) (code int32, message string, err error) {
 	redis := rc.InitRedis()
 	res, err := redis.SIsMember(rc.ctx, data.RedisKey, data.RedisValue)
 	if err != nil {
