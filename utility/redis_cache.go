@@ -42,7 +42,7 @@ func (rc *RedisCache) InitRedis() *gredis.Redis {
 	return redis
 }
 
-func (rc *RedisCache) ExistsData(data RedisExistsData) (code int32, message string, err error) {
+func (rc *RedisCache) ExistsData(data RedisExistsData, f func(condition interface{}) (code int32, message string, err error)) (code int32, message string, err error) {
 	redis := rc.InitRedis()
 	res, err := redis.SIsMember(rc.ctx, data.RedisKey, data.RedisValue)
 	if err != nil {
@@ -52,6 +52,26 @@ func (rc *RedisCache) ExistsData(data RedisExistsData) (code int32, message stri
 	if res == 1 {
 		return 0, data.Message, nil
 	}
+
+	code, message, err = f(data.RedisValue)
+	if err != nil {
+		return -1, "", err
+	}
+
+	if code == 1 {
+		return code, message, nil
+	}
+
+	res, err = redis.SAdd(rc.ctx, data.RedisKey, data.RedisValue)
+	if err != nil {
+		return -1, "", err
+	}
+
+	if res == 0 {
+		return 1, "失败，添加重复元素", nil
+	}
+
+	return 0, "添加元素成功", nil
 }
 
 // InitRedis
