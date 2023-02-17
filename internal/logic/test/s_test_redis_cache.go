@@ -22,14 +22,6 @@ type sRedisCacheTest struct {
 }
 
 func (s *sRedisCacheTest) TestExistsSetData(ctx context.Context, in model.TestExistsSetDataInput) (code int32, message string, err error) {
-	var f = func(condition interface{}) (code int32, message string, err error) {
-		code, message, _, err = utility.DBGetMapById(dao.DbTest.Ctx(ctx), utility.DBGetByIdInput{
-			Field: "id",
-			Where: condition,
-		})
-
-		return code, message, err
-	}
 	return utility.ExistsSetData(utility.RedisExistsData{
 		Key:   "db_test:exists_id",
 		Value: in.Id,

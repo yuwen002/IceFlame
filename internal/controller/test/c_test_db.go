@@ -9,9 +9,9 @@ import (
 	"strings"
 )
 
-var TestDB = cTestDB{}
+var DBTest = cDBTest{}
 
-type cTestDB struct {
+type cDBTest struct {
 }
 
 // TestInsert
@@ -25,8 +25,8 @@ type cTestDB struct {
 // @param req
 // @return res
 // @return err
-func (c *cTestDB) TestInsert(ctx context.Context, req *test.DBInsertReq) (res *test.DBInsertRes, err error) {
-	code, message, err := service.TestDB().TestInsert(ctx, model.TestDBInsertInput{TestData: req.Data})
+func (c *cDBTest) TestInsert(ctx context.Context, req *test.DBInsertReq) (res *test.DBInsertRes, err error) {
+	code, message, err := service.DBTest().TestInsert(ctx, model.TestDBInsertInput{TestData: req.Data})
 
 	var json = g.RequestFromCtx(ctx).Response
 	if err != nil {
@@ -55,8 +55,8 @@ func (c *cTestDB) TestInsert(ctx context.Context, req *test.DBInsertReq) (res *t
 // @param req
 // @return res
 // @return err
-func (c *cTestDB) TestInsertAndGetId(ctx context.Context, req *test.DBInsertAndGetIdReq) (res *test.DBInsertAndGetIdRes, err error) {
-	code, message, id, err := service.TestDB().TestInsertAndGetId(ctx, model.TestDBInsertInput{TestData: req.Data})
+func (c *cDBTest) TestInsertAndGetId(ctx context.Context, req *test.DBInsertAndGetIdReq) (res *test.DBInsertAndGetIdRes, err error) {
+	code, message, id, err := service.DBTest().TestInsertAndGetId(ctx, model.TestDBInsertInput{TestData: req.Data})
 
 	var json = g.RequestFromCtx(ctx).Response
 	if err != nil {
@@ -86,9 +86,9 @@ func (c *cTestDB) TestInsertAndGetId(ctx context.Context, req *test.DBInsertAndG
 // @param req
 // @return res
 // @return err
-func (c *cTestDB) TestGetStructById(ctx context.Context, req *test.DBGetStructByIdReq) (res *test.DBGetStructByIdRes, err error) {
+func (c *cDBTest) TestGetStructById(ctx context.Context, req *test.DBGetStructByIdReq) (res *test.DBGetStructByIdRes, err error) {
 	var output *model.TestGetByIdOutput
-	code, message, err := service.TestDB().TestGetStructById(ctx, model.TestGetByIdInput{Id: req.Id}, &output)
+	code, message, err := service.DBTest().TestGetStructById(ctx, model.TestGetByIdInput{Id: req.Id}, &output)
 	var json = g.RequestFromCtx(ctx).Response
 	if err != nil {
 		json.WriteJsonExit(g.Map{
@@ -117,9 +117,9 @@ func (c *cTestDB) TestGetStructById(ctx context.Context, req *test.DBGetStructBy
 // @param req
 // @return res
 // @return err
-func (c *cTestDB) TestGetStructGCacheById(ctx context.Context, req *test.DBGetStructGCacheByIdReq) (res *test.DBGetStructGCacheByIdRes, err error) {
+func (c *cDBTest) TestGetStructGCacheById(ctx context.Context, req *test.DBGetStructGCacheByIdReq) (res *test.DBGetStructGCacheByIdRes, err error) {
 	var output *model.TestGetByIdOutput
-	code, message, err := service.TestDB().TestGetStructGCacheById(ctx, model.TestGetByIdInput{Id: req.Id}, &output)
+	code, message, err := service.DBTest().TestGetStructGCacheById(ctx, model.TestGetByIdInput{Id: req.Id}, &output)
 	var json = g.RequestFromCtx(ctx).Response
 	if err != nil {
 		json.WriteJsonExit(g.Map{
@@ -148,9 +148,9 @@ func (c *cTestDB) TestGetStructGCacheById(ctx context.Context, req *test.DBGetSt
 // @param req
 // @return res
 // @return err
-func (c *cTestDB) TestGetStructRCacheById(ctx context.Context, req *test.DBGetStructRCacheByIdReq) (res *test.DBGetStructRCacheByIdRes, err error) {
+func (c *cDBTest) TestGetStructRCacheById(ctx context.Context, req *test.DBGetStructRCacheByIdReq) (res *test.DBGetStructRCacheByIdRes, err error) {
 	var output *model.TestGetByIdOutput
-	code, message, err := service.TestDB().TestGetStructRCacheById(ctx, model.TestGetByIdInput{Id: req.Id}, &output)
+	code, message, err := service.DBTest().TestGetStructRCacheById(ctx, model.TestGetByIdInput{Id: req.Id}, &output)
 	var json = g.RequestFromCtx(ctx).Response
 	if err != nil {
 		json.WriteJsonExit(g.Map{
@@ -179,8 +179,8 @@ func (c *cTestDB) TestGetStructRCacheById(ctx context.Context, req *test.DBGetSt
 // @param req
 // @return res
 // @return err
-func (c *cTestDB) TestGetMapById(ctx context.Context, req *test.DBGetMapByIdReq) (res *test.DBGetMapByIdRes, err error) {
-	code, message, output, err := service.TestDB().TestGetMapById(ctx, model.TestGetByIdInput{Id: req.Id})
+func (c *cDBTest) TestGetMapById(ctx context.Context, req *test.DBGetMapByIdReq) (res *test.DBGetMapByIdRes, err error) {
+	code, message, output, err := service.DBTest().TestGetMapById(ctx, model.TestGetByIdInput{Id: req.Id})
 	var json = g.RequestFromCtx(ctx).Response
 	if err != nil {
 		json.WriteJsonExit(g.Map{
@@ -209,8 +209,8 @@ func (c *cTestDB) TestGetMapById(ctx context.Context, req *test.DBGetMapByIdReq)
 // @param req
 // @return res
 // @return err
-func (c *cTestDB) TestGetMapGCacheById(ctx context.Context, req *test.DBGetMapGCacheByIdReq) (res *test.DBGetMapGCacheByIdRes, err error) {
-	code, message, output, err := service.TestDB().TestGetMapGCacheById(ctx, model.TestGetByIdInput{Id: req.Id})
+func (c *cDBTest) TestGetMapGCacheById(ctx context.Context, req *test.DBGetMapGCacheByIdReq) (res *test.DBGetMapGCacheByIdRes, err error) {
+	code, message, output, err := service.DBTest().TestGetMapGCacheById(ctx, model.TestGetByIdInput{Id: req.Id})
 	var json = g.RequestFromCtx(ctx).Response
 	if err != nil {
 		json.WriteJsonExit(g.Map{
@@ -238,8 +238,8 @@ func (c *cTestDB) TestGetMapGCacheById(ctx context.Context, req *test.DBGetMapGC
 // @param req
 // @return res
 // @return err
-func (c *cTestDB) TestGetMapRCacheById(ctx context.Context, req *test.DBGetMapRCacheByIdReq) (res *test.DBGetMapRCacheByIdRes, err error) {
-	code, message, output, err := service.TestDB().TestGetMapRCacheById(ctx, model.TestGetByIdInput{Id: req.Id})
+func (c *cDBTest) TestGetMapRCacheById(ctx context.Context, req *test.DBGetMapRCacheByIdReq) (res *test.DBGetMapRCacheByIdRes, err error) {
+	code, message, output, err := service.DBTest().TestGetMapRCacheById(ctx, model.TestGetByIdInput{Id: req.Id})
 	var json = g.RequestFromCtx(ctx).Response
 	if err != nil {
 		json.WriteJsonExit(g.Map{
@@ -267,9 +267,9 @@ func (c *cTestDB) TestGetMapRCacheById(ctx context.Context, req *test.DBGetMapRC
 // @param req
 // @return res
 // @return err
-func (c *cTestDB) TestGetStructByIds(ctx context.Context, req *test.DBGetStructByIdsReq) (res *test.DBGetStructByIdsRes, err error) {
+func (c *cDBTest) TestGetStructByIds(ctx context.Context, req *test.DBGetStructByIdsReq) (res *test.DBGetStructByIdsRes, err error) {
 	var output []*model.TestGetByIdOutput
-	code, message, err := service.TestDB().TestGetStructByIds(ctx, model.TestGetByIdsInput{Ids: strings.Split(req.Ids, ",")}, &output)
+	code, message, err := service.DBTest().TestGetStructByIds(ctx, model.TestGetByIdsInput{Ids: strings.Split(req.Ids, ",")}, &output)
 	var json = g.RequestFromCtx(ctx).Response
 	if err != nil {
 		json.WriteJsonExit(g.Map{
@@ -298,8 +298,8 @@ func (c *cTestDB) TestGetStructByIds(ctx context.Context, req *test.DBGetStructB
 // @param req
 // @return res
 // @return err
-func (c *cTestDB) TestGetMapByIds(ctx context.Context, req *test.DBGetMapByIdsReq) (res *test.DBGetMapByIdsRes, err error) {
-	code, message, output, err := service.TestDB().TestGetMapByIds(ctx, model.TestGetByIdsInput{Ids: strings.Split(req.Ids, ",")})
+func (c *cDBTest) TestGetMapByIds(ctx context.Context, req *test.DBGetMapByIdsReq) (res *test.DBGetMapByIdsRes, err error) {
+	code, message, output, err := service.DBTest().TestGetMapByIds(ctx, model.TestGetByIdsInput{Ids: strings.Split(req.Ids, ",")})
 	var json = g.RequestFromCtx(ctx).Response
 	if err != nil {
 		json.WriteJsonExit(g.Map{
@@ -328,9 +328,9 @@ func (c *cTestDB) TestGetMapByIds(ctx context.Context, req *test.DBGetMapByIdsRe
 // @param req
 // @return res
 // @return err
-func (c *cTestDB) TestGetOneStructByWhere(ctx context.Context, req *test.DBGetOneStructByWhereReq) (res *test.DBGetOneStructByWhereRes, err error) {
+func (c *cDBTest) TestGetOneStructByWhere(ctx context.Context, req *test.DBGetOneStructByWhereReq) (res *test.DBGetOneStructByWhereRes, err error) {
 	var output *model.TestGetOneByWhereOutput
-	code, message, err := service.TestDB().TestGetOneStructByWhere(ctx, model.TestGetOneByWhereInput{
+	code, message, err := service.DBTest().TestGetOneStructByWhere(ctx, model.TestGetOneByWhereInput{
 		Where: "title=?",
 		Args:  req.Title,
 	}, &output)
@@ -363,8 +363,8 @@ func (c *cTestDB) TestGetOneStructByWhere(ctx context.Context, req *test.DBGetOn
 // @param req
 // @return res
 // @return err
-func (c *cTestDB) TestGetOneMapByWhere(ctx context.Context, req *test.DBGetOneMapByWhereReq) (res *test.DBGetOneMapByWhereRes, err error) {
-	code, message, output, err := service.TestDB().TestGetOneMapByWhere(ctx, model.TestGetOneByWhereInput{
+func (c *cDBTest) TestGetOneMapByWhere(ctx context.Context, req *test.DBGetOneMapByWhereReq) (res *test.DBGetOneMapByWhereRes, err error) {
+	code, message, output, err := service.DBTest().TestGetOneMapByWhere(ctx, model.TestGetOneByWhereInput{
 		Where: "title=?",
 		Args:  req.Title,
 	})
@@ -397,9 +397,9 @@ func (c *cTestDB) TestGetOneMapByWhere(ctx context.Context, req *test.DBGetOneMa
 // @param req
 // @return res
 // @return err
-func (c *cTestDB) TestDBGetAllStructByWhere(ctx context.Context, req *test.DBGetAllStructByWhereReq) (res *test.DBGetAllStructByWhereRes, err error) {
+func (c *cDBTest) TestDBGetAllStructByWhere(ctx context.Context, req *test.DBGetAllStructByWhereReq) (res *test.DBGetAllStructByWhereRes, err error) {
 	var output []*model.TestGetAllByWhereOutput
-	code, message, err := service.TestDB().TestDBGetAllStructByWhere(ctx, model.TestGetAllByWhereInput{
+	code, message, err := service.DBTest().TestDBGetAllStructByWhere(ctx, model.TestGetAllByWhereInput{
 		Where: "classify=?",
 		Args:  req.Classify,
 		Limit: 0,
@@ -433,8 +433,8 @@ func (c *cTestDB) TestDBGetAllStructByWhere(ctx context.Context, req *test.DBGet
 // @param req
 // @return res
 // @return err
-func (c *cTestDB) TestDBGetAllMapByWhere(ctx context.Context, req *test.DBGetAllMapByWhereReq) (res *test.DBGetAllMapByWhereRes, err error) {
-	code, message, output, err := service.TestDB().TestDBGetAllMapByWhere(ctx, model.TestGetAllByWhereInput{
+func (c *cDBTest) TestDBGetAllMapByWhere(ctx context.Context, req *test.DBGetAllMapByWhereReq) (res *test.DBGetAllMapByWhereRes, err error) {
+	code, message, output, err := service.DBTest().TestDBGetAllMapByWhere(ctx, model.TestGetAllByWhereInput{
 		Where: "classify=?",
 		Args:  req.Classify,
 		Limit: 10,
@@ -468,8 +468,8 @@ func (c *cTestDB) TestDBGetAllMapByWhere(ctx context.Context, req *test.DBGetAll
 // @param req
 // @return res
 // @return err
-func (c *cTestDB) TestDBModifyById(ctx context.Context, req *test.DBModifyByIdReq) (res *test.DBModifyByIdRes, err error) {
-	code, message, err := service.TestDB().TestDBModifyById(ctx, model.TestModifyByIdInput{
+func (c *cDBTest) TestDBModifyById(ctx context.Context, req *test.DBModifyByIdReq) (res *test.DBModifyByIdRes, err error) {
+	code, message, err := service.DBTest().TestDBModifyById(ctx, model.TestModifyByIdInput{
 		Data: g.Map{
 			"test_data": req.TestData,
 			"title":     req.Title,
@@ -505,8 +505,8 @@ func (c *cTestDB) TestDBModifyById(ctx context.Context, req *test.DBModifyByIdRe
 // @param req
 // @return res
 // @return err
-func (c *cTestDB) TestDBModifyGCacheById(ctx context.Context, req *test.DBModifyGCacheByIdReq) (res *test.DBModifyGCacheByIdRes, err error) {
-	code, message, err := service.TestDB().TestDBModifyGCacheById(ctx, model.TestModifyByIdInput{
+func (c *cDBTest) TestDBModifyGCacheById(ctx context.Context, req *test.DBModifyGCacheByIdReq) (res *test.DBModifyGCacheByIdRes, err error) {
+	code, message, err := service.DBTest().TestDBModifyGCacheById(ctx, model.TestModifyByIdInput{
 		Data: g.Map{
 			"test_data": req.TestData,
 			"title":     req.Title,
@@ -542,8 +542,8 @@ func (c *cTestDB) TestDBModifyGCacheById(ctx context.Context, req *test.DBModify
 // @param req
 // @return res
 // @return err
-func (c *cTestDB) TestDBModifyRCacheById(ctx context.Context, req *test.DBModifyRCacheByIdReq) (res *test.DBModifyRCacheByIdRes, err error) {
-	code, message, err := service.TestDB().TestDBModifyRCacheById(ctx, model.TestModifyByIdInput{
+func (c *cDBTest) TestDBModifyRCacheById(ctx context.Context, req *test.DBModifyRCacheByIdReq) (res *test.DBModifyRCacheByIdRes, err error) {
+	code, message, err := service.DBTest().TestDBModifyRCacheById(ctx, model.TestModifyByIdInput{
 		Data: g.Map{
 			"test_data": req.TestData,
 			"title":     req.Title,
@@ -580,8 +580,8 @@ func (c *cTestDB) TestDBModifyRCacheById(ctx context.Context, req *test.DBModify
 // @param req
 // @return res
 // @return err
-func (c *cTestDB) TestDBModifyByWhere(ctx context.Context, req *test.DBModifyByWhereReq) (res *test.DBModifyByWhereRes, err error) {
-	code, message, err := service.TestDB().TestDBModifyByWhere(ctx, model.TestModifyByWhereInput{
+func (c *cDBTest) TestDBModifyByWhere(ctx context.Context, req *test.DBModifyByWhereReq) (res *test.DBModifyByWhereRes, err error) {
+	code, message, err := service.DBTest().TestDBModifyByWhere(ctx, model.TestModifyByWhereInput{
 		Data: g.Map{
 			"test_data": req.TestData,
 			"title":     req.Title,
@@ -619,8 +619,8 @@ func (c *cTestDB) TestDBModifyByWhere(ctx context.Context, req *test.DBModifyByW
 // @param req
 // @return res
 // @return err
-func (c *cTestDB) TestDBDelById(ctx context.Context, req *test.DBDelByIdReq) (res *test.DBDelByIdRes, err error) {
-	code, message, err := service.TestDB().TestDBDelById(ctx, model.TestDelByIdInput{Id: req.Id})
+func (c *cDBTest) TestDBDelById(ctx context.Context, req *test.DBDelByIdReq) (res *test.DBDelByIdRes, err error) {
+	code, message, err := service.DBTest().TestDBDelById(ctx, model.TestDelByIdInput{Id: req.Id})
 
 	var json = g.RequestFromCtx(ctx).Response
 	if err != nil {
@@ -649,8 +649,8 @@ func (c *cTestDB) TestDBDelById(ctx context.Context, req *test.DBDelByIdReq) (re
 // @param req
 // @return res
 // @return err
-func (c *cTestDB) TestDBDelByIds(ctx context.Context, req *test.DBDelByIdsReq) (res *test.DBDelByIdsRes, err error) {
-	code, message, err := service.TestDB().TestDBDelByIds(ctx, model.TestDelByIdsInput{Ids: req.Ids})
+func (c *cDBTest) TestDBDelByIds(ctx context.Context, req *test.DBDelByIdsReq) (res *test.DBDelByIdsRes, err error) {
+	code, message, err := service.DBTest().TestDBDelByIds(ctx, model.TestDelByIdsInput{Ids: req.Ids})
 
 	var json = g.RequestFromCtx(ctx).Response
 	if err != nil {
@@ -679,8 +679,8 @@ func (c *cTestDB) TestDBDelByIds(ctx context.Context, req *test.DBDelByIdsReq) (
 // @param req
 // @return res
 // @return err
-func (c *cTestDB) TestDBDelByWhere(ctx context.Context, req *test.DBDelByWhereReq) (res *test.DBDelByWhereRes, err error) {
-	code, message, err := service.TestDB().TestDBDelByWhere(ctx, model.TestDelByWhereInput{
+func (c *cDBTest) TestDBDelByWhere(ctx context.Context, req *test.DBDelByWhereReq) (res *test.DBDelByWhereRes, err error) {
+	code, message, err := service.DBTest().TestDBDelByWhere(ctx, model.TestDelByWhereInput{
 		Where: "classify=?",
 		Args:  req.Classify,
 	})
@@ -712,8 +712,8 @@ func (c *cTestDB) TestDBDelByWhere(ctx context.Context, req *test.DBDelByWhereRe
 // @param req
 // @return res
 // @return err
-func (c *cTestDB) TestDBModifyIncById(ctx context.Context, req *test.DBModifyIncByIdReq) (res *test.DBModifyIncByIdRes, err error) {
-	code, message, err := service.TestDB().TestDBModifyIncById(ctx, model.TestModifyIncByIdInput{
+func (c *cDBTest) TestDBModifyIncById(ctx context.Context, req *test.DBModifyIncByIdReq) (res *test.DBModifyIncByIdRes, err error) {
+	code, message, err := service.DBTest().TestDBModifyIncById(ctx, model.TestModifyIncByIdInput{
 		Id:     req.Id,
 		Column: "num",
 		Amount: 1,
@@ -746,8 +746,8 @@ func (c *cTestDB) TestDBModifyIncById(ctx context.Context, req *test.DBModifyInc
 // @param req
 // @return res
 // @return err
-func (c *cTestDB) TestDBModifyDecById(ctx context.Context, req *test.DBModifyDecByIdReq) (res *test.DBModifyDecByIdRes, err error) {
-	code, message, err := service.TestDB().TestDBModifyDecById(ctx, model.TestModifyDecByIdInput{
+func (c *cDBTest) TestDBModifyDecById(ctx context.Context, req *test.DBModifyDecByIdReq) (res *test.DBModifyDecByIdRes, err error) {
+	code, message, err := service.DBTest().TestDBModifyDecById(ctx, model.TestModifyDecByIdInput{
 		Id:     req.Id,
 		Column: "num",
 		Amount: 1,
@@ -780,8 +780,8 @@ func (c *cTestDB) TestDBModifyDecById(ctx context.Context, req *test.DBModifyDec
 // @param req
 // @return res
 // @return err
-func (c *cTestDB) TestDBModifyIncByWhere(ctx context.Context, req *test.DBModifyIncByWhereReq) (res *test.DBModifyIncByWhereRes, err error) {
-	code, message, err := service.TestDB().TestDBModifyIncByWhere(ctx, model.TestModifyIncByWhereInput{
+func (c *cDBTest) TestDBModifyIncByWhere(ctx context.Context, req *test.DBModifyIncByWhereReq) (res *test.DBModifyIncByWhereRes, err error) {
+	code, message, err := service.DBTest().TestDBModifyIncByWhere(ctx, model.TestModifyIncByWhereInput{
 		Where:  "classify=?",
 		Args:   req.Classify,
 		Column: "num",
@@ -815,8 +815,8 @@ func (c *cTestDB) TestDBModifyIncByWhere(ctx context.Context, req *test.DBModify
 // @param req
 // @return res
 // @return err
-func (c *cTestDB) TestDBModifyDecByWhere(ctx context.Context, req *test.DBModifyDecByWhereReq) (res *test.DBModifyDecByWhereRes, err error) {
-	code, message, err := service.TestDB().TestDBModifyDecByWhere(ctx, model.TestModifyDecByWhereInput{
+func (c *cDBTest) TestDBModifyDecByWhere(ctx context.Context, req *test.DBModifyDecByWhereReq) (res *test.DBModifyDecByWhereRes, err error) {
+	code, message, err := service.DBTest().TestDBModifyDecByWhere(ctx, model.TestModifyDecByWhereInput{
 		Where:  "classify=?",
 		Args:   req.Classify,
 		Column: "num",
