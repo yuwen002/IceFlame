@@ -11,7 +11,7 @@ import (
 )
 
 type (
-	ITestDB interface {
+	IDBTest interface {
 		TestInsert(ctx context.Context, in model.TestDBInsertInput) (code int32, message string, err error)
 		TestInsertAndGetId(ctx context.Context, in model.TestDBInsertInput) (code int32, message string, lastInsertId int64, err error)
 		TestGetStructById(ctx context.Context, in model.TestGetByIdInput, output interface{}) (code int32, message string, err error)
@@ -38,19 +38,34 @@ type (
 		TestDBModifyIncByWhere(ctx context.Context, in model.TestModifyIncByWhereInput) (code int32, message string, err error)
 		TestDBModifyDecByWhere(ctx context.Context, in model.TestModifyDecByWhereInput) (code int32, message string, err error)
 	}
+	IRedisCacheTest interface {
+		TestExistsSetData(ctx context.Context, in model.TestExistsSetDataInput) (code int32, message string, err error)
+	}
 )
 
 var (
-	localTestDB ITestDB
+	localDBTest         IDBTest
+	localRedisCacheTest IRedisCacheTest
 )
 
-func TestDB() ITestDB {
-	if localTestDB == nil {
-		panic("implement not found for interface ITestDB, forgot register?")
+func DBTest() IDBTest {
+	if localDBTest == nil {
+		panic("implement not found for interface IDBTest, forgot register?")
 	}
-	return localTestDB
+	return localDBTest
 }
 
-func RegisterTestDB(i ITestDB) {
-	localTestDB = i
+func RegisterDBTest(i IDBTest) {
+	localDBTest = i
+}
+
+func RedisCacheTest() IRedisCacheTest {
+	if localRedisCacheTest == nil {
+		panic("implement not found for interface IRedisCacheTest, forgot register?")
+	}
+	return localRedisCacheTest
+}
+
+func RegisterRedisCacheTest(i IRedisCacheTest) {
+	localRedisCacheTest = i
 }

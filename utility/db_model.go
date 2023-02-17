@@ -253,7 +253,7 @@ func (db *DB) SetRedisCache(cache RedisData) (code int32, message string, err er
 
 	// 过期时间开启
 	if cache.Expire > 0 {
-		_, _ = redis.Do(db.ctx, "EXPIRE", cache.Key, cache.Expire)
+		_, _ = redis.Expire(db.ctx, cache.Key, cache.Expire)
 	}
 
 	return 0, "数据写入成功", nil

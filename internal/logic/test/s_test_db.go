@@ -9,21 +9,21 @@ import (
 	"ice_flame/utility"
 )
 
-var insTestDB = sTestDB{}
+var insDBTest = sDBTest{}
 
-func NewTestDB() *sTestDB {
-	return &insTestDB
+func NewDBTest() *sDBTest {
+	return &insDBTest
 }
 
 func init() {
-	service.RegisterTestDB(NewTestDB())
+	service.RegisterDBTest(NewDBTest())
 }
 
-// sTestDB
+// sDBTest
 // @Description: 数据库测试
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-02-02 15:29:14
-type sTestDB struct {
+type sDBTest struct {
 }
 
 // TestInsert
@@ -38,7 +38,7 @@ type sTestDB struct {
 // @return code
 // @return message
 // @return err
-func (s *sTestDB) TestInsert(ctx context.Context, in model.TestDBInsertInput) (code int32, message string, err error) {
+func (s *sDBTest) TestInsert(ctx context.Context, in model.TestDBInsertInput) (code int32, message string, err error) {
 	return utility.DBInsert(dao.DbTest.Ctx(ctx), utility.DBInsertInput{Data: in})
 }
 
@@ -55,7 +55,7 @@ func (s *sTestDB) TestInsert(ctx context.Context, in model.TestDBInsertInput) (c
 // @return message
 // @return lastInsertId
 // @return err
-func (s *sTestDB) TestInsertAndGetId(ctx context.Context, in model.TestDBInsertInput) (code int32, message string, lastInsertId int64, err error) {
+func (s *sDBTest) TestInsertAndGetId(ctx context.Context, in model.TestDBInsertInput) (code int32, message string, lastInsertId int64, err error) {
 	return utility.DBInsertAndGetId(dao.DbTest.Ctx(ctx), utility.DBInsertInput{Data: in})
 }
 
@@ -73,7 +73,7 @@ func (s *sTestDB) TestInsertAndGetId(ctx context.Context, in model.TestDBInsertI
 // @return message
 // @return output
 // @return err
-func (s *sTestDB) TestGetStructById(ctx context.Context, in model.TestGetByIdInput, output interface{}) (code int32, message string, err error) {
+func (s *sDBTest) TestGetStructById(ctx context.Context, in model.TestGetByIdInput, output interface{}) (code int32, message string, err error) {
 	code, message, err = utility.DBGetStructById(dao.DbTest.Ctx(ctx), utility.DBGetByIdInput{Where: in.Id}, output)
 	return code, message, err
 }
@@ -91,7 +91,7 @@ func (s *sTestDB) TestGetStructById(ctx context.Context, in model.TestGetByIdInp
 // @return code
 // @return message
 // @return err
-func (s *sTestDB) TestGetStructGCacheById(ctx context.Context, in model.TestGetByIdInput, output interface{}) (code int32, message string, err error) {
+func (s *sDBTest) TestGetStructGCacheById(ctx context.Context, in model.TestGetByIdInput, output interface{}) (code int32, message string, err error) {
 	return utility.DBGetStructGCacheById(dao.DbTest.Ctx(ctx), utility.DBGetByIdInput{
 		Where:       in.Id,
 		CacheKey:    dao.DbTest.Table() + ":id-" + gconv.String(in.Id),
@@ -110,7 +110,7 @@ func (s *sTestDB) TestGetStructGCacheById(ctx context.Context, in model.TestGetB
 // @param ctx
 // @param in
 // @param output
-func (s *sTestDB) TestGetStructRCacheById(ctx context.Context, in model.TestGetByIdInput, output interface{}) (code int32, message string, err error) {
+func (s *sDBTest) TestGetStructRCacheById(ctx context.Context, in model.TestGetByIdInput, output interface{}) (code int32, message string, err error) {
 	return utility.DBGetStructRCacheById(dao.DbTest.Ctx(ctx), utility.DBGetByIdInput{
 		Where:       in.Id,
 		CacheKey:    dao.DbTest.Table() + ":id-" + gconv.String(in.Id),
@@ -132,7 +132,7 @@ func (s *sTestDB) TestGetStructRCacheById(ctx context.Context, in model.TestGetB
 // @return message
 // @return output
 // @return err
-func (s *sTestDB) TestGetMapById(ctx context.Context, in model.TestGetByIdInput) (code int32, message string, output interface{}, err error) {
+func (s *sDBTest) TestGetMapById(ctx context.Context, in model.TestGetByIdInput) (code int32, message string, output interface{}, err error) {
 	return utility.DBGetMapById(dao.DbTest.Ctx(ctx), utility.DBGetByIdInput{Where: in.Id})
 }
 
@@ -149,7 +149,7 @@ func (s *sTestDB) TestGetMapById(ctx context.Context, in model.TestGetByIdInput)
 // @return message
 // @return output
 // @return err
-func (s *sTestDB) TestGetMapGCacheById(ctx context.Context, in model.TestGetByIdInput) (code int32, message string, output interface{}, err error) {
+func (s *sDBTest) TestGetMapGCacheById(ctx context.Context, in model.TestGetByIdInput) (code int32, message string, output interface{}, err error) {
 	return utility.DBGetMapGCacheById(dao.DbTest.Ctx(ctx), utility.DBGetByIdInput{
 		Where:       "id=?",
 		Args:        in.Id,
@@ -172,7 +172,7 @@ func (s *sTestDB) TestGetMapGCacheById(ctx context.Context, in model.TestGetById
 // @return message
 // @return output
 // @return err
-func (s *sTestDB) TestGetMapRCacheById(ctx context.Context, in model.TestGetByIdInput) (code int32, message string, output interface{}, err error) {
+func (s *sDBTest) TestGetMapRCacheById(ctx context.Context, in model.TestGetByIdInput) (code int32, message string, output interface{}, err error) {
 	return utility.DBGetMapRCacheById(dao.DbTest.Ctx(ctx), utility.DBGetByIdInput{
 		Where:       "id=?",
 		Args:        in.Id,
@@ -195,7 +195,7 @@ func (s *sTestDB) TestGetMapRCacheById(ctx context.Context, in model.TestGetById
 // @return code
 // @return message
 // @return err
-func (s *sTestDB) TestGetStructByIds(ctx context.Context, in model.TestGetByIdsInput, output interface{}) (code int32, message string, err error) {
+func (s *sDBTest) TestGetStructByIds(ctx context.Context, in model.TestGetByIdsInput, output interface{}) (code int32, message string, err error) {
 	return utility.DBGetStructByIds(dao.DbTest.Ctx(ctx), utility.DBGetByIdsInput{
 		Column: "id",
 		In:     in.Ids,
@@ -216,7 +216,7 @@ func (s *sTestDB) TestGetStructByIds(ctx context.Context, in model.TestGetByIdsI
 // @return message
 // @return output
 // @return err
-func (s *sTestDB) TestGetMapByIds(ctx context.Context, in model.TestGetByIdsInput) (code int32, message string, output interface{}, err error) {
+func (s *sDBTest) TestGetMapByIds(ctx context.Context, in model.TestGetByIdsInput) (code int32, message string, output interface{}, err error) {
 	return utility.DBGetMapByIds(dao.DbTest.Ctx(ctx), utility.DBGetByIdsInput{
 		Column: "id",
 		In:     in.Ids,
@@ -237,7 +237,7 @@ func (s *sTestDB) TestGetMapByIds(ctx context.Context, in model.TestGetByIdsInpu
 // @return code
 // @return message
 // @return err
-func (s *sTestDB) TestGetOneStructByWhere(ctx context.Context, in model.TestGetOneByWhereInput, output interface{}) (code int32, message string, err error) {
+func (s *sDBTest) TestGetOneStructByWhere(ctx context.Context, in model.TestGetOneByWhereInput, output interface{}) (code int32, message string, err error) {
 	return utility.DBGetOneStructByWhere(dao.DbTest.Ctx(ctx), utility.DBGetOneByWhereInput{
 		Where: in.Where,
 		Args:  in.Args,
@@ -258,7 +258,7 @@ func (s *sTestDB) TestGetOneStructByWhere(ctx context.Context, in model.TestGetO
 // @return message
 // @return output
 // @return err
-func (s *sTestDB) TestGetOneMapByWhere(ctx context.Context, in model.TestGetOneByWhereInput) (code int32, message string, output interface{}, err error) {
+func (s *sDBTest) TestGetOneMapByWhere(ctx context.Context, in model.TestGetOneByWhereInput) (code int32, message string, output interface{}, err error) {
 	return utility.DBGetOneMapByWhere(dao.DbTest.Ctx(ctx), utility.DBGetOneByWhereInput{
 		Where: in.Where,
 		Args:  in.Args,
@@ -278,7 +278,7 @@ func (s *sTestDB) TestGetOneMapByWhere(ctx context.Context, in model.TestGetOneB
 // @return code
 // @return message
 // @return err
-func (s *sTestDB) TestDBGetAllStructByWhere(ctx context.Context, in model.TestGetAllByWhereInput, output interface{}) (code int32, message string, err error) {
+func (s *sDBTest) TestDBGetAllStructByWhere(ctx context.Context, in model.TestGetAllByWhereInput, output interface{}) (code int32, message string, err error) {
 	var condition utility.DBGetAllByWhereInput
 	condition.Where = in.Where
 	condition.Args = in.Args
@@ -300,7 +300,7 @@ func (s *sTestDB) TestDBGetAllStructByWhere(ctx context.Context, in model.TestGe
 // @return message
 // @return output
 // @return err
-func (s *sTestDB) TestDBGetAllMapByWhere(ctx context.Context, in model.TestGetAllByWhereInput) (code int32, message string, output interface{}, err error) {
+func (s *sDBTest) TestDBGetAllMapByWhere(ctx context.Context, in model.TestGetAllByWhereInput) (code int32, message string, output interface{}, err error) {
 	return utility.DBGetAllMapByWhere(dao.DbTest.Ctx(ctx), utility.DBGetAllByWhereInput{
 		Where:    in.Where,
 		Args:     in.Args,
@@ -322,7 +322,7 @@ func (s *sTestDB) TestDBGetAllMapByWhere(ctx context.Context, in model.TestGetAl
 // @return code
 // @return message
 // @return err
-func (s *sTestDB) TestDBModifyById(ctx context.Context, in model.TestModifyByIdInput) (code int32, message string, err error) {
+func (s *sDBTest) TestDBModifyById(ctx context.Context, in model.TestModifyByIdInput) (code int32, message string, err error) {
 	return utility.DBModifyById(dao.DbTest.Ctx(ctx), utility.DBModifyByIdInput{
 		Data:  in.Data,
 		Where: in.Where,
@@ -342,7 +342,7 @@ func (s *sTestDB) TestDBModifyById(ctx context.Context, in model.TestModifyByIdI
 // @return code
 // @return message
 // @return err
-func (s *sTestDB) TestDBModifyGCacheById(ctx context.Context, in model.TestModifyByIdInput) (code int32, message string, err error) {
+func (s *sDBTest) TestDBModifyGCacheById(ctx context.Context, in model.TestModifyByIdInput) (code int32, message string, err error) {
 	return utility.DBModifyGCacheById(dao.DbTest.Ctx(ctx), utility.DBModifyByIdInput{
 		Data:        in.Data,
 		Where:       in.Where,
@@ -364,7 +364,7 @@ func (s *sTestDB) TestDBModifyGCacheById(ctx context.Context, in model.TestModif
 // @return code
 // @return message
 // @return err
-func (s *sTestDB) TestDBModifyRCacheById(ctx context.Context, in model.TestModifyByIdInput) (code int32, message string, err error) {
+func (s *sDBTest) TestDBModifyRCacheById(ctx context.Context, in model.TestModifyByIdInput) (code int32, message string, err error) {
 	return utility.DBModifyRCacheById(dao.DbTest.Ctx(ctx), utility.DBModifyByIdInput{
 		Data:        in.Data,
 		Where:       in.Where,
@@ -386,7 +386,7 @@ func (s *sTestDB) TestDBModifyRCacheById(ctx context.Context, in model.TestModif
 // @return code
 // @return message
 // @return err
-func (s *sTestDB) TestDBModifyByWhere(ctx context.Context, in model.TestModifyByWhereInput) (code int32, message string, err error) {
+func (s *sDBTest) TestDBModifyByWhere(ctx context.Context, in model.TestModifyByWhereInput) (code int32, message string, err error) {
 	return utility.DBModifyByWhere(dao.DbTest.Ctx(ctx), utility.DBModifyByWhereInput{
 		Data:     in.Data,
 		Where:    in.Where,
@@ -408,7 +408,7 @@ func (s *sTestDB) TestDBModifyByWhere(ctx context.Context, in model.TestModifyBy
 // @return code
 // @return message
 // @return err
-func (s *sTestDB) TestDBDelById(ctx context.Context, in model.TestDelByIdInput) (code int32, message string, err error) {
+func (s *sDBTest) TestDBDelById(ctx context.Context, in model.TestDelByIdInput) (code int32, message string, err error) {
 	return utility.DBDelById(dao.DbTest.Ctx(ctx), utility.DBDelByIdInput{Where: in.Id})
 }
 
@@ -424,7 +424,7 @@ func (s *sTestDB) TestDBDelById(ctx context.Context, in model.TestDelByIdInput) 
 // @return code
 // @return message
 // @return err
-func (s *sTestDB) TestDBDelByIds(ctx context.Context, in model.TestDelByIdsInput) (code int32, message string, err error) {
+func (s *sDBTest) TestDBDelByIds(ctx context.Context, in model.TestDelByIdsInput) (code int32, message string, err error) {
 	return utility.DBDelByIds(dao.DbTest.Ctx(ctx), utility.DBDelByIdsInput{
 		Column: "id",
 		In:     in.Ids,
@@ -443,7 +443,7 @@ func (s *sTestDB) TestDBDelByIds(ctx context.Context, in model.TestDelByIdsInput
 // @return code
 // @return message
 // @return err
-func (s *sTestDB) TestDBDelByWhere(ctx context.Context, in model.TestDelByWhereInput) (code int32, message string, err error) {
+func (s *sDBTest) TestDBDelByWhere(ctx context.Context, in model.TestDelByWhereInput) (code int32, message string, err error) {
 	return utility.DBDelByWhere(dao.DbTest.Ctx(ctx), utility.DBDelByWhereInput{
 		Where:    in.Where,
 		Args:     in.Args,
@@ -464,7 +464,7 @@ func (s *sTestDB) TestDBDelByWhere(ctx context.Context, in model.TestDelByWhereI
 // @return code
 // @return message
 // @return err
-func (s *sTestDB) TestDBModifyIncById(ctx context.Context, in model.TestModifyIncByIdInput) (code int32, message string, err error) {
+func (s *sDBTest) TestDBModifyIncById(ctx context.Context, in model.TestModifyIncByIdInput) (code int32, message string, err error) {
 	return utility.DBModifyIncById(dao.DbTest.Ctx(ctx), utility.DBModifyIncByIdInput{
 		Field:  in.Column,
 		Where:  in.Id,
@@ -484,7 +484,7 @@ func (s *sTestDB) TestDBModifyIncById(ctx context.Context, in model.TestModifyIn
 // @return code
 // @return message
 // @return err
-func (s *sTestDB) TestDBModifyDecById(ctx context.Context, in model.TestModifyDecByIdInput) (code int32, message string, err error) {
+func (s *sDBTest) TestDBModifyDecById(ctx context.Context, in model.TestModifyDecByIdInput) (code int32, message string, err error) {
 	return utility.DBModifyDecById(dao.DbTest.Ctx(ctx), utility.DBModifyDecByIdInput{
 		Field:  in.Column,
 		Where:  in.Id,
@@ -504,7 +504,7 @@ func (s *sTestDB) TestDBModifyDecById(ctx context.Context, in model.TestModifyDe
 // @return code
 // @return message
 // @return err
-func (s *sTestDB) TestDBModifyIncByWhere(ctx context.Context, in model.TestModifyIncByWhereInput) (code int32, message string, err error) {
+func (s *sDBTest) TestDBModifyIncByWhere(ctx context.Context, in model.TestModifyIncByWhereInput) (code int32, message string, err error) {
 	return utility.DBModifyIncByWhere(dao.DbTest.Ctx(ctx), utility.DBModifyIncByWhereInput{
 		Field:    in.Column,
 		Where:    in.Where,
@@ -527,7 +527,7 @@ func (s *sTestDB) TestDBModifyIncByWhere(ctx context.Context, in model.TestModif
 // @return code
 // @return message
 // @return err
-func (s *sTestDB) TestDBModifyDecByWhere(ctx context.Context, in model.TestModifyDecByWhereInput) (code int32, message string, err error) {
+func (s *sDBTest) TestDBModifyDecByWhere(ctx context.Context, in model.TestModifyDecByWhereInput) (code int32, message string, err error) {
 	return utility.DBModifyDecByWhere(dao.DbTest.Ctx(ctx), utility.DBModifyDecByWhereInput{
 		Field:    in.Column,
 		Where:    in.Where,
