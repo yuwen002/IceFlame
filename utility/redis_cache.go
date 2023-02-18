@@ -7,14 +7,25 @@ import (
 )
 
 // RedisExistsData
-// @Description:
+// @Description: 集合数据
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-02-17 11:01:41
 type RedisExistsData struct {
-	Config string
-	Key    string
-	Value  interface{}
-	Expire int64
+	Config string      // Redis配置信息
+	Key    string      // Redis键值
+	Value  interface{} // Redis值
+	Expire int64       // Redis过期时间
+}
+
+// RedisCastData
+// @Description: hash数据转换
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-18 11:23:26
+type RedisCastData struct {
+	Config string // Redis配置信息
+	Key    string // Redis键值
+	Field  string // Redis字段
+	Expire int64  // Redis过期时间
 }
 
 // RedisCache
@@ -78,13 +89,8 @@ func (rc *RedisCache) ExistsSetData(data RedisExistsData, f func(condition inter
 
 	// 数据不存在，查询验证
 	code, message, err = f(data.Value)
-	if err != nil {
-		return -1, "", err
-	}
-
-	// 查询数据不存在，直接返回
-	if code == 1 {
-		return code, message, nil
+	if code != 0 {
+		return code, message, err
 	}
 
 	// 数据存在写入集合信息
@@ -106,11 +112,63 @@ func (rc *RedisCache) ExistsSetData(data RedisExistsData, f func(condition inter
 		}
 
 		if res == 0 {
-			return 2, "添加元素成功, key不存在或者不能为key设置过期时间", nil
+			return 2, "添加元素成功, 不能为key设置过期时间", nil
 		}
 	}
 
 	return 0, "添加元素成功", nil
+}
+
+// CastHashData
+//
+// @Title 数据转换
+// @Description 数据转换，例如：店铺ID转换商家ID
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-18 11:49:39
+// @receiver rc
+// @param data
+// @param f
+// @return code
+// @return message
+// @return output
+// @return err
+func (rc *RedisCache) CastHashData(data RedisCastData, f func(condition interface{}) (code int32, message string, output interface{}, err error)) (code int32, message string, output interface{}, err error) {
+	// 初始化Redis
+	redis := rc.InitRedis()
+	res, err := redis.HGet(rc.ctx, data.Key, data.Field)
+	if err != nil {
+		return -1, "", nil, err
+	}
+
+	if !res.IsNil() {
+		return 0, "取出转换数据成功", res, nil
+	}
+
+	code, message, output, err = f(data.Field)
+	if code != 0 {
+		return code, message, nil, err
+	}
+
+	field := map[string]interface{}{data.Field: output}
+	result, err := redis.HSet(rc.ctx, data.Key, field)
+	if err != nil {
+		return -1, "", nil, err
+	}
+
+	if result == 1 {
+		return 0, "取出转换数据成功", output, nil
+	}
+
+	// 添加元素成功，验证过期时间是否开启
+	if data.Expire > 0 {
+		result, err = redis.Expire(rc.ctx, data.Key, data.Expire)
+		return -1, "", nil, err
+
+		if result == 0 {
+			return 2, "添加元素成功, 不能为key设置过期时间", nil, nil
+		}
+	}
+
 }
 
 // InitRedis
@@ -140,4 +198,21 @@ func InitRedis(config ...string) *gredis.Redis {
 func ExistsSetData(data RedisExistsData, f func(condition interface{}) (code int32, message string, err error)) (code int32, message string, err error) {
 	var redis = RedisCache{Config: data.Config}
 	return redis.ExistsSetData(data, f)
+}
+
+// CastHashData
+//
+// @Title 数据转换
+// @Description 数据转换，例如：店铺ID转换商家ID
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-18 15:09:58
+// @param data
+// @param f
+// @return code
+// @return message
+// @return output
+// @return err
+func CastHashData(data RedisCastData, f func(condition interface{}) (code int32, message string, output interface{}, err error)) (code int32, message string, output interface{}, err error) {
+	var redis = RedisCache{Config: data.Config}
+	return redis.CastHashData(data, f)
 }

@@ -18,9 +18,25 @@ func init() {
 	service.RegisterRedisCacheTest(NewRedisCacheTest())
 }
 
+// sRedisCacheTest
+// @Description: Redis缓存测试
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-18 11:18:40
 type sRedisCacheTest struct {
 }
 
+// TestExistsSetData
+//
+// @Title 测试Redis集合数据是否存在
+// @Description 测试Redis集合数据是否存在
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-18 10:27:31
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
 func (s *sRedisCacheTest) TestExistsSetData(ctx context.Context, in model.TestExistsSetDataInput) (code int32, message string, err error) {
 	return utility.ExistsSetData(utility.RedisExistsData{
 		Key:   "db_test:exists_id",
@@ -32,5 +48,15 @@ func (s *sRedisCacheTest) TestExistsSetData(ctx context.Context, in model.TestEx
 		})
 
 		return code, message, err
+	})
+}
+
+func (s *sRedisCacheTest) TestCastHashData(ctx context.Context, in model.TestCastHashDataInput) {
+	return utility.CastHashData(utility.RedisCastData{
+		Config: "test",
+		Key:    "db_test:cast_id",
+		Field:  in.Id,
+	}, func(condition interface{}) (code int32, message string, output interface{}, err error) {
+
 	})
 }

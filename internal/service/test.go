@@ -11,6 +11,10 @@ import (
 )
 
 type (
+	IRedisCacheTest interface {
+		TestExistsSetData(ctx context.Context, in model.TestExistsSetDataInput) (code int32, message string, err error)
+		TestCastHashData(ctx context.Context, in model.TestCastHashDataInput)
+	}
 	IDBTest interface {
 		TestInsert(ctx context.Context, in model.TestDBInsertInput) (code int32, message string, err error)
 		TestInsertAndGetId(ctx context.Context, in model.TestDBInsertInput) (code int32, message string, lastInsertId int64, err error)
@@ -37,9 +41,6 @@ type (
 		TestDBModifyDecById(ctx context.Context, in model.TestModifyDecByIdInput) (code int32, message string, err error)
 		TestDBModifyIncByWhere(ctx context.Context, in model.TestModifyIncByWhereInput) (code int32, message string, err error)
 		TestDBModifyDecByWhere(ctx context.Context, in model.TestModifyDecByWhereInput) (code int32, message string, err error)
-	}
-	IRedisCacheTest interface {
-		TestExistsSetData(ctx context.Context, in model.TestExistsSetDataInput) (code int32, message string, err error)
 	}
 )
 
