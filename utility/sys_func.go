@@ -3,7 +3,44 @@ package utility
 import (
 	"bytes"
 	"github.com/shopspring/decimal"
+	"golang.org/x/crypto/bcrypt"
 )
+
+// PasswordHash
+//
+// @Title 创建密码的散列
+// @Description 密码hash
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-20 15:26:24
+// @param password
+// @return string
+// @return error
+func PasswordHash(password string) (string, error) {
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return "", err
+	}
+
+	return string(hash), err
+}
+
+// PasswordVerify
+//
+// @Title 验证密码是否和散列值匹配
+// @Description 验证密码
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-20 15:26:50
+// @param password
+// @param hash
+// @return bool
+func PasswordVerify(password string, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	if err != nil {
+		return false
+	}
+
+	return true
+}
 
 // ConvertUnitMul
 //
