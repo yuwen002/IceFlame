@@ -72,15 +72,18 @@ func (s *sRedisCacheTest) TestCastHashData(ctx context.Context, in model.TestCas
 		Field:  gconv.String(in.Id),
 	}, func(condition interface{}) (code int32, message string, output interface{}, err error) {
 		code, message, output, err = utility.DBGetMapById(dao.DbTest.Ctx(ctx), utility.DBGetByIdInput{
-			Field: "id",
+			Field: "union_id",
 			Where: condition,
 		})
 
 		if code != 0 {
 			return code, message, output, err
 		}
+
+		// interface数据类型转换为Map
 		unionId := output.(map[string]interface{})
 		return code, message, unionId["union_id"], err
 	})
 
+	return code, message, output, err
 }

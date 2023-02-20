@@ -54,6 +54,7 @@ var (
 
 					// 测试Redis结构体方法
 					test.RedisCacheTest.TestExistsSetData,
+					test.RedisCacheTest.TestCastHashData,
 				)
 			})
 			s.Run()

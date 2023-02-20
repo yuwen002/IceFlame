@@ -140,10 +140,12 @@ func (rc *RedisCache) CastHashData(data RedisCastData, f func(condition interfac
 		return -1, "", nil, err
 	}
 
-	if !res.IsNil() {
+	// 数据正确，取出成功
+	if !res.IsEmpty() {
 		return 0, "取出转换数据成功", res, nil
 	}
 
+	// 无数据从新读取数据
 	code, message, output, err = f(data.Field)
 	if code != 0 {
 		return code, message, nil, err
@@ -155,20 +157,21 @@ func (rc *RedisCache) CastHashData(data RedisCastData, f func(condition interfac
 		return -1, "", nil, err
 	}
 
-	if result == 1 {
-		return 0, "取出转换数据成功", output, nil
-	}
-
 	// 添加元素成功，验证过期时间是否开启
 	if data.Expire > 0 {
 		result, err = redis.Expire(rc.ctx, data.Key, data.Expire)
 		return -1, "", nil, err
 
 		if result == 0 {
-			return 2, "添加元素成功, 不能为key设置过期时间", nil, nil
+			return 2, "添加元素成功, 不能为key设置过期时间", output, nil
 		}
 	}
 
+	if result == 1 {
+		return 0, "取出转换数据成功(新字段)", output, nil
+	}
+
+	return 0, "取出转换数据成功(覆盖字段值)", output, nil
 }
 
 // InitRedis
