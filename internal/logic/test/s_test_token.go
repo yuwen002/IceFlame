@@ -33,7 +33,7 @@ type sJwtTokenTest struct{}
 // @return message
 // @return err
 func (s *sJwtTokenTest) TestSetToken(ctx context.Context, in model.JwtClaimsInput) (code int32, message string, output string, err error) {
-	token, err := utility.CreateToken(utility.CustomClaims{
+	token, err := utility.CreateToken(utility.CustomClaimsInput{
 		Id:       in.Id,
 		UserInfo: in.UserInfo,
 		Expire:   in.Expire,

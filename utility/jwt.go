@@ -185,6 +185,6 @@ func CreateToken(in CustomClaimsInput, secretKey string) (string, error) {
 // @return map[string]interface{}
 // @return error
 func ParseToken(token string, secretKey string) (map[string]interface{}, error) {
-	jwt := JwtClaims{SecretKey: secretKey, Sig}
+	jwt := JwtClaims{SecretKey: secretKey}
 	return jwt.ParseToken(token)
 }
