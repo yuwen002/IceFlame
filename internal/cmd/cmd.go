@@ -55,6 +55,10 @@ var (
 					// 测试Redis结构体方法
 					test.RedisCacheTest.TestExistsSetData,
 					test.RedisCacheTest.TestCastHashData,
+
+					// Jwt测试
+					test.JwtClaimsTest.TestJCSetToken,
+					test.JwtClaimsTest.TestJCGetToken,
 				)
 			})
 			s.Run()

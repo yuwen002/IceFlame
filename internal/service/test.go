@@ -11,6 +11,10 @@ import (
 )
 
 type (
+	IJwtTokenTest interface {
+		TestSetToken(ctx context.Context, in model.JwtClaimsInput) (code int32, message string, output string, err error)
+		TestGetToken(ctx context.Context, token string) (code int32, message string, output interface{}, err error)
+	}
 	IDBTest interface {
 		TestInsert(ctx context.Context, in model.TestDBInsertInput) (code int32, message string, err error)
 		TestInsertAndGetId(ctx context.Context, in model.TestDBInsertInput) (code int32, message string, lastInsertId int64, err error)
@@ -45,8 +49,9 @@ type (
 )
 
 var (
-	localRedisCacheTest IRedisCacheTest
 	localDBTest         IDBTest
+	localRedisCacheTest IRedisCacheTest
+	localJwtTokenTest   IJwtTokenTest
 )
 
 func DBTest() IDBTest {
@@ -69,4 +74,15 @@ func RedisCacheTest() IRedisCacheTest {
 
 func RegisterRedisCacheTest(i IRedisCacheTest) {
 	localRedisCacheTest = i
+}
+
+func JwtTokenTest() IJwtTokenTest {
+	if localJwtTokenTest == nil {
+		panic("implement not found for interface IJwtTokenTest, forgot register?")
+	}
+	return localJwtTokenTest
+}
+
+func RegisterJwtTokenTest(i IJwtTokenTest) {
+	localJwtTokenTest = i
 }
