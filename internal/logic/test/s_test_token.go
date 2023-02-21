@@ -2,7 +2,6 @@ package test
 
 import (
 	"context"
-	"github.com/golang-jwt/jwt/v4"
 	"ice_flame/internal/consts"
 	"ice_flame/internal/model"
 	"ice_flame/internal/service"
@@ -39,10 +38,8 @@ func (s *sJwtTokenTest) TestSetToken(ctx context.Context, in model.JwtClaimsInpu
 		UserInfo: in.UserInfo,
 		Expire:   in.Expire,
 		Before:   in.Before,
-		RegisteredClaims: jwt.RegisteredClaims{
-			Issuer:  in.Issuer,
-			Subject: in.Subject,
-		},
+		Issuer:   in.Issuer,
+		Subject:  in.Subject,
 	}, consts.USER_SECRET_KEY)
 
 	if err != nil {

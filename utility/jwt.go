@@ -7,15 +7,27 @@ import (
 	"time"
 )
 
+// CustomClaimsInput
+// @Description:
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-02-21 23:39:02
+type CustomClaimsInput struct {
+	Id            uint64                 // 用户ID
+	UserInfo      map[string]interface{} // 用户信息
+	Expire        int64                  // 过期时间
+	Before        int64                  // 生效时间
+	Issuer        string                 // 签发人
+	Subject       string                 // 签发主题
+	SigningMethod jwt.SigningMethod
+}
+
 // CustomClaims
 // @Description: 自定义输入信息
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-02-21 16:21:09
 type CustomClaims struct {
-	Id       uint64 `json:"user_id"`
-	UserInfo map[string]interface{}
-	Expire   int64
-	Before   int64
+	Id       uint64                 `json:"user_id"`
+	UserInfo map[string]interface{} `json:"user_info"`
 	jwt.RegisteredClaims
 }
 
@@ -40,7 +52,6 @@ func (jc *JwtClaims) VerifySecretKey() error {
 		err := errors.New("密钥信息错误")
 		return err
 	}
-
 	return nil
 }
 
@@ -54,7 +65,7 @@ func (jc *JwtClaims) VerifySecretKey() error {
 // @param in
 // @return string
 // @return error
-func (jc *JwtClaims) CreateToken(in CustomClaims) (string, error) {
+func (jc *JwtClaims) CreateToken(in CustomClaimsInput) (string, error) {
 	err := jc.VerifySecretKey()
 	if err != nil {
 		return "", err
@@ -66,34 +77,43 @@ func (jc *JwtClaims) CreateToken(in CustomClaims) (string, error) {
 	}
 
 	// 判断过期时间
+	var expiresAt *jwt.NumericDate
 	if in.Expire > 0 {
-		in.ExpiresAt = jwt.NewNumericDate(time.Now().Add(time.Duration(gconv.Int64(in.Expire)) * 24 * time.Hour))
+		expiresAt = jwt.NewNumericDate(time.Now().Add(time.Duration(gconv.Int64(in.Expire)) * 24 * time.Hour))
 	} else {
-		in.ExpiresAt = jwt.NewNumericDate(time.Now().Add(30 * 24 * time.Hour * time.Duration(1)))
+		expiresAt = jwt.NewNumericDate(time.Now().Add(30 * 24 * time.Hour * time.Duration(1)))
 	}
 
 	// 签发时间
 	now := jwt.NewNumericDate(time.Now())
 
 	// 判断生效时间
+	var notBefore *jwt.NumericDate
 	if in.Before > 0 {
-		in.NotBefore = jwt.NewNumericDate(time.Now().Add(time.Duration(in.Before) * 24 * time.Hour))
+		notBefore = jwt.NewNumericDate(time.Now().Add(time.Duration(in.Before) * 24 * time.Hour))
 	} else {
-		in.NotBefore = now
+		notBefore = now
 	}
 
-	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"Id":       in.Id,
-		"UserInfo": in.UserInfo,
-		"RegisteredClaims": jwt.RegisteredClaims{
-			Issuer:    in.Issuer,    // 签发人
-			Subject:   in.Subject,   // 签发主题
-			ExpiresAt: in.ExpiresAt, // 过期时间
-			NotBefore: in.NotBefore, // 生效时间
-			IssuedAt:  in.IssuedAt,  // 签发时间
-			Audience:  nil,          // 接收者
+	var signingMethod jwt.SigningMethod
+	if in.SigningMethod == nil {
+		signingMethod = jwt.SigningMethodHS256
+	}
+
+	customClaims := CustomClaims{
+		Id:       in.Id,
+		UserInfo: in.UserInfo,
+		RegisteredClaims: jwt.RegisteredClaims{
+			Issuer:    in.Issuer,
+			Subject:   in.Subject,
+			Audience:  nil,
+			ExpiresAt: expiresAt,
+			NotBefore: notBefore,
+			IssuedAt:  now,
 		},
-	})
+	}
+
+	claims := jwt.NewWithClaims(signingMethod, customClaims)
 
 	return claims.SignedString([]byte(jc.SecretKey))
 }
@@ -114,7 +134,7 @@ func (jc *JwtClaims) ParseToken(token string) (map[string]interface{}, error) {
 		return nil, err
 	}
 
-	withClaims, err := jwt.ParseWithClaims(token, jwt.MapClaims{}, func(token *jwt.Token) (interface{}, error) {
+	withClaims, err := jwt.ParseWithClaims(token, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(jc.SecretKey), nil
 	})
 
@@ -132,8 +152,8 @@ func (jc *JwtClaims) ParseToken(token string) (map[string]interface{}, error) {
 		}
 	}
 
-	if claims, ok := withClaims.Claims.(jwt.MapClaims); ok && withClaims.Valid {
-		return claims, nil
+	if claims, ok := withClaims.Claims.(*CustomClaims); ok && withClaims.Valid {
+		return gconv.Map(claims), nil
 	}
 
 	return nil, errors.New("无法处理此token")
@@ -149,7 +169,7 @@ func (jc *JwtClaims) ParseToken(token string) (map[string]interface{}, error) {
 // @param secretKey
 // @return string
 // @return error
-func CreateToken(in CustomClaims, secretKey string) (string, error) {
+func CreateToken(in CustomClaimsInput, secretKey string) (string, error) {
 	jwt := JwtClaims{SecretKey: secretKey}
 	return jwt.CreateToken(in)
 }
@@ -165,6 +185,6 @@ func CreateToken(in CustomClaims, secretKey string) (string, error) {
 // @return map[string]interface{}
 // @return error
 func ParseToken(token string, secretKey string) (map[string]interface{}, error) {
-	jwt := JwtClaims{SecretKey: secretKey}
+	jwt := JwtClaims{SecretKey: secretKey, Sig}
 	return jwt.ParseToken(token)
 }

@@ -11,10 +11,6 @@ import (
 )
 
 type (
-	IJwtTokenTest interface {
-		TestSetToken(ctx context.Context, in model.JwtClaimsInput) (code int32, message string, output string, err error)
-		TestGetToken(ctx context.Context, token string) (code int32, message string, output interface{}, err error)
-	}
 	IDBTest interface {
 		TestInsert(ctx context.Context, in model.TestDBInsertInput) (code int32, message string, err error)
 		TestInsertAndGetId(ctx context.Context, in model.TestDBInsertInput) (code int32, message string, lastInsertId int64, err error)
@@ -45,6 +41,10 @@ type (
 	IRedisCacheTest interface {
 		TestExistsSetData(ctx context.Context, in model.TestExistsSetDataInput) (code int32, message string, err error)
 		TestCastHashData(ctx context.Context, in model.TestCastHashDataInput) (code int32, message string, output interface{}, err error)
+	}
+	IJwtTokenTest interface {
+		TestSetToken(ctx context.Context, in model.JwtClaimsInput) (code int32, message string, output string, err error)
+		TestGetToken(ctx context.Context, token string) (code int32, message string, output interface{}, err error)
 	}
 )
 
