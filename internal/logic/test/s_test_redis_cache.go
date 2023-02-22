@@ -39,7 +39,7 @@ type sRedisCacheTest struct {
 // @return message
 // @return err
 func (s *sRedisCacheTest) TestExistsSetData(ctx context.Context, in model.TestExistsSetDataInput) (code int32, message string, err error) {
-	return utility.ExistsSetData(utility.RedisExistsData{
+	return utility.RCExistsSetData(utility.RedisExistsData{
 		Key:   "db_test:exists_id",
 		Value: in.Id,
 	}, func(condition interface{}) (code int32, message string, err error) {
@@ -66,7 +66,7 @@ func (s *sRedisCacheTest) TestExistsSetData(ctx context.Context, in model.TestEx
 // @return output
 // @return err
 func (s *sRedisCacheTest) TestCastHashData(ctx context.Context, in model.TestCastHashDataInput) (code int32, message string, output interface{}, err error) {
-	code, message, output, err = utility.CastHashData(utility.RedisCastData{
+	code, message, output, err = utility.RCCastHashData(utility.RedisCastData{
 		Config: "test",
 		Key:    "db_test:cast_id",
 		Field:  gconv.String(in.Id),

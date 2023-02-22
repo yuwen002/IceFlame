@@ -3,7 +3,9 @@ package cmd
 import (
 	"context"
 	"ice_flame/internal/controller"
+	"ice_flame/internal/controller/manage"
 	"ice_flame/internal/controller/test"
+	"ice_flame/internal/service"
 
 	_ "github.com/gogf/gf/contrib/drivers/mysql/v2"
 	_ "github.com/gogf/gf/contrib/nosql/redis/v2"
@@ -61,6 +63,15 @@ var (
 					test.JwtClaimsTest.TestJCGetToken,
 				)
 			})
+			// 后台管理分组
+			s.Group("/manage",
+				func(group *ghttp.RouterGroup) {
+					group.Middleware(service.Middleware().MiddlewareHandlerResponse)
+					group.Bind(
+						manage.UcSystemMaster.Register,
+					)
+
+				})
 			s.Run()
 			return nil
 		},

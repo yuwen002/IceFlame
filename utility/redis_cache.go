@@ -187,7 +187,7 @@ func InitRedis(config ...string) *gredis.Redis {
 	return redis.InitRedis()
 }
 
-// ExistsSetData
+// RCExistsSetData
 //
 // @Title 判断集合重元素是否存在
 // @Description 判断集合重元素是否存在, 不存在将集合元素写入
@@ -198,12 +198,16 @@ func InitRedis(config ...string) *gredis.Redis {
 // @return code
 // @return message
 // @return err
-func ExistsSetData(data RedisExistsData, f func(condition interface{}) (code int32, message string, err error)) (code int32, message string, err error) {
+//
+//	0, "集合中数据已存在"
+//	1, "失败，添加重复元素"，"添加元素成功"
+//	2, "添加元素成功, key不存在或者不能为key设置过期时间"
+func RCExistsSetData(data RedisExistsData, f func(condition interface{}) (code int32, message string, err error)) (code int32, message string, err error) {
 	var redis = RedisCache{Config: data.Config}
 	return redis.ExistsSetData(data, f)
 }
 
-// CastHashData
+// RCCastHashData
 //
 // @Title 数据转换
 // @Description 数据转换，例如：店铺ID转换商家ID
@@ -215,7 +219,7 @@ func ExistsSetData(data RedisExistsData, f func(condition interface{}) (code int
 // @return message
 // @return output
 // @return err
-func CastHashData(data RedisCastData, f func(condition interface{}) (code int32, message string, output interface{}, err error)) (code int32, message string, output interface{}, err error) {
+func RCCastHashData(data RedisCastData, f func(condition interface{}) (code int32, message string, output interface{}, err error)) (code int32, message string, output interface{}, err error) {
 	var redis = RedisCache{Config: data.Config}
 	return redis.CastHashData(data, f)
 }

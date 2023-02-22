@@ -3,7 +3,6 @@ package utility
 import (
 	"errors"
 	"fmt"
-	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/golang-jwt/jwt/v4"
 	"time"
 )
@@ -131,7 +130,7 @@ func (jc *JwtClaims) CreateToken(in CustomClaimsInput) (string, error) {
 // @param token
 // @return jwt.MapClaims
 // @return error
-func (jc *JwtClaims) ParseToken(token string) (map[string]interface{}, error) {
+func (jc *JwtClaims) ParseToken(token string) (*CustomClaims, error) {
 	// 验证秘钥
 	err := jc.VerifySecretKey()
 	if err != nil {
@@ -158,7 +157,7 @@ func (jc *JwtClaims) ParseToken(token string) (map[string]interface{}, error) {
 	}
 
 	if claims, ok := withClaims.Claims.(*CustomClaims); ok && withClaims.Valid {
-		return gconv.Map(claims), nil
+		return claims, nil
 	}
 
 	return nil, errors.New("无法处理此token")
@@ -189,7 +188,7 @@ func CreateToken(in CustomClaimsInput, secretKey string) (string, error) {
 // @param secretKey
 // @return map[string]interface{}
 // @return error
-func ParseToken(token string, secretKey string) (map[string]interface{}, error) {
+func ParseToken(token string, secretKey string) (*CustomClaims, error) {
 	jwt := JwtClaims{SecretKey: secretKey}
 	return jwt.ParseToken(token)
 }
