@@ -5,6 +5,8 @@ import (
 	"errors"
 	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/util/gconv"
+	"ice_flame/internal/consts"
 	"ice_flame/internal/dao"
 	"ice_flame/internal/model/uc_center"
 	"ice_flame/internal/service"
@@ -64,7 +66,7 @@ func (s *sUcSystemMaster) ExistsUsername(ctx context.Context, username string) (
 	return code, message, err
 }
 
-// CreateSystemMaster
+// RegisterSystemMaster
 //
 // @Title 新建管理员用户
 // @Description 新建管理员用户
@@ -76,13 +78,13 @@ func (s *sUcSystemMaster) ExistsUsername(ctx context.Context, username string) (
 // @return code
 // @return message
 // @return err
-func (s *sUcSystemMaster) CreateSystemMaster(ctx context.Context, in uc_center.CreateSystemMasterInput) (code int32, message string, err error) {
+func (s *sUcSystemMaster) RegisterSystemMaster(ctx context.Context, in uc_center.RegisterSystemMasterInput) (code int32, message string, err error) {
 	// 验证用户名是否存在
 	code, message, err = s.ExistsUsername(ctx, in.Tel)
 	if err != nil {
 		return code, message, err
 	}
-	if code == 1 {
+	if code == 0 {
 		return 1, "用户名已存在", err
 	}
 
@@ -137,4 +139,32 @@ func (s *sUcSystemMaster) CreateSystemMaster(ctx context.Context, in uc_center.C
 	}
 
 	return 0, "数据写入成功", nil
+}
+
+func (s *sUcSystemMaster) LoginTelSystemMaster(ctx context.Context, in uc_center.LoginTelSystemMasterInput) (code int32, message string, token string, err error) {
+	// 查询登入信息
+	code, message, data, err := utility.DBGetOneMapByWhere(dao.UcSystemMaster.Ctx(ctx), utility.DBGetOneByWhereInput{
+		Where: "tel",
+		Args:  s.prefix + in.Tel,
+		Order: "",
+	})
+
+	if err != nil {
+		return -1, "", "", err
+	}
+
+	if code == 1 {
+		return 1, "登入信息不存在", "", nil
+	}
+
+	dataMap := data.(map[string]interface{})
+	utility.CreateToken(utility.CustomClaimsInput{
+		Id: gconv.Uint64(dataMap["id"]),
+		UserInfo: g.Map{
+			"username": dataMap["username"],
+		},
+		Expire:  60 * 60 * 24,
+		Issuer:  "系统管理员:" + gconv.String(dataMap["name"]),
+		Subject: "后台管理",
+	}, consts.MasterSecretKey)
 }

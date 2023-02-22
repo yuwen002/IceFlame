@@ -25,7 +25,7 @@ type cUcSystemMaster struct {
 // @return res
 // @return err
 func (c *cUcSystemMaster) Register(ctx context.Context, req *manage.RegisterSystemMasterReq) (res *manage.RegisterSystemMasterRes, err error) {
-	code, message, err := service.UcSystemMaster().CreateSystemMaster(ctx, uc_center.CreateSystemMasterInput{
+	code, message, err := service.UcSystemMaster().CreateSystemMaster(ctx, uc_center.RegisterSystemMasterInput{
 		Username: req.Tel,
 		Password: req.Password,
 		Tel:      req.Tel,

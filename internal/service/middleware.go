@@ -10,17 +10,17 @@ import (
 )
 
 type (
-	IMiddleware interface {
-		MiddlewareHandlerResponse(r *ghttp.Request)
-	}
 	IAuthMiddleware interface {
 		MiddlewareAuthMaster(r *ghttp.Request)
+	}
+	IMiddleware interface {
+		MiddlewareHandlerResponse(r *ghttp.Request)
 	}
 )
 
 var (
-	localMiddleware     IMiddleware
 	localAuthMiddleware IAuthMiddleware
+	localMiddleware     IMiddleware
 )
 
 func AuthMiddleware() IAuthMiddleware {

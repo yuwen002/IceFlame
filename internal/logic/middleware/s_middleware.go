@@ -1,39 +1,62 @@
 package middleware
 
 import (
+	"github.com/gogf/gf/v2/errors/gcode"
+	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
-	"ice_flame/internal/consts"
-	"ice_flame/utility"
+	"ice_flame/internal/service"
+	"net/http"
 )
 
-var insAuthMiddleware = sAuthMiddleware{}
+var insMiddleware = sMiddleware{}
 
-func AuthMiddleware() *sAuthMiddleware {
-	return &insAuthMiddleware
+func Middleware() *sMiddleware {
+	return &insMiddleware
 }
 
-type sAuthMiddleware struct{}
+func init() {
+	service.RegisterMiddleware(Middleware())
+}
 
-// MiddlewareAuthMaster
-//
-// @Title 管理员登入验证中间件
-// @Description
-// @Author liuxingyu <yuwen002@163.com>
-// @Date 2023-02-22 14:16:59
-// @receiver s
-// @param r
-func (s *sAuthMiddleware) MiddlewareAuthMaster(r *ghttp.Request) {
-	token := r.Get("token")
-	claims, err := utility.ParseToken(token.String(), consts.MasterSecretKey)
-	if err != nil {
-		r.Response.WriteJsonExit(g.Map{
-			"code":    -1,
-			"message": err.Error(),
-		})
+type sMiddleware struct {
+}
 
-		r.SetCtxVar("master_id", claims.Id)
-		r.SetCtxVar("user_info", claims.UserInfo)
-		r.Middleware.Next()
+func (s *sMiddleware) MiddlewareHandlerResponse(r *ghttp.Request) {
+	r.Middleware.Next()
+
+	// There's custom buffer content, it then exits current handler.
+	if r.Response.BufferLength() > 0 {
+		return
 	}
+
+	var (
+		msg  string
+		err  = r.GetError()
+		res  = r.GetHandlerResponse()
+		code = gerror.Code(err)
+	)
+	if err != nil {
+		if code == gcode.CodeNil {
+			code = gcode.CodeInternalError
+		}
+		msg = err.Error()
+	} else if r.Response.Status > 0 && r.Response.Status != http.StatusOK {
+		msg = http.StatusText(r.Response.Status)
+		switch r.Response.Status {
+		case http.StatusNotFound:
+			code = gcode.CodeNotFound
+		case http.StatusForbidden:
+			code = gcode.CodeNotAuthorized
+		default:
+			code = gcode.CodeUnknown
+		}
+	} else {
+		code = gcode.CodeOK
+	}
+	r.Response.WriteJson(g.Map{
+		"code":    code.Code(),
+		"message": msg,
+		"data":    res,
+	})
 }

@@ -13,7 +13,8 @@ import (
 type (
 	IUcSystemMaster interface {
 		ExistsUsername(ctx context.Context, username string) (code int32, message string, err error)
-		CreateSystemMaster(ctx context.Context, in uc_center.CreateSystemMasterInput) (code int32, message string, err error)
+		RegisterSystemMaster(ctx context.Context, in uc_center.RegisterSystemMasterInput) (code int32, message string, err error)
+		LoginTelSystemMaster(ctx context.Context, in uc_center.LoginTelSystemMasterInput) (code int32, message string, token string, err error)
 	}
 )
 
