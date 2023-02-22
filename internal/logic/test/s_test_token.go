@@ -40,7 +40,8 @@ func (s *sJwtTokenTest) TestSetToken(ctx context.Context, in model.JwtClaimsInpu
 		Before:   in.Before,
 		Issuer:   in.Issuer,
 		Subject:  in.Subject,
-	}, consts.USER_SECRET_KEY)
+		//SigningMethod: jwt.SigningMethodPS256,
+	}, consts.UserSecretKey)
 
 	if err != nil {
 		return -1, "", "", err
@@ -63,7 +64,7 @@ func (s *sJwtTokenTest) TestSetToken(ctx context.Context, in model.JwtClaimsInpu
 // @return output
 // @return err
 func (s *sJwtTokenTest) TestGetToken(ctx context.Context, token string) (code int32, message string, output interface{}, err error) {
-	claims, err := utility.ParseToken(token, consts.USER_SECRET_KEY)
+	claims, err := utility.ParseToken(token, consts.UserSecretKey)
 	if err != nil {
 		return -1, "", "", err
 	}

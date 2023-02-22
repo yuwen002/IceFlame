@@ -2,6 +2,7 @@ package utility
 
 import (
 	"errors"
+	"fmt"
 	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/golang-jwt/jwt/v4"
 	"time"
@@ -66,6 +67,7 @@ func (jc *JwtClaims) VerifySecretKey() error {
 // @return string
 // @return error
 func (jc *JwtClaims) CreateToken(in CustomClaimsInput) (string, error) {
+	// 验证秘钥
 	err := jc.VerifySecretKey()
 	if err != nil {
 		return "", err
@@ -79,7 +81,7 @@ func (jc *JwtClaims) CreateToken(in CustomClaimsInput) (string, error) {
 	// 判断过期时间
 	var expiresAt *jwt.NumericDate
 	if in.Expire > 0 {
-		expiresAt = jwt.NewNumericDate(time.Now().Add(time.Duration(gconv.Int64(in.Expire)) * 24 * time.Hour))
+		expiresAt = jwt.NewNumericDate(time.Now().Add(time.Duration(in.Expire) * time.Second))
 	} else {
 		expiresAt = jwt.NewNumericDate(time.Now().Add(30 * 24 * time.Hour * time.Duration(1)))
 	}
@@ -95,25 +97,26 @@ func (jc *JwtClaims) CreateToken(in CustomClaimsInput) (string, error) {
 		notBefore = now
 	}
 
-	var signingMethod jwt.SigningMethod
+	// 判断加密方式
 	if in.SigningMethod == nil {
-		signingMethod = jwt.SigningMethodHS256
+		in.SigningMethod = jwt.SigningMethodHS256
 	}
 
+	// 初始化加密数据
 	customClaims := CustomClaims{
 		Id:       in.Id,
 		UserInfo: in.UserInfo,
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    in.Issuer,
 			Subject:   in.Subject,
-			Audience:  nil,
 			ExpiresAt: expiresAt,
 			NotBefore: notBefore,
 			IssuedAt:  now,
 		},
 	}
-
-	claims := jwt.NewWithClaims(signingMethod, customClaims)
+	// 生成token
+	claims := jwt.NewWithClaims(in.SigningMethod, customClaims)
+	fmt.Println(claims)
 
 	return claims.SignedString([]byte(jc.SecretKey))
 }
@@ -129,11 +132,13 @@ func (jc *JwtClaims) CreateToken(in CustomClaimsInput) (string, error) {
 // @return jwt.MapClaims
 // @return error
 func (jc *JwtClaims) ParseToken(token string) (map[string]interface{}, error) {
+	// 验证秘钥
 	err := jc.VerifySecretKey()
 	if err != nil {
 		return nil, err
 	}
 
+	// 解析token
 	withClaims, err := jwt.ParseWithClaims(token, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(jc.SecretKey), nil
 	})

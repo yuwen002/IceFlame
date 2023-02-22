@@ -12,6 +12,17 @@ var JwtClaimsTest = cJwtClaimsTest{}
 
 type cJwtClaimsTest struct{}
 
+// TestJCSetToken
+//
+// @Title 测试生成token
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-22 10:54:04
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
 func (c *cJwtClaimsTest) TestJCSetToken(ctx context.Context, req *test.JCSetTokenReq) (res *test.JCSetTokenRes, err error) {
 	code, message, token, err := service.JwtTokenTest().TestSetToken(ctx, model.JwtClaimsInput{
 		Id: 1,
@@ -42,6 +53,17 @@ func (c *cJwtClaimsTest) TestJCSetToken(ctx context.Context, req *test.JCSetToke
 	return
 }
 
+// TestJCGetToken
+//
+// @Title 测试解析token
+// @Description 测试解析token
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-22 10:59:50
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
 func (c *cJwtClaimsTest) TestJCGetToken(ctx context.Context, req *test.JCGetTokenReq) (res *test.JCSetTokenRes, err error) {
 	code, message, claims, err := service.JwtTokenTest().TestGetToken(ctx, req.Token)
 	var json = g.RequestFromCtx(ctx).Response
