@@ -19,3 +19,12 @@ type LoginTelPasswordInput struct {
 	Tel      string
 	Password string
 }
+
+// LoginUsernamePasswordInput
+// @Description:用户名密码登入
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-23 16:20:59
+type LoginUsernamePasswordInput struct {
+	Username string
+	Password string
+}

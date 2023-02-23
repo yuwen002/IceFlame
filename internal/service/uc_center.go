@@ -15,6 +15,7 @@ type (
 		ExistsUsername(ctx context.Context, username string) (code int32, message string, err error)
 		Register(ctx context.Context, in uc_center.RegisterInput) (code int32, message string, err error)
 		LoginTelPassword(ctx context.Context, in uc_center.LoginTelPasswordInput) (code int32, message string, token string, err error)
+		LoginUsernamePassword(ctx context.Context, in uc_center.LoginUsernamePasswordInput) (code int32, message string, token string, err error)
 	}
 )
 

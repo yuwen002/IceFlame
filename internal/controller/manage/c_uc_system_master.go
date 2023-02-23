@@ -81,3 +81,37 @@ func (c *cUcSystemMaster) LoginTelPassword(ctx context.Context, req *manage.Logi
 
 	return
 }
+
+// LoginUsernamePassword
+//
+// @Title 管理员用户登入
+// @Description 管理员用户登入，登入方式用户名和密码
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-23 16:30:03
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMaster) LoginUsernamePassword(ctx context.Context, req *manage.LoginUsernamePasswordReq) (res *manage.LoginUsernamePasswordRes, err error) {
+	code, message, token, err := service.UcSystemMaster().LoginUsernamePassword(ctx, uc_center.LoginUsernamePasswordInput{
+		Username: req.Username,
+		Password: req.Password,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    g.Map{"token": token},
+	})
+
+	return
+}

@@ -70,6 +70,7 @@ var (
 					group.Bind(
 						manage.UcSystemMaster.Register,
 						manage.UcSystemMaster.LoginTelPassword,
+						manage.UcSystemMaster.LoginUsernamePassword,
 					)
 
 				})

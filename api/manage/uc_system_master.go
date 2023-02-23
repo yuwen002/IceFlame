@@ -21,9 +21,21 @@ type RegisterRes struct {
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-02-23 14:33:03
 type LoginTelPasswordReq struct {
-	g.Meta   `path:"/master/login_tel_password" tags:"管理员登入" method:"post" summary:"管理员登入"`
+	g.Meta   `path:"/master/login_tel_password" tags:"管理员登入" method:"post" summary:"管理员登入,登入方式电话和密码"`
 	Tel      string `p:"tel" v:"required|phone#用户电话不能为空|请填写正确电话"`
 	Password string `p:"password" v:"required|length:5,32#密码不能为空|密码在5到32之间"`
 }
 type LoginTelPasswordRes struct {
+}
+
+// LoginUsernamePasswordReq
+// @Description: 管理员登入，登入方式用户名密码登入
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-23 16:29:05
+type LoginUsernamePasswordReq struct {
+	g.Meta   `path:"/master/login_username_password" tags:"管理员登入" method:"post" summary:"管理员登入用户名和密码"`
+	Username string `p:"tel" v:"required#用户名不能为空"`
+	Password string `p:"password" v:"required|length:5,32#密码不能为空|密码在5到32之间"`
+}
+type LoginUsernamePasswordRes struct {
 }

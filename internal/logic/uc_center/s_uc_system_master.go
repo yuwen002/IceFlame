@@ -197,3 +197,55 @@ func (s *sUcSystemMaster) LoginTelPassword(ctx context.Context, in uc_center.Log
 
 	return 0, "登入成功", token, nil
 }
+
+// LoginUsernamePassword
+//
+// @Title 管理员用户名密码登入
+// @Description 管理员用户名密码登入
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-23 16:23:48
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return token
+// @return err
+func (s *sUcSystemMaster) LoginUsernamePassword(ctx context.Context, in uc_center.LoginUsernamePasswordInput) (code int32, message string, token string, err error) {
+	// 查询登入信息
+	code, message, data, err := utility.DBGetOneMapByWhere(dao.UcAccount.Ctx(ctx), utility.DBGetOneByWhereInput{
+		Where: "username = ? and status = 0",
+		Args:  s.prefix + in.Username,
+	})
+
+	if err != nil {
+		return -1, "", "", err
+	}
+
+	if code == 1 {
+		return 1, "登入信息不存在", "", nil
+	}
+
+	dataMap := data.(map[string]interface{})
+
+	// 验证密码是否正确
+	if utility.PasswordVerify(in.Password, gconv.String(dataMap["password_hash"])) == false {
+		return 1, "用户名密码错误", "", nil
+	}
+
+	// 生成token
+	token, err = utility.CreateToken(utility.CustomClaimsInput{
+		Id: gconv.Uint64(dataMap["id"]),
+		UserInfo: g.Map{
+			"username": dataMap["username"],
+		},
+		Expire:  60 * 60 * 24,
+		Issuer:  "系统管理员:" + gconv.String(dataMap["name"]),
+		Subject: "后台管理",
+	}, consts.MasterSecretKey)
+	if err != nil {
+		return -1, "", "", err
+	}
+
+	return 0, "登入成功", token, nil
+}
