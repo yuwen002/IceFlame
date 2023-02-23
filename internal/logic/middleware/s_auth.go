@@ -4,6 +4,7 @@ import (
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"ice_flame/internal/consts"
+	"ice_flame/internal/service"
 	"ice_flame/utility"
 )
 
@@ -11,6 +12,10 @@ var insAuthMiddleware = sAuthMiddleware{}
 
 func AuthMiddleware() *sAuthMiddleware {
 	return &insAuthMiddleware
+}
+
+func init() {
+	service.RegisterAuthMiddleware(AuthMiddleware())
 }
 
 type sAuthMiddleware struct{}
@@ -25,6 +30,13 @@ type sAuthMiddleware struct{}
 // @param r
 func (s *sAuthMiddleware) MiddlewareAuthMaster(r *ghttp.Request) {
 	token := r.Get("token")
+	// token 未传入
+	if token.String() == "" {
+		r.Response.WriteJsonExit(g.Map{
+			"code":    -1,
+			"message": "token不能为空",
+		})
+	}
 	claims, err := utility.ParseToken(token.String(), consts.MasterSecretKey)
 	if err != nil {
 		r.Response.WriteJsonExit(g.Map{

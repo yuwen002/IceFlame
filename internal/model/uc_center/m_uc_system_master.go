@@ -5,7 +5,6 @@ package uc_center
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-02-22 16:06:35
 type RegisterInput struct {
-	Username string
 	Password string
 	Tel      string
 	Name     string
@@ -27,4 +26,15 @@ type LoginTelPasswordInput struct {
 type LoginUsernamePasswordInput struct {
 	Username string
 	Password string
+}
+
+// CreateSystemMasterInput
+// @Description: 后台管理员新建用户
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-23 16:56:11
+type CreateSystemMasterInput struct {
+	Username string
+	Password string
+	Tel      string
+	Name     string
 }

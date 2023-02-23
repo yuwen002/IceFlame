@@ -73,7 +73,18 @@ var (
 						manage.UcSystemMaster.LoginUsernamePassword,
 					)
 
-				})
+				},
+				func(group *ghttp.RouterGroup) {
+					group.Middleware(
+						service.Middleware().MiddlewareHandlerResponse,
+						service.AuthMiddleware().MiddlewareAuthMaster,
+					)
+					group.Bind(
+						manage.UcSystemMaster.CreateSystemMaster,
+					)
+				},
+			)
+
 			s.Run()
 			return nil
 		},

@@ -66,6 +66,39 @@ func (s *sUcSystemMaster) ExistsUsername(ctx context.Context, username string) (
 	return code, message, err
 }
 
+// ExistsTel
+//
+// @Title 验证用户手机号是否存在
+// @Description 验证用户电话号是否存在
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-23 16:41:58
+// @receiver s
+// @param ctx
+// @param tel
+// @return code
+// @return message
+// @return err
+func (s *sUcSystemMaster) ExistsTel(ctx context.Context, tel string) (code int32, message string, err error) {
+	tel = s.prefix + tel
+	data := utility.RedisExistsData{
+		Config: "uc_center",
+		Key:    dao.UcAccount.Table() + ":exists_tel",
+		Value:  tel,
+	}
+
+	code, message, err = utility.RCExistsSetData(data, func(condition interface{}) (code int32, message string, err error) {
+		code, message, _, err = utility.DBGetOneMapByWhere(dao.UcAccount.Ctx(ctx), utility.DBGetOneByWhereInput{
+			Field: "id",
+			Where: "tel=?",
+			Args:  tel,
+		})
+
+		return code, message, err
+	})
+
+	return code, message, err
+}
+
 // Register
 //
 // @Title 新建管理员用户
@@ -88,17 +121,19 @@ func (s *sUcSystemMaster) Register(ctx context.Context, in uc_center.RegisterInp
 		return 1, "用户名已存在", err
 	}
 
-	// 无密码，默认密码123456
-	if in.Password == "" {
-		in.Password, err = utility.PasswordHash("123456")
-		if err != nil {
-			return code, message, err
-		}
-	} else {
-		in.Password, err = utility.PasswordHash(in.Password)
-		if err != nil {
-			return code, message, err
-		}
+	// 验证用户手机号是否存在
+	code, message, err = s.ExistsTel(ctx, in.Tel)
+	if err != nil {
+		return code, message, err
+	}
+	if code == 0 {
+		return 1, "用户名手机号已存在", err
+	}
+
+	// 密码hash
+	in.Password, err = utility.PasswordHash(in.Password)
+	if err != nil {
+		return code, message, err
 	}
 
 	err = dao.UcAccount.Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
@@ -248,4 +283,93 @@ func (s *sUcSystemMaster) LoginUsernamePassword(ctx context.Context, in uc_cente
 	}
 
 	return 0, "登入成功", token, nil
+}
+
+// CreateSystemMaster
+//
+// @Title 后台管理员新建用户
+// @Description 后台管理员新建用户，后台管理新建用户，可自定义用户名
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-23 16:58:13
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sUcSystemMaster) CreateSystemMaster(ctx context.Context, in uc_center.CreateSystemMasterInput) (code int32, message string, err error) {
+	// 验证用户名是否存在
+	code, message, err = s.ExistsUsername(ctx, in.Username)
+	if err != nil {
+		return code, message, err
+	}
+	if code == 0 {
+		return 1, "用户名已存在", err
+	}
+
+	// 验证用户手机号是否存在
+	code, message, err = s.ExistsTel(ctx, in.Tel)
+	if err != nil {
+		return code, message, err
+	}
+	if code == 0 {
+		return 1, "用户名手机号已存在", err
+	}
+
+	// 无密码，默认密码123456
+	if in.Password == "" {
+		in.Password, err = utility.PasswordHash("123456")
+		if err != nil {
+			return code, message, err
+		}
+	} else {
+		in.Password, err = utility.PasswordHash(in.Password)
+		if err != nil {
+			return code, message, err
+		}
+	}
+
+	err = dao.UcAccount.Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
+		// 写入主表数据uc_account
+		code, message, lastInsertId, err := utility.DBInsertAndGetId(dao.UcAccount.Ctx(ctx), utility.DBInsertInput{Data: g.Map{
+			"username":      s.prefix + in.Username,
+			"password_hash": in.Password,
+			"tel":           s.prefix + in.Tel,
+		}})
+
+		if err != nil {
+			return err
+		}
+
+		if code == 1 {
+			err = errors.New(message)
+			return err
+		}
+
+		// 写入管理员表数据
+		code, message, err = utility.DBInsert(dao.UcSystemMaster.Ctx(ctx), utility.DBInsertInput{
+			Data: g.Map{
+				"account_id": lastInsertId,
+				"name":       in.Name,
+				"tel":        in.Tel,
+			},
+		})
+
+		if err != nil {
+			return err
+		}
+
+		if code == 1 {
+			err = errors.New(message)
+			return err
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return -1, "", err
+	}
+
+	return 0, "数据写入成功", nil
 }

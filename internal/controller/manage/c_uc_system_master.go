@@ -26,7 +26,6 @@ type cUcSystemMaster struct {
 // @return err
 func (c *cUcSystemMaster) Register(ctx context.Context, req *manage.RegisterReq) (res *manage.RegisterRes, err error) {
 	code, message, err := service.UcSystemMaster().Register(ctx, uc_center.RegisterInput{
-		Username: req.Tel,
 		Password: req.Password,
 		Tel:      req.Tel,
 		Name:     req.Name,
@@ -111,6 +110,41 @@ func (c *cUcSystemMaster) LoginUsernamePassword(ctx context.Context, req *manage
 		"code":    code,
 		"message": message,
 		"data":    g.Map{"token": token},
+	})
+
+	return
+}
+
+// CreateSystemMaster
+//
+// @Title 管理员新建管理用户
+// @Description 管理员新建管理用户
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-23 17:06:28
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMaster) CreateSystemMaster(ctx context.Context, req *manage.CreateSystemMasterReq) (res *manage.CreateSystemMasterRes, err error) {
+	code, message, err := service.UcSystemMaster().CreateSystemMaster(ctx, uc_center.CreateSystemMasterInput{
+		Username: req.Username,
+		Password: req.Password,
+		Tel:      req.Tel,
+		Name:     req.Name,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
 	})
 
 	return
