@@ -69,6 +69,7 @@ var (
 					group.Middleware(service.Middleware().MiddlewareHandlerResponse)
 					group.Bind(
 						manage.UcSystemMaster.Register,
+						manage.UcSystemMaster.LoginTelPassword,
 					)
 
 				})
