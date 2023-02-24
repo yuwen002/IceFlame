@@ -76,8 +76,8 @@ var (
 				},
 				func(group *ghttp.RouterGroup) {
 					group.Middleware(
-						service.Middleware().MiddlewareHandlerResponse,
 						service.AuthMiddleware().MiddlewareAuthMaster,
+						service.Middleware().MiddlewareHandlerResponse,
 					)
 					group.Bind(
 						manage.UcSystemMaster.CreateSystemMaster,
