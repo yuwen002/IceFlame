@@ -81,6 +81,7 @@ var (
 					)
 					group.Bind(
 						manage.UcSystemMaster.CreateSystemMaster,
+						manage.UcSystemMaster.ModifyPassword,
 					)
 				},
 			)

@@ -2,6 +2,7 @@ package utility
 
 import (
 	"context"
+	"fmt"
 	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/database/gredis"
 	"github.com/gogf/gf/v2/frame/g"
@@ -304,7 +305,7 @@ func (db *DB) GetStructRedisCache(cache RedisData, output interface{}) (code int
 // @return message
 // @return output
 // @return err
-func (db *DB) GetMapRedisCache(cache RedisData) (code int32, message string, output interface{}, err error) {
+func (db *DB) GetMapRedisCache(cache RedisData) (code int32, message string, output map[string]interface{}, err error) {
 	// Redis初始化
 	redis := db.InitRedis()
 	// 数据获取
@@ -549,7 +550,7 @@ func (db *DB) GetStructRCacheById(condition DBGetByIdInput, output interface{}) 
 // @return message
 // @return output
 // @return err
-func (db *DB) GetMapById(condition DBGetByIdInput) (code int32, message string, output interface{}, err error) {
+func (db *DB) GetMapById(condition DBGetByIdInput) (code int32, message string, output map[string]interface{}, err error) {
 	// 数据查询
 	res, err := db.ConditionGetById(condition).One()
 	if err != nil {
@@ -575,7 +576,7 @@ func (db *DB) GetMapById(condition DBGetByIdInput) (code int32, message string, 
 // @return message
 // @return output
 // @return err
-func (db *DB) GetMapGCacheById(condition DBGetByIdInput) (code int32, message string, output interface{}, err error) {
+func (db *DB) GetMapGCacheById(condition DBGetByIdInput) (code int32, message string, output map[string]interface{}, err error) {
 	// Redis 缓存适配
 	redisCache := gcache.NewAdapterRedis(db.InitRedis())
 	g.DB().GetCache().SetAdapter(redisCache)
@@ -610,7 +611,7 @@ func (db *DB) GetMapGCacheById(condition DBGetByIdInput) (code int32, message st
 // @return message
 // @return output
 // @return err
-func (db *DB) GetMapRCacheById(condition DBGetByIdInput) (code int32, message string, output interface{}, err error) {
+func (db *DB) GetMapRCacheById(condition DBGetByIdInput) (code int32, message string, output map[string]interface{}, err error) {
 	// 缓存数据查询
 	code, message, output, err = db.GetMapRedisCache(RedisData{Key: condition.CacheKey})
 	if err != nil {
@@ -708,7 +709,7 @@ func (db *DB) GetStructByIds(condition DBGetByIdsInput, output interface{}) (cod
 // @return message
 // @return output
 // @return err
-func (db *DB) GetMapByIds(condition DBGetByIdsInput) (code int32, message string, output interface{}, err error) {
+func (db *DB) GetMapByIds(condition DBGetByIdsInput) (code int32, message string, output []map[string]interface{}, err error) {
 	// 数据查询
 	res, err := db.ConditionGetByIds(condition).WhereIn(condition.Column, condition.In).All()
 	if err != nil {
@@ -789,7 +790,7 @@ func (db *DB) GetOneStructByWhere(condition DBGetOneByWhereInput, output interfa
 // @return message
 // @return output
 // @return err
-func (db *DB) GetOneMapByWhere(condition DBGetOneByWhereInput) (code int32, message string, output interface{}, err error) {
+func (db *DB) GetOneMapByWhere(condition DBGetOneByWhereInput) (code int32, message string, output map[string]interface{}, err error) {
 	// 查询数据
 	res, err := db.GetOneByWhere(condition).One()
 	if err != nil {
@@ -893,7 +894,7 @@ func (db *DB) GetAllStructByWhere(condition DBGetAllByWhereInput, output interfa
 // @return message
 // @return output
 // @return err
-func (db *DB) GetAllMapByWhere(condition DBGetAllByWhereInput) (code int32, message string, output gdb.List, err error) {
+func (db *DB) GetAllMapByWhere(condition DBGetAllByWhereInput) (code int32, message string, output []map[string]interface{}, err error) {
 	res, err := db.ConditionGetAllByWhere(condition).All()
 	if err != nil {
 		return -1, "", nil, err
@@ -915,11 +916,12 @@ func (db *DB) GetAllMapByWhere(condition DBGetAllByWhereInput) (code int32, mess
 // @param condition
 // @return *gdb.Model
 func (db *DB) ConditionModifyById(condition DBModifyByIdInput) *gdb.Model {
+	fmt.Println(condition.Args)
 	// 判断条件
 	if condition.Args == nil {
-		db.M = db.M.Where(condition.Where, condition.Args)
-	} else {
 		db.M = db.M.Where("id=?", condition.Where)
+	} else {
+		db.M = db.M.Where(condition.Where, condition.Args)
 	}
 
 	// 过滤空字段是否开启
@@ -1492,7 +1494,7 @@ func DBGetStructRCacheById(m *gdb.Model, condition DBGetByIdInput, output interf
 // @return message
 // @return output
 // @return err
-func DBGetMapById(m *gdb.Model, condition DBGetByIdInput) (code int32, message string, output interface{}, err error) {
+func DBGetMapById(m *gdb.Model, condition DBGetByIdInput) (code int32, message string, output map[string]interface{}, err error) {
 	db := DB{M: m}
 	return db.GetMapById(condition)
 }
@@ -1509,7 +1511,7 @@ func DBGetMapById(m *gdb.Model, condition DBGetByIdInput) (code int32, message s
 // @return message
 // @return output
 // @return err
-func DBGetMapGCacheById(m *gdb.Model, condition DBGetByIdInput) (code int32, message string, output interface{}, err error) {
+func DBGetMapGCacheById(m *gdb.Model, condition DBGetByIdInput) (code int32, message string, output map[string]interface{}, err error) {
 	db := DB{M: m, RedisConfig: condition.RedisConfig}
 	return db.GetMapGCacheById(condition)
 }
@@ -1526,7 +1528,7 @@ func DBGetMapGCacheById(m *gdb.Model, condition DBGetByIdInput) (code int32, mes
 // @return message
 // @return output
 // @return err
-func DBGetMapRCacheById(m *gdb.Model, condition DBGetByIdInput) (code int32, message string, output interface{}, err error) {
+func DBGetMapRCacheById(m *gdb.Model, condition DBGetByIdInput) (code int32, message string, output map[string]interface{}, err error) {
 	db := DB{M: m, RedisConfig: condition.RedisConfig}
 	return db.GetMapRCacheById(condition)
 }
@@ -1560,7 +1562,7 @@ func DBGetStructByIds(m *gdb.Model, condition DBGetByIdsInput, output interface{
 // @return message
 // @return output
 // @return err
-func DBGetMapByIds(m *gdb.Model, condition DBGetByIdsInput) (code int32, message string, output interface{}, err error) {
+func DBGetMapByIds(m *gdb.Model, condition DBGetByIdsInput) (code int32, message string, output []map[string]interface{}, err error) {
 	db := DB{M: m}
 	return db.GetMapByIds(condition)
 }
@@ -1594,7 +1596,7 @@ func DBGetOneStructByWhere(m *gdb.Model, condition DBGetOneByWhereInput, output 
 // @return message
 // @return output
 // @return err
-func DBGetOneMapByWhere(m *gdb.Model, condition DBGetOneByWhereInput) (code int32, message string, output interface{}, err error) {
+func DBGetOneMapByWhere(m *gdb.Model, condition DBGetOneByWhereInput) (code int32, message string, output map[string]interface{}, err error) {
 	db := DB{M: m}
 	return db.GetOneMapByWhere(condition)
 }
@@ -1628,7 +1630,7 @@ func DBGetAllStructByWhere(m *gdb.Model, condition DBGetAllByWhereInput, output 
 // @return message
 // @return output
 // @return err
-func DBGetAllMapByWhere(m *gdb.Model, condition DBGetAllByWhereInput) (code int32, message string, output gdb.List, err error) {
+func DBGetAllMapByWhere(m *gdb.Model, condition DBGetAllByWhereInput) (code int32, message string, output []map[string]interface{}, err error) {
 	db := DB{M: m}
 	return db.GetAllMapByWhere(condition)
 }

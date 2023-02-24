@@ -111,7 +111,7 @@ func (s *sUcSystemMaster) ExistsTel(ctx context.Context, tel string) (code int32
 // @return code
 // @return message
 // @return err
-func (s *sUcSystemMaster) Register(ctx context.Context, in uc_center.RegisterInput) (code int32, message string, err error) {
+func (s *sUcSystemMaster) Register(ctx context.Context, in system_master.RegisterInput) (code int32, message string, err error) {
 	// 验证用户名是否存在
 	code, message, err = s.ExistsUsername(ctx, in.Tel)
 	if err != nil {
@@ -194,7 +194,7 @@ func (s *sUcSystemMaster) Register(ctx context.Context, in uc_center.RegisterInp
 // @return message
 // @return token
 // @return err
-func (s *sUcSystemMaster) LoginTelPassword(ctx context.Context, in uc_center.LoginTelPasswordInput) (code int32, message string, token string, err error) {
+func (s *sUcSystemMaster) LoginTelPassword(ctx context.Context, in system_master.LoginTelPasswordInput) (code int32, message string, token string, err error) {
 	// 查询登入信息
 	code, message, data, err := utility.DBGetOneMapByWhere(dao.UcAccount.Ctx(ctx), utility.DBGetOneByWhereInput{
 		Where: "tel = ? and status = 0",
@@ -209,21 +209,19 @@ func (s *sUcSystemMaster) LoginTelPassword(ctx context.Context, in uc_center.Log
 		return 1, "登入信息不存在", "", nil
 	}
 
-	dataMap := data.(map[string]interface{})
-
 	// 验证密码是否正确
-	if utility.PasswordVerify(in.Password, gconv.String(dataMap["password_hash"])) == false {
+	if utility.PasswordVerify(in.Password, gconv.String(data["password_hash"])) == false {
 		return 1, "用户名密码错误", "", nil
 	}
 
 	// 生成token
 	token, err = utility.CreateToken(utility.CustomClaimsInput{
-		Id: gconv.Uint64(dataMap["id"]),
+		Id: gconv.Uint64(data["id"]),
 		UserInfo: g.Map{
-			"username": dataMap["username"],
+			"username": data["username"],
 		},
 		Expire:  60 * 60 * 24,
-		Issuer:  "系统管理员:" + gconv.String(dataMap["name"]),
+		Issuer:  "系统管理员:" + gconv.String(data["name"]),
 		Subject: "后台管理",
 	}, consts.MasterSecretKey)
 	if err != nil {
@@ -246,7 +244,7 @@ func (s *sUcSystemMaster) LoginTelPassword(ctx context.Context, in uc_center.Log
 // @return message
 // @return token
 // @return err
-func (s *sUcSystemMaster) LoginUsernamePassword(ctx context.Context, in uc_center.LoginUsernamePasswordInput) (code int32, message string, token string, err error) {
+func (s *sUcSystemMaster) LoginUsernamePassword(ctx context.Context, in system_master.LoginUsernamePasswordInput) (code int32, message string, token string, err error) {
 	// 查询登入信息
 	code, message, data, err := utility.DBGetOneMapByWhere(dao.UcAccount.Ctx(ctx), utility.DBGetOneByWhereInput{
 		Where: "username = ? and status = 0",
@@ -261,21 +259,19 @@ func (s *sUcSystemMaster) LoginUsernamePassword(ctx context.Context, in uc_cente
 		return 1, "登入信息不存在", "", nil
 	}
 
-	dataMap := data.(map[string]interface{})
-
 	// 验证密码是否正确
-	if utility.PasswordVerify(in.Password, gconv.String(dataMap["password_hash"])) == false {
+	if utility.PasswordVerify(in.Password, gconv.String(data["password_hash"])) == false {
 		return 1, "用户名密码错误", "", nil
 	}
 
 	// 生成token
 	token, err = utility.CreateToken(utility.CustomClaimsInput{
-		Id: gconv.Uint64(dataMap["id"]),
+		Id: gconv.Uint64(data["id"]),
 		UserInfo: g.Map{
-			"username": dataMap["username"],
+			"username": data["username"],
 		},
 		Expire:  60 * 60 * 24,
-		Issuer:  "系统管理员:" + gconv.String(dataMap["name"]),
+		Issuer:  "系统管理员:" + gconv.String(data["name"]),
 		Subject: "后台管理",
 	}, consts.MasterSecretKey)
 	if err != nil {
@@ -297,7 +293,7 @@ func (s *sUcSystemMaster) LoginUsernamePassword(ctx context.Context, in uc_cente
 // @return code
 // @return message
 // @return err
-func (s *sUcSystemMaster) CreateSystemMaster(ctx context.Context, in uc_center.CreateSystemMasterInput) (code int32, message string, err error) {
+func (s *sUcSystemMaster) CreateSystemMaster(ctx context.Context, in system_master.CreateSystemMasterInput) (code int32, message string, err error) {
 	// 验证用户名是否存在
 	code, message, err = s.ExistsUsername(ctx, in.Username)
 	if err != nil {
@@ -372,4 +368,48 @@ func (s *sUcSystemMaster) CreateSystemMaster(ctx context.Context, in uc_center.C
 	}
 
 	return 0, "数据写入成功", nil
+}
+
+// ModifyPasswordSelfById
+//
+// @Title 修改管理员密码
+// @Description 修改管理员密码
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-24 13:35:22
+// @receiver s
+// @param ctx
+// @param password
+// @return code
+// @return message
+// @return err
+func (s *sUcSystemMaster) ModifyPasswordSelfById(ctx context.Context, in system_master.ModifyPasswordInput) (code int32, message string, err error) {
+	// 查询旧密码信息
+	id := ctx.Value("master_id")
+	code, message, out, err := utility.DBGetMapById(dao.UcAccount.Ctx(ctx), utility.DBGetByIdInput{
+		Field: "password_hash",
+		Where: id,
+	})
+
+	if code != 0 {
+		return code, message, err
+	}
+
+	// 验证旧密码
+	if !utility.PasswordVerify(in.OldPassword, gconv.String(out["password_hash"])) {
+		return 1, "旧密码不正确", nil
+	}
+
+	// 新密码hash
+	in.NewPassword, err = utility.PasswordHash(in.NewPassword)
+	if err != nil {
+		return -1, "", err
+	}
+
+	// 更新密码
+	code, message, err = utility.DBModifyById(dao.UcAccount.Ctx(ctx), utility.DBModifyByIdInput{
+		Data:  g.Map{"password_hash": in.NewPassword},
+		Where: id,
+	})
+
+	return code, message, err
 }

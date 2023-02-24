@@ -25,7 +25,7 @@ type cUcSystemMaster struct {
 // @return res
 // @return err
 func (c *cUcSystemMaster) Register(ctx context.Context, req *manage.RegisterReq) (res *manage.RegisterRes, err error) {
-	code, message, err := service.UcSystemMaster().Register(ctx, uc_center.RegisterInput{
+	code, message, err := service.UcSystemMaster().Register(ctx, system_master.RegisterInput{
 		Password: req.Password,
 		Tel:      req.Tel,
 		Name:     req.Name,
@@ -59,7 +59,7 @@ func (c *cUcSystemMaster) Register(ctx context.Context, req *manage.RegisterReq)
 // @return res
 // @return err
 func (c *cUcSystemMaster) LoginTelPassword(ctx context.Context, req *manage.LoginTelPasswordReq) (res *manage.LoginTelPasswordRes, err error) {
-	code, message, token, err := service.UcSystemMaster().LoginTelPassword(ctx, uc_center.LoginTelPasswordInput{
+	code, message, token, err := service.UcSystemMaster().LoginTelPassword(ctx, system_master.LoginTelPasswordInput{
 		Tel:      req.Tel,
 		Password: req.Password,
 	})
@@ -93,7 +93,7 @@ func (c *cUcSystemMaster) LoginTelPassword(ctx context.Context, req *manage.Logi
 // @return res
 // @return err
 func (c *cUcSystemMaster) LoginUsernamePassword(ctx context.Context, req *manage.LoginUsernamePasswordReq) (res *manage.LoginUsernamePasswordRes, err error) {
-	code, message, token, err := service.UcSystemMaster().LoginUsernamePassword(ctx, uc_center.LoginUsernamePasswordInput{
+	code, message, token, err := service.UcSystemMaster().LoginUsernamePassword(ctx, system_master.LoginUsernamePasswordInput{
 		Username: req.Username,
 		Password: req.Password,
 	})
@@ -127,11 +127,44 @@ func (c *cUcSystemMaster) LoginUsernamePassword(ctx context.Context, req *manage
 // @return res
 // @return err
 func (c *cUcSystemMaster) CreateSystemMaster(ctx context.Context, req *manage.CreateSystemMasterReq) (res *manage.CreateSystemMasterRes, err error) {
-	code, message, err := service.UcSystemMaster().CreateSystemMaster(ctx, uc_center.CreateSystemMasterInput{
+	code, message, err := service.UcSystemMaster().CreateSystemMaster(ctx, system_master.CreateSystemMasterInput{
 		Username: req.Username,
 		Password: req.Password,
 		Tel:      req.Tel,
 		Name:     req.Name,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}
+
+// ModifyPassword
+//
+// @Title 修改管理员密码
+// @Description 修改管理员密码
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-24 17:06:04
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMaster) ModifyPassword(ctx context.Context, req *manage.ModifyPasswordReq) (res *manage.ModifyPasswordRes, err error) {
+	code, message, err := service.UcSystemMaster().ModifyPasswordSelfById(ctx, system_master.ModifyPasswordInput{
+		OldPassword: req.OldPassword,
+		NewPassword: req.OldPassword,
 	})
 
 	var json = g.RequestFromCtx(ctx).Response

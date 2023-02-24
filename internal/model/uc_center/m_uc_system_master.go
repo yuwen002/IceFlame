@@ -1,4 +1,4 @@
-package uc_center
+package system_master
 
 // RegisterInput
 // @Description: 创建新用户
@@ -37,4 +37,13 @@ type CreateSystemMasterInput struct {
 	Password string
 	Tel      string
 	Name     string
+}
+
+// ModifyPasswordInput
+// @Description: 修改用户密码
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-24 13:56:52
+type ModifyPasswordInput struct {
+	OldPassword string
+	NewPassword string
 }
