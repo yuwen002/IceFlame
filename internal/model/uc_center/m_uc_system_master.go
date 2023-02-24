@@ -47,3 +47,12 @@ type ModifyPasswordInput struct {
 	OldPassword string
 	NewPassword string
 }
+
+// ListSystemMasterInput
+// @Description: 管理员数据列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-02-24 23:46:23
+type ListSystemMasterInput struct {
+	Size int
+	Page int
+}

@@ -19,7 +19,7 @@ type (
 		LoginUsernamePassword(ctx context.Context, in system_master.LoginUsernamePasswordInput) (code int32, message string, token string, err error)
 		CreateSystemMaster(ctx context.Context, in system_master.CreateSystemMasterInput) (code int32, message string, err error)
 		ModifyPasswordSelfById(ctx context.Context, in system_master.ModifyPasswordInput) (code int32, message string, err error)
-		ListSystemMaster(ctx context.Context)
+		ListSystemMaster(ctx context.Context, in system_master.ListSystemMasterInput) (code int32, message string, out map[string]interface{}, err error)
 	}
 )
 

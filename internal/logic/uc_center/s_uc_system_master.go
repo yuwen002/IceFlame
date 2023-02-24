@@ -414,6 +414,18 @@ func (s *sUcSystemMaster) ModifyPasswordSelfById(ctx context.Context, in system_
 	return code, message, err
 }
 
-func (s *sUcSystemMaster) ListSystemMaster(ctx context.Context) {
-
+// ListSystemMaster
+//
+// @Title 管理员信息列表
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-02-24 23:47:38
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return out
+// @return err
+func (s *sUcSystemMaster) ListSystemMaster(ctx context.Context, in system_master.ListSystemMasterInput) (code int32, message string, out map[string]interface{}, err error) {
 }
