@@ -413,3 +413,7 @@ func (s *sUcSystemMaster) ModifyPasswordSelfById(ctx context.Context, in system_
 
 	return code, message, err
 }
+
+func (s *sUcSystemMaster) ListSystemMaster(ctx context.Context) {
+
+}
