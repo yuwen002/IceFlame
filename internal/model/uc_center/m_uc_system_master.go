@@ -1,5 +1,10 @@
 package system_master
 
+import (
+	"github.com/gogf/gf/v2/os/gtime"
+	"github.com/gogf/gf/v2/util/gmeta"
+)
+
 // RegisterInput
 // @Description: 创建新用户
 // @Author liuxingyu <yuwen002@163.com>
@@ -55,4 +60,30 @@ type ModifyPasswordInput struct {
 type ListSystemMasterInput struct {
 	Size int
 	Page int
+}
+
+// UcSystemMaster
+// @Description: 管理员用户表
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-25 17:47:49
+type UcSystemMaster struct {
+	gmeta.Meta `orm:"table:uc_system_master"`
+	Id         uint64     `json:"id"`
+	AccountId  uint64     `json:"account_id"`
+	Name       string     `json:"name"`
+	Tel        string     `json:"tel"`
+	UcAccount  *UcAccount `orm:"with:account_id=id"`
+}
+
+// UcAccount
+// @Description: 用户中心总表
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-25 17:48:08
+type UcAccount struct {
+	gmeta.Meta   `orm:"table:uc_account"`
+	Username     string     `json:"username"`
+	RealNameType string     `json:"real_name_type"`
+	Status       uint8      `json:"status"`
+	CreatedAt    gtime.Time `json:"created_at"`
+	UpdatedAt    gtime.Time `json:"updated_at"`
 }

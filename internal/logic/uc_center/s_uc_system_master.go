@@ -427,5 +427,12 @@ func (s *sUcSystemMaster) ModifyPasswordSelfById(ctx context.Context, in system_
 // @return message
 // @return out
 // @return err
-func (s *sUcSystemMaster) ListSystemMaster(ctx context.Context, in system_master.ListSystemMasterInput) (code int32, message string, out map[string]interface{}, err error) {
+func (s *sUcSystemMaster) ListSystemMaster(ctx context.Context, in system_master.ListSystemMasterInput) (code int32, message string, out []map[string]interface{}, err error) {
+	var systemMaster []*system_master.UcSystemMaster
+	err = dao.UcSystemMaster.Ctx(ctx).With(system_master.UcSystemMaster{}).Where("supper_master=0").Page(in.Page, in.Size).Scan(&systemMaster)
+	if err != nil {
+		return -1, "", nil, err
+	}
+
+	return 0, "查询成功", gconv.Maps(systemMaster), nil
 }

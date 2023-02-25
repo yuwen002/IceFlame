@@ -182,3 +182,7 @@ func (c *cUcSystemMaster) ModifyPassword(ctx context.Context, req *manage.Modify
 
 	return
 }
+
+func (c *cUcSystemMaster) ListSystemMaster(ctx context.Context) {
+
+}

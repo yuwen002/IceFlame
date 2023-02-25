@@ -67,3 +67,8 @@ type ModifyPasswordReq struct {
 }
 type ModifyPasswordRes struct {
 }
+
+type ListSystemMasterReq struct {
+}
+type ListSystemMasterRes struct {
+}
