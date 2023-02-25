@@ -11,6 +11,7 @@ import (
 	"ice_flame/internal/model/uc_center"
 	"ice_flame/internal/service"
 	"ice_flame/utility"
+	"strings"
 )
 
 var insUcSystemMaster = sUcSystemMaster{
@@ -427,12 +428,30 @@ func (s *sUcSystemMaster) ModifyPasswordSelfById(ctx context.Context, in system_
 // @return message
 // @return out
 // @return err
-func (s *sUcSystemMaster) ListSystemMaster(ctx context.Context, in system_master.ListSystemMasterInput) (code int32, message string, out []map[string]interface{}, err error) {
+func (s *sUcSystemMaster) ListSystemMaster(ctx context.Context, in system_master.ListSystemMasterInput) (code int32, message string, out []system_master.ListSystemMasterOutput, err error) {
 	var systemMaster []*system_master.UcSystemMaster
-	err = dao.UcSystemMaster.Ctx(ctx).With(system_master.UcSystemMaster{}).Where("supper_master=0").Page(in.Page, in.Size).Scan(&systemMaster)
+	err = dao.UcSystemMaster.Ctx(ctx).With(system_master.UcSystemMaster{}.UcAccount).Where(
+		"supper_master = 0 and account_id != ?",
+		ctx.Value("master_id"),
+	).Page(in.Page, in.Size).Order("id desc").Scan(&systemMaster)
 	if err != nil {
 		return -1, "", nil, err
 	}
 
-	return 0, "查询成功", gconv.Maps(systemMaster), nil
+	for _, v := range systemMaster {
+
+		out = append(out, system_master.ListSystemMasterOutput{
+			Id:           v.Id,
+			AccountId:    v.AccountId,
+			Username:     strings.Replace(v.UcAccount.Username, s.prefix, "", -1),
+			Tel:          v.Tel,
+			Name:         v.Name,
+			RealNameType: v.UcAccount.RealNameType,
+			Status:       v.UcAccount.Status,
+			CreatedAt:    v.UcAccount.CreatedAt,
+			UpdatedAt:    v.UcAccount.UpdatedAt,
+		})
+	}
+
+	return 0, "查询成功", out, nil
 }

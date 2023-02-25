@@ -68,7 +68,14 @@ type ModifyPasswordReq struct {
 type ModifyPasswordRes struct {
 }
 
+// ListSystemMasterReq
+// @Description: 管理员列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-02-25 23:15:07
 type ListSystemMasterReq struct {
+	g.Meta `path:"/master/show_system_master" tags:"管理员用户列表" method:"get" summary:"管理员用户列表"`
+	Page   int `p:"page" v:"max:1|integer#页码要大于等于1|页码只为正整数"`
+	Size   int `p:"size" v:"max:1|integer#显示条数要大于等于1|显示条数只为正整数"`
 }
 type ListSystemMasterRes struct {
 }

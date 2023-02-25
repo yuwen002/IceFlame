@@ -183,6 +183,44 @@ func (c *cUcSystemMaster) ModifyPassword(ctx context.Context, req *manage.Modify
 	return
 }
 
-func (c *cUcSystemMaster) ListSystemMaster(ctx context.Context) {
+// ListSystemMaster
+//
+// @Title 管理员用户显示列表
+// @Description 管理员用户显示列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-02-25 23:23:54
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMaster) ListSystemMaster(ctx context.Context, req *manage.ListSystemMasterReq) (res *manage.ListSystemMasterRes, err error) {
+	// 判断页码
+	if req.Page == 0 {
+		req.Page = 1
+	}
 
+	// 判断每页显示条数
+	if req.Size == 0 {
+		req.Size = 10
+	}
+	code, message, out, err := service.UcSystemMaster().ListSystemMaster(ctx, system_master.ListSystemMasterInput{
+		Size: req.Size,
+		Page: req.Page,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    g.Map{"list": out},
+	})
+	return
 }

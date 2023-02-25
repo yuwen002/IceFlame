@@ -58,8 +58,24 @@ type ModifyPasswordInput struct {
 // @Author liuxingyu <yuwen002@163.com>
 // @Data 2023-02-24 23:46:23
 type ListSystemMasterInput struct {
-	Size int
 	Page int
+	Size int
+}
+
+// ListSystemMasterOutput
+// @Description:
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-02-26 01:43:35
+type ListSystemMasterOutput struct {
+	Id           uint64     `json:"id"`
+	AccountId    uint64     `json:"account_id"`
+	Username     string     `json:"username"`
+	Name         string     `json:"name"`
+	Tel          string     `json:"tel"`
+	Status       uint8      `json:"status"`
+	RealNameType string     `json:"real_name_type"`
+	CreatedAt    gtime.Time `json:"created_at"`
+	UpdatedAt    gtime.Time `json:"updated_at"`
 }
 
 // UcSystemMaster
@@ -72,7 +88,7 @@ type UcSystemMaster struct {
 	AccountId  uint64     `json:"account_id"`
 	Name       string     `json:"name"`
 	Tel        string     `json:"tel"`
-	UcAccount  *UcAccount `orm:"with:account_id=id"`
+	UcAccount  *UcAccount `orm:"with:id=account_id"`
 }
 
 // UcAccount
@@ -81,6 +97,7 @@ type UcSystemMaster struct {
 // @Date 2023-02-25 17:48:08
 type UcAccount struct {
 	gmeta.Meta   `orm:"table:uc_account"`
+	Id           uint64     `json:"id"`
 	Username     string     `json:"username"`
 	RealNameType string     `json:"real_name_type"`
 	Status       uint8      `json:"status"`
