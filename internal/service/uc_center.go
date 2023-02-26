@@ -20,6 +20,7 @@ type (
 		CreateSystemMaster(ctx context.Context, in system_master.CreateSystemMasterInput) (code int32, message string, err error)
 		ModifyPasswordSelfById(ctx context.Context, in system_master.ModifyPasswordInput) (code int32, message string, err error)
 		ListSystemMaster(ctx context.Context, in system_master.ListSystemMasterInput) (code int32, message string, out []system_master.ListSystemMasterOutput, err error)
+		ModifySystemMasterById(ctx context.Context, in system_master.ModifySystemMasterByIdInput) (code int32, message string, err error)
 	}
 )
 

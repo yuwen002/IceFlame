@@ -455,3 +455,55 @@ func (s *sUcSystemMaster) ListSystemMaster(ctx context.Context, in system_master
 
 	return 0, "查询成功", out, nil
 }
+
+// ModifySystemMasterById
+//
+// @Title 修改管理员用户信息
+// @Description 修改管理员用户信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-02-26 23:57:15
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sUcSystemMaster) ModifySystemMasterById(ctx context.Context, in system_master.ModifySystemMasterByIdInput) (code int32, message string, err error) {
+	code, message, err = s.ExistsTel(ctx, in.Tel)
+	if code != 1 {
+		return code, message, err
+	}
+
+	//  修改用户信息
+	err = dao.UcSystemMaster.Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
+		_, _, err = utility.DBModifyById(dao.UcSystemMaster.Ctx(ctx), utility.DBModifyByIdInput{
+			Data: g.Map{
+				"tel":  in.Tel,
+				"name": in.Name,
+			},
+			Where: "account_id = ?",
+			Args:  in.AccountId,
+		})
+
+		if err != nil {
+			return err
+		}
+
+		_, _, err = utility.DBModifyById(dao.UcAccount.Ctx(ctx), utility.DBModifyByIdInput{
+			Data:  g.Map{"tel": s.prefix + in.Tel},
+			Where: in.AccountId,
+		})
+
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return -1, "", err
+	}
+
+	return 0, "修改成功", nil
+}
