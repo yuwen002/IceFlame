@@ -105,12 +105,13 @@ type UcAccount struct {
 	UpdatedAt    gtime.Time `json:"updated_at"`
 }
 
-// ModifySystemMasterByIdInput
+// ModifySystemMasterByAccountIdInput
 // @Description:修改管理员信息
 // @Author liuxingyu <yuwen002@163.com>
 // @Data 2023-02-26 23:53:36
-type ModifySystemMasterByIdInput struct {
+type ModifySystemMasterByAccountIdInput struct {
 	AccountId uint64
 	Tel       string
 	Name      string
+	Status    int8
 }

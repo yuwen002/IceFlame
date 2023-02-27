@@ -150,7 +150,7 @@ func (c *cUcSystemMaster) CreateSystemMaster(ctx context.Context, req *manage.Cr
 	return
 }
 
-// ModifyPassword
+// EditPassword
 //
 // @Title 修改管理员密码
 // @Description 修改管理员密码
@@ -161,7 +161,7 @@ func (c *cUcSystemMaster) CreateSystemMaster(ctx context.Context, req *manage.Cr
 // @param req
 // @return res
 // @return err
-func (c *cUcSystemMaster) ModifyPassword(ctx context.Context, req *manage.ModifyPasswordReq) (res *manage.ModifyPasswordRes, err error) {
+func (c *cUcSystemMaster) EditPassword(ctx context.Context, req *manage.EditPasswordReq) (res *manage.EditPasswordRes, err error) {
 	code, message, err := service.UcSystemMaster().ModifyPasswordSelfById(ctx, system_master.ModifyPasswordInput{
 		OldPassword: req.OldPassword,
 		NewPassword: req.OldPassword,
@@ -222,5 +222,28 @@ func (c *cUcSystemMaster) ListSystemMaster(ctx context.Context, req *manage.List
 		"message": message,
 		"data":    g.Map{"list": out},
 	})
+	return
+}
+
+func (c *cUcSystemMaster) EditSystemMaster(ctx context.Context, req *manage.EditSystemMasterReq) (res *manage.EditSystemMasterRes, err error) {
+	code, message, err := service.UcSystemMaster().ModifySystemMasterByAccountId(ctx, system_master.ModifySystemMasterByAccountIdInput{
+		AccountId: req.AccountId,
+		Tel:       req.Tel,
+		Name:      req.Name,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
 	return
 }

@@ -55,17 +55,17 @@ type CreateSystemMasterReq struct {
 type CreateSystemMasterRes struct {
 }
 
-// ModifyPasswordReq
+// EditPasswordReq
 // @Description:修改关联
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-02-24 16:24:25
-type ModifyPasswordReq struct {
-	g.Meta             `path:"/master/modify_password" tags:"管理员新建管理用户" method:"put" summary:"管理员新建管理用户"`
+type EditPasswordReq struct {
+	g.Meta             `path:"/master/edit_password" tags:"管理员新建管理用户" method:"put" summary:"管理员新建管理用户"`
 	OldPassword        string `p:"old_password" v:"required|length:5,32#密码不能为空|密码在5到32之间"`
 	NewPassword        string `p:"new_password" v:"required|length:5,32#密码不能为空|密码在5到32之间"`
 	ConfirmNewPassword string `p:"confirm_new_password" v:"required|same:new_password#确认密码不能为空|两次输入密码不一致"`
 }
-type ModifyPasswordRes struct {
+type EditPasswordRes struct {
 }
 
 // ListSystemMasterReq
@@ -74,8 +74,22 @@ type ModifyPasswordRes struct {
 // @Data 2023-02-25 23:15:07
 type ListSystemMasterReq struct {
 	g.Meta `path:"/master/show_system_master" tags:"管理员用户列表" method:"get" summary:"管理员用户列表"`
-	Page   int `p:"page" v:"max:1|integer#页码要大于等于1|页码只为正整数"`
-	Size   int `p:"size" v:"max:1|integer#显示条数要大于等于1|显示条数只为正整数"`
+	Page   int `p:"page" v:"min:1|integer#页码要大于等于1|页码只为正整数"`
+	Size   int `p:"size" v:"min:1|integer#显示条数要大于等于1|显示条数只为正整数"`
 }
 type ListSystemMasterRes struct {
+}
+
+// EditSystemMasterReq
+// @Description:编辑管理员列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-27 10:23:48
+type EditSystemMasterReq struct {
+	g.Meta    `path:"/master/edit_system_master" tags:"管理员用户列表" method:"put" summary:"管理员用户列表"`
+	AccountId uint64 `p:"account_id" v:"required|min:1|integer#ID要大于等于1|ID只为正整数"`
+	Tel       string `p:"tel" v:"required|phone#用户电话不能为空|请填写正确电话"`
+	Name      string `p:"name" v:"required#姓名不能为空"`
+	Status    int8   `p:"status" v:"required#用户状态不能为空"`
+}
+type EditSystemMasterRes struct {
 }

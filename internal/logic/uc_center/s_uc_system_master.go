@@ -58,7 +58,7 @@ func (s *sUcSystemMaster) ExistsUsername(ctx context.Context, username string) (
 		code, message, _, err = utility.DBGetOneMapByWhere(dao.UcAccount.Ctx(ctx), utility.DBGetOneByWhereInput{
 			Field: "id",
 			Where: "username=?",
-			Args:  username,
+			Args:  condition,
 		})
 
 		return code, message, err
@@ -91,13 +91,44 @@ func (s *sUcSystemMaster) ExistsTel(ctx context.Context, tel string) (code int32
 		code, message, _, err = utility.DBGetOneMapByWhere(dao.UcAccount.Ctx(ctx), utility.DBGetOneByWhereInput{
 			Field: "id",
 			Where: "tel=?",
-			Args:  tel,
+			Args:  condition,
 		})
 
 		return code, message, err
 	})
 
 	return code, message, err
+}
+
+// AccountIdCastTel
+//
+// @Title account id 换 管理员电话
+// @Description account id 换 管理员电话
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-27 16:22:10
+// @receiver s
+// @param ctx
+// @param accountId
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sUcSystemMaster) AccountIdCastTel(ctx context.Context, accountId uint64) (code int32, message string, output interface{}, err error) {
+	code, message, output, err = utility.RCCastHashData(utility.RedisCastData{
+		Config: "uc_center",
+		Key:    dao.UcAccount.Table() + ":account_id_cast_tel",
+		Field:  gconv.String(accountId),
+	}, func(condition interface{}) (code int32, message string, output interface{}, err error) {
+		code, message, out, err := utility.DBGetMapById(dao.UcAccount.Ctx(ctx), utility.DBGetByIdInput{
+			Field: "id",
+			Where: "account_id=?",
+			Args:  condition,
+		})
+
+		return code, message, out["tel"], err
+	})
+
+	return code, message, output, err
 }
 
 // Register
@@ -456,7 +487,7 @@ func (s *sUcSystemMaster) ListSystemMaster(ctx context.Context, in system_master
 	return 0, "查询成功", out, nil
 }
 
-// ModifySystemMasterById
+// ModifySystemMasterByAccountId
 //
 // @Title 修改管理员用户信息
 // @Description 修改管理员用户信息
@@ -468,20 +499,30 @@ func (s *sUcSystemMaster) ListSystemMaster(ctx context.Context, in system_master
 // @return code
 // @return message
 // @return err
-func (s *sUcSystemMaster) ModifySystemMasterById(ctx context.Context, in system_master.ModifySystemMasterByIdInput) (code int32, message string, err error) {
-	code, message, err = s.ExistsTel(ctx, in.Tel)
-	if code != 1 {
+func (s *sUcSystemMaster) ModifySystemMasterByAccountId(ctx context.Context, in system_master.ModifySystemMasterByAccountIdInput) (code int32, message string, err error) {
+	// 转换用户数据，用account id换取电话
+	code, message, output, err := s.AccountIdCastTel(ctx, in.AccountId)
+	if code != 0 {
 		return code, message, err
+	}
+
+	// 判断电话号信息是否变更，变更需要验证新电话号是否存在
+	if output != in.Tel {
+		code, message, err = s.ExistsTel(ctx, in.Tel)
+		if code != 1 {
+			return code, message, err
+		}
 	}
 
 	//  修改用户信息
 	err = dao.UcSystemMaster.Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
-		_, _, err = utility.DBModifyById(dao.UcSystemMaster.Ctx(ctx), utility.DBModifyByIdInput{
+		// 更新管理员表信息
+		code, _, err = utility.DBModifyById(dao.UcSystemMaster.Ctx(ctx), utility.DBModifyByIdInput{
 			Data: g.Map{
 				"tel":  in.Tel,
 				"name": in.Name,
 			},
-			Where: "account_id = ?",
+			Where: "account_id = ? and supper_master == 0",
 			Args:  in.AccountId,
 		})
 
@@ -489,8 +530,14 @@ func (s *sUcSystemMaster) ModifySystemMasterById(ctx context.Context, in system_
 			return err
 		}
 
+		// tel 未更新，主账户不更新电话
+		data := g.Map{"status": in.Status}
+		if code == 1 {
+			data["tel"] = s.prefix + in.Tel
+		}
+		// 修改主表信息
 		_, _, err = utility.DBModifyById(dao.UcAccount.Ctx(ctx), utility.DBModifyByIdInput{
-			Data:  g.Map{"tel": s.prefix + in.Tel},
+			Data:  data,
 			Where: in.AccountId,
 		})
 

@@ -14,13 +14,14 @@ type (
 	IUcSystemMaster interface {
 		ExistsUsername(ctx context.Context, username string) (code int32, message string, err error)
 		ExistsTel(ctx context.Context, tel string) (code int32, message string, err error)
+		AccountIdCastTel(ctx context.Context, accountId uint64) (code int32, message string, output interface{}, err error)
 		Register(ctx context.Context, in system_master.RegisterInput) (code int32, message string, err error)
 		LoginTelPassword(ctx context.Context, in system_master.LoginTelPasswordInput) (code int32, message string, token string, err error)
 		LoginUsernamePassword(ctx context.Context, in system_master.LoginUsernamePasswordInput) (code int32, message string, token string, err error)
 		CreateSystemMaster(ctx context.Context, in system_master.CreateSystemMasterInput) (code int32, message string, err error)
 		ModifyPasswordSelfById(ctx context.Context, in system_master.ModifyPasswordInput) (code int32, message string, err error)
 		ListSystemMaster(ctx context.Context, in system_master.ListSystemMasterInput) (code int32, message string, out []system_master.ListSystemMasterOutput, err error)
-		ModifySystemMasterById(ctx context.Context, in system_master.ModifySystemMasterByIdInput) (code int32, message string, err error)
+		ModifySystemMasterByAccountId(ctx context.Context, in system_master.ModifySystemMasterByAccountIdInput) (code int32, message string, err error)
 	}
 )
 
