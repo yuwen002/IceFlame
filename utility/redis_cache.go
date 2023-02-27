@@ -22,10 +22,11 @@ type RedisExistsData struct {
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-02-18 11:23:26
 type RedisCastData struct {
-	Config string // Redis配置信息
-	Key    string // Redis键值
-	Field  string // Redis字段
-	Expire int64  // Redis过期时间
+	Config string      // Redis配置信息
+	Key    string      // Redis键值
+	Field  string      // Redis字段
+	Data   interface{} // 更新数据字段
+	Expire int64       // Redis过期时间
 }
 
 // RedisCache
@@ -174,6 +175,37 @@ func (rc *RedisCache) CastHashData(data RedisCastData, f func(condition interfac
 	return 0, "取出转换数据成功(覆盖字段值)", output, nil
 }
 
+// CastHashData
+//
+// @Title 更新数据转换
+// @Description 更新数据转换，例如：店铺ID转换商家ID
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-18 11:49:39
+// @receiver rc
+// @param data
+// @param f
+// @return code
+// @return message
+// @return output
+// @return err
+
+func (rc *RedisCache) UpdateCastHashData(data RedisCastData) (code int32, message string, err error) {
+	// 初始化Redis
+	redis := rc.InitRedis()
+	// 更新hash字段
+	field := map[string]interface{}{data.Field: data.Data}
+	result, err := redis.HSet(rc.ctx, data.Key, field)
+	if err != nil {
+		return -1, "", err
+	}
+
+	if result == 1 {
+		return 1, "取出转换数据成功(新字段)", nil
+	}
+
+	return 0, "取出转换数据成功(覆盖字段值)", nil
+}
+
 // InitRedis
 //
 // @Title 初始化Redis函数
@@ -222,4 +254,19 @@ func RCExistsSetData(data RedisExistsData, f func(condition interface{}) (code i
 func RCCastHashData(data RedisCastData, f func(condition interface{}) (code int32, message string, output interface{}, err error)) (code int32, message string, output interface{}, err error) {
 	var redis = RedisCache{Config: data.Config}
 	return redis.CastHashData(data, f)
+}
+
+// UpdateCastHashData
+//
+// @Title 更新数据转换
+// @Description 更新数据转换，例如：店铺ID转换商家IDn
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-02-27 23:45:47
+// @param data
+// @return code
+// @return message
+// @return err
+func UpdateCastHashData(data RedisCastData) (code int32, message string, err error) {
+	var redis = RedisCache{Config: data.Config}
+	return redis.UpdateCastHashData(data)
 }

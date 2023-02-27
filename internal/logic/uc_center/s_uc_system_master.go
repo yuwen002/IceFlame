@@ -131,6 +131,17 @@ func (s *sUcSystemMaster) AccountIdCastTel(ctx context.Context, accountId uint64
 	return code, message, output, err
 }
 
+func (s *sUcSystemMaster) UpdateAccountIdCastTel(ctx context.Context, accountId uint64, tel string) (code int32, message string, err error) {
+	code, message, err = utility.UpdateCastHashData(utility.RedisCastData{
+		Config: "uc_center",
+		Key:    dao.UcAccount.Table() + ":account_id_cast_tel",
+		Field:  gconv.String(accountId),
+		Data:   tel,
+	})
+
+	return code, message, err
+}
+
 // Register
 //
 // @Title 新建管理员用户
