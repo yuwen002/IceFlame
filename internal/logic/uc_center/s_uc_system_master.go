@@ -422,19 +422,8 @@ func (s *sUcSystemMaster) LoginUsernamePassword(ctx context.Context, in system_m
 		return 1, "登入信息不存在", "", nil
 	}
 
-	accountId := gconv.String(data["account_id"])
-	// 获取登入次数，查看用户是否登入限制
-	code, message, err = s.GetLoginCount(ctx, accountId)
-	if code != 0 {
-		return code, message, "", err
-	}
-
 	// 验证密码是否正确
 	if utility.PasswordVerify(in.Password, gconv.String(data["password_hash"])) == false {
-		code, message, err = s.IncLoginCount(ctx, accountId)
-		if code != 0 {
-			return code, message, "", err
-		}
 		return 1, "用户名密码错误", "", nil
 	}
 
@@ -452,8 +441,6 @@ func (s *sUcSystemMaster) LoginUsernamePassword(ctx context.Context, in system_m
 		return -1, "", "", err
 	}
 
-	// 登入成功，删除次数限制
-	_, _, _ = s.DelLoginCount(ctx, accountId)
 	return 0, "登入成功", token, nil
 }
 
