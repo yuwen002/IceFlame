@@ -168,14 +168,13 @@ func (s *sUcSystemMaster) UpdateAccountIdCastTel(ctx context.Context, accountId 
 // @receiver s
 // @param accountId
 // @return string
-func (s *sUcSystemMaster) GetLoginCountRKey(ctx context.Context) string {
-	ip := g.RequestFromCtx(ctx).GetRemoteIp()
-	return dao.UcSystemMaster.Table() + "verify_login_count:" + time.Now().Format("2006-01-02")
+func (s *sUcSystemMaster) GetLoginCountRKey(accountId string) string {
+	return dao.UcSystemMaster.Table() + "verify_login_count(" + time.Now().Format("2006-01-02") + "):account_id-" + accountId
 }
 
 // IncLoginCount
 //
-// @Title
+// @Title 密码输入错误,增加验证次数
 // @Description
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-02-28 18:16:29
@@ -185,15 +184,16 @@ func (s *sUcSystemMaster) GetLoginCountRKey(ctx context.Context) string {
 // @return code
 // @return message
 // @return err
-func (s *sUcSystemMaster) IncLoginCount(ctx context.Context, accountId uint64) (code int32, message string, err error) {
+func (s *sUcSystemMaster) IncLoginCount(ctx context.Context, accountId string) (code int32, message string, err error) {
 	key := s.GetLoginCountRKey(accountId)
+
 	redis := utility.InitRedis(s.redisConfig)
 	num, err := redis.Incr(ctx, key)
 	if err != nil {
 		return -1, "", err
 	}
 
-	if num > 3 {
+	if num >= 3 {
 		return 1, "登入次数超出限制", nil
 	}
 
@@ -202,7 +202,7 @@ func (s *sUcSystemMaster) IncLoginCount(ctx context.Context, accountId uint64) (
 
 // GetLoginCount
 //
-// @Title
+// @Title 获取登入错误次数
 // @Description
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-02-28 18:16:22
@@ -212,24 +212,41 @@ func (s *sUcSystemMaster) IncLoginCount(ctx context.Context, accountId uint64) (
 // @return code
 // @return message
 // @return err
-func (s *sUcSystemMaster) GetLoginCount(ctx context.Context, accountId uint64) (code int32, message string, err error) {
+func (s *sUcSystemMaster) GetLoginCount(ctx context.Context, accountId string) (code int32, message string, err error) {
 	key := s.GetLoginCountRKey(accountId)
 	redis := utility.InitRedis(s.redisConfig)
 	res, err := redis.Get(ctx, key)
 	if err != nil {
 		return -1, "", err
 	}
-	if res.Int8() > 3 {
+	if res.Int8() >= 3 {
 		return 1, "登入次数超出限制", nil
 	}
 
 	return 0, "登入错误次数" + res.String(), nil
 }
 
-func (s *sUcSystemMaster) DelLoginCount(ctx context.Context, accountId uint64) (code int32, message string, err error) {
+// DelLoginCount
+//
+// @Title 删除登入错误次数
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-02-28 21:58:47
+// @receiver s
+// @param ctx
+// @param accountId
+// @return code
+// @return message
+// @return err
+func (s *sUcSystemMaster) DelLoginCount(ctx context.Context, accountId string) (code int32, message string, err error) {
 	key := s.GetLoginCountRKey(accountId)
 	redis := utility.InitRedis(s.redisConfig)
-	redis.Del(ctx, key)
+	_, err = redis.Del(ctx, key)
+	if err != nil {
+		return -1, "", err
+	}
+
+	return 0, "删除登入次数成功", nil
 }
 
 // Register
@@ -342,9 +359,16 @@ func (s *sUcSystemMaster) LoginTelPassword(ctx context.Context, in system_master
 		return 1, "登入信息不存在", "", nil
 	}
 
+	accountId := gconv.String(data["account_id"])
+	// 获取登入次数，查看用户是否登入限制
+	code, message, err = s.GetLoginCount(ctx, accountId)
+	if code != 0 {
+		return code, message, "", err
+	}
+
 	// 验证密码是否正确
 	if utility.PasswordVerify(in.Password, gconv.String(data["password_hash"])) == false {
-		code, message, err = s.IncLoginCount(ctx, gconv.Uint64(data["id"]))
+		code, message, err = s.IncLoginCount(ctx, accountId)
 		if code != 0 {
 			return code, message, "", err
 		}
@@ -365,6 +389,8 @@ func (s *sUcSystemMaster) LoginTelPassword(ctx context.Context, in system_master
 		return -1, "", "", err
 	}
 
+	// 登入成功，删除次数限制
+	_, _, _ = s.DelLoginCount(ctx, accountId)
 	return 0, "登入成功", token, nil
 }
 
@@ -396,8 +422,19 @@ func (s *sUcSystemMaster) LoginUsernamePassword(ctx context.Context, in system_m
 		return 1, "登入信息不存在", "", nil
 	}
 
+	accountId := gconv.String(data["account_id"])
+	// 获取登入次数，查看用户是否登入限制
+	code, message, err = s.GetLoginCount(ctx, accountId)
+	if code != 0 {
+		return code, message, "", err
+	}
+
 	// 验证密码是否正确
 	if utility.PasswordVerify(in.Password, gconv.String(data["password_hash"])) == false {
+		code, message, err = s.IncLoginCount(ctx, accountId)
+		if code != 0 {
+			return code, message, "", err
+		}
 		return 1, "用户名密码错误", "", nil
 	}
 
@@ -415,6 +452,8 @@ func (s *sUcSystemMaster) LoginUsernamePassword(ctx context.Context, in system_m
 		return -1, "", "", err
 	}
 
+	// 登入成功，删除次数限制
+	_, _, _ = s.DelLoginCount(ctx, accountId)
 	return 0, "登入成功", token, nil
 }
 

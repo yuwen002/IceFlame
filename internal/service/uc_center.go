@@ -16,10 +16,10 @@ type (
 		ExistsTel(ctx context.Context, tel string) (code int32, message string, err error)
 		AccountIdCastTel(ctx context.Context, accountId uint64) (code int32, message string, output interface{}, err error)
 		UpdateAccountIdCastTel(ctx context.Context, accountId uint64, tel string) (code int32, message string, err error)
-		GetLoginCountRKey(ctx context.Context) string
-		IncLoginCount(ctx context.Context, accountId uint64) (code int32, message string, err error)
-		GetLoginCount(ctx context.Context, accountId uint64) (code int32, message string, err error)
-		DelLoginCount(ctx context.Context, accountId uint64) (code int32, message string, err error)
+		GetLoginCountRKey(accountId string) string
+		IncLoginCount(ctx context.Context, accountId string) (code int32, message string, err error)
+		GetLoginCount(ctx context.Context, accountId string) (code int32, message string, err error)
+		DelLoginCount(ctx context.Context, accountId string) (code int32, message string, err error)
 		Register(ctx context.Context, in system_master.RegisterInput) (code int32, message string, err error)
 		LoginTelPassword(ctx context.Context, in system_master.LoginTelPasswordInput) (code int32, message string, token string, err error)
 		LoginUsernamePassword(ctx context.Context, in system_master.LoginUsernamePasswordInput) (code int32, message string, token string, err error)

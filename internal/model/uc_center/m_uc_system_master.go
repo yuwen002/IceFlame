@@ -133,3 +133,12 @@ type ModifyStatusByAccountIdInput struct {
 	AccountId uint64
 	Status    string
 }
+
+// IncLoginCountInput
+// @Description: 登入限制
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-02-28 21:36:45
+type IncLoginCountInput struct {
+	Username string
+	Tel      string
+}
