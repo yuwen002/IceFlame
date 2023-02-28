@@ -13,10 +13,12 @@ import (
 	"ice_flame/internal/service"
 	"ice_flame/utility"
 	"strings"
+	"time"
 )
 
 var insUcSystemMaster = sUcSystemMaster{
-	prefix: "SA_",
+	prefix:      "SA_",
+	redisConfig: "uc_center",
 }
 
 func UcSystemMaster() *sUcSystemMaster {
@@ -32,7 +34,8 @@ func init() {
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-02-22 16:06:45
 type sUcSystemMaster struct {
-	prefix string
+	prefix      string
+	redisConfig string
 }
 
 // ExistsUsername
@@ -50,7 +53,7 @@ type sUcSystemMaster struct {
 func (s *sUcSystemMaster) ExistsUsername(ctx context.Context, username string) (code int32, message string, err error) {
 	username = s.prefix + username
 	data := utility.RedisExistsData{
-		Config: "uc_center",
+		Config: s.redisConfig,
 		Key:    dao.UcAccount.Table() + ":exists_username",
 		Value:  username,
 	}
@@ -83,7 +86,7 @@ func (s *sUcSystemMaster) ExistsUsername(ctx context.Context, username string) (
 func (s *sUcSystemMaster) ExistsTel(ctx context.Context, tel string) (code int32, message string, err error) {
 	tel = s.prefix + tel
 	data := utility.RedisExistsData{
-		Config: "uc_center",
+		Config: s.redisConfig,
 		Key:    dao.UcAccount.Table() + ":exists_tel",
 		Value:  tel,
 	}
@@ -116,7 +119,7 @@ func (s *sUcSystemMaster) ExistsTel(ctx context.Context, tel string) (code int32
 // @return err
 func (s *sUcSystemMaster) AccountIdCastTel(ctx context.Context, accountId uint64) (code int32, message string, output interface{}, err error) {
 	code, message, output, err = utility.RCCastHashData(utility.RedisCastData{
-		Config: "uc_center",
+		Config: s.redisConfig,
 		Key:    dao.UcSystemMaster.Table() + ":account_id_cast_tel",
 		Field:  gconv.String(accountId),
 	}, func(condition interface{}) (code int32, message string, output interface{}, err error) {
@@ -147,13 +150,86 @@ func (s *sUcSystemMaster) AccountIdCastTel(ctx context.Context, accountId uint64
 // @return err
 func (s *sUcSystemMaster) UpdateAccountIdCastTel(ctx context.Context, accountId uint64, tel string) (code int32, message string, err error) {
 	code, message, err = utility.UpdateCastHashData(utility.RedisCastData{
-		Config: "uc_center",
+		Config: s.redisConfig,
 		Key:    dao.UcSystemMaster.Table() + ":account_id_cast_tel",
 		Field:  gconv.String(accountId),
 		Data:   tel,
 	})
 
 	return code, message, err
+}
+
+// GetLoginCountRKey
+//
+// @Title 根据用户account ID 获取Redis key
+// @Description 根据用户account ID 获取Redis key
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-28 18:18:29
+// @receiver s
+// @param accountId
+// @return string
+func (s *sUcSystemMaster) GetLoginCountRKey(ctx context.Context) string {
+	ip := g.RequestFromCtx(ctx).GetRemoteIp()
+	return dao.UcSystemMaster.Table() + "verify_login_count:" + time.Now().Format("2006-01-02")
+}
+
+// IncLoginCount
+//
+// @Title
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-28 18:16:29
+// @receiver s
+// @param ctx
+// @param accountId
+// @return code
+// @return message
+// @return err
+func (s *sUcSystemMaster) IncLoginCount(ctx context.Context, accountId uint64) (code int32, message string, err error) {
+	key := s.GetLoginCountRKey(accountId)
+	redis := utility.InitRedis(s.redisConfig)
+	num, err := redis.Incr(ctx, key)
+	if err != nil {
+		return -1, "", err
+	}
+
+	if num > 3 {
+		return 1, "登入次数超出限制", nil
+	}
+
+	return 0, "登入错误次数" + gconv.String(num), nil
+}
+
+// GetLoginCount
+//
+// @Title
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-28 18:16:22
+// @receiver s
+// @param ctx
+// @param accountId
+// @return code
+// @return message
+// @return err
+func (s *sUcSystemMaster) GetLoginCount(ctx context.Context, accountId uint64) (code int32, message string, err error) {
+	key := s.GetLoginCountRKey(accountId)
+	redis := utility.InitRedis(s.redisConfig)
+	res, err := redis.Get(ctx, key)
+	if err != nil {
+		return -1, "", err
+	}
+	if res.Int8() > 3 {
+		return 1, "登入次数超出限制", nil
+	}
+
+	return 0, "登入错误次数" + res.String(), nil
+}
+
+func (s *sUcSystemMaster) DelLoginCount(ctx context.Context, accountId uint64) (code int32, message string, err error) {
+	key := s.GetLoginCountRKey(accountId)
+	redis := utility.InitRedis(s.redisConfig)
+	redis.Del(ctx, key)
 }
 
 // Register
@@ -268,6 +344,10 @@ func (s *sUcSystemMaster) LoginTelPassword(ctx context.Context, in system_master
 
 	// 验证密码是否正确
 	if utility.PasswordVerify(in.Password, gconv.String(data["password_hash"])) == false {
+		code, message, err = s.IncLoginCount(ctx, gconv.Uint64(data["id"]))
+		if code != 0 {
+			return code, message, "", err
+		}
 		return 1, "用户名密码错误", "", nil
 	}
 
