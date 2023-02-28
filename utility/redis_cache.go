@@ -117,7 +117,7 @@ func (rc *RedisCache) ExistsSetData(data RedisExistsData, f func(condition inter
 		}
 	}
 
-	return 0, "添加元素成功", nil
+	return 0, "添加元素成功,集合中数据已存在", nil
 }
 
 // CastHashData

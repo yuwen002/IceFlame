@@ -115,3 +115,21 @@ type ModifySystemMasterByAccountIdInput struct {
 	Name      string
 	Status    int8
 }
+
+// ResetPasswordByAccountIdInput
+// @Description: 重置管理员密码
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-28 14:13:00
+type ResetPasswordByAccountIdInput struct {
+	AccountId uint64
+	Password  string
+}
+
+// ModifyStatusByAccountIdInput
+// @Description: 更改管理用户状态
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-28 15:48:38
+type ModifyStatusByAccountIdInput struct {
+	AccountId uint64
+	Status    string
+}

@@ -86,10 +86,35 @@ type ListSystemMasterRes struct {
 // @Date 2023-02-27 10:23:48
 type EditSystemMasterReq struct {
 	g.Meta    `path:"/master/edit_system_master" tags:"管理员用户列表" method:"put" summary:"管理员用户列表"`
-	AccountId uint64 `p:"account_id" v:"required|min:1|integer#ID要大于等于1|ID只为正整数"`
+	AccountId uint64 `p:"account_id" v:"required|min:1|integer#ID不能为空|ID要大于等于1|ID只为正整数"`
 	Tel       string `p:"tel" v:"required|phone#用户电话不能为空|请填写正确电话"`
 	Name      string `p:"name" v:"required#姓名不能为空"`
 	Status    int8   `p:"status" v:"required#用户状态不能为空"`
 }
 type EditSystemMasterRes struct {
+}
+
+// ResetPasswordSystemMasterReq
+// @Description: 管理员重置密码
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-28 15:13:21
+type ResetPasswordSystemMasterReq struct {
+	g.Meta          `path:"/master/reset_password" tags:"重置管理员密码" method:"put" summary:"重置管理员密码"`
+	AccountId       uint64 `p:"account_id" v:"required|min:1|integer#ID不能为空|ID要大于等于1|ID只为正整数"`
+	Password        string `p:"password" v:"length:5,32#密码在5到32之间"`
+	ConfirmPassword string `p:"confirm_password" v:"same:password#两次输入密码不一致"`
+}
+type ResetPasswordSystemMasterRes struct {
+}
+
+// EditStatusSystemMasterReq
+// @Description: 管理员修改管理员登入状态
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-28 15:57:42
+type EditStatusSystemMasterReq struct {
+	g.Meta    `path:"/master/edit_status" tags:"重置管理员密码" method:"put" summary:"重置管理员密码"`
+	AccountId uint64 `p:"account_id" v:"required|min:1|integer#ID不能为空|ID要大于等于1|ID只为正整数"`
+	Status    string `p:"status" v:"in:required|0,1#用户状态不能为空|用户状态值错误"`
+}
+type EditStatusSystemMasterRes struct {
 }

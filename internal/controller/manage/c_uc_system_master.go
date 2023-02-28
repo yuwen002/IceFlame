@@ -225,11 +225,88 @@ func (c *cUcSystemMaster) ListSystemMaster(ctx context.Context, req *manage.List
 	return
 }
 
+// EditSystemMaster
+//
+// @Title 编辑用户信息
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-28 14:55:53
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
 func (c *cUcSystemMaster) EditSystemMaster(ctx context.Context, req *manage.EditSystemMasterReq) (res *manage.EditSystemMasterRes, err error) {
 	code, message, err := service.UcSystemMaster().ModifySystemMasterByAccountId(ctx, system_master.ModifySystemMasterByAccountIdInput{
 		AccountId: req.AccountId,
 		Tel:       req.Tel,
 		Name:      req.Name,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}
+
+// ResetPassword
+//
+// @Title 重置管理员密码
+// @Description 重置管理员密码
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-28 15:43:40
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMaster) ResetPassword(ctx context.Context, req *manage.ResetPasswordSystemMasterReq) (res *manage.ResetPasswordSystemMasterRes, err error) {
+	code, message, err := service.UcSystemMaster().ResetPasswordByAccountId(ctx, system_master.ResetPasswordByAccountIdInput{
+		AccountId: req.AccountId,
+		Password:  req.Password,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}
+
+// EditStatus
+//
+// @Title 修改管理用户状态
+// @Description 修改管理用户状态
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-28 15:59:46
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMaster) EditStatus(ctx context.Context, req *manage.EditStatusSystemMasterReq) (res *manage.EditStatusSystemMasterRes, err error) {
+	code, message, err := service.UcSystemMaster().ModifyStatusByAccountId(ctx, system_master.ModifyStatusByAccountIdInput{
+		AccountId: req.AccountId,
+		Status:    req.Status,
 	})
 
 	var json = g.RequestFromCtx(ctx).Response

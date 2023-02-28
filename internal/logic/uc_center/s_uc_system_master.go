@@ -3,6 +3,7 @@ package uc_center
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/util/gconv"
@@ -116,11 +117,11 @@ func (s *sUcSystemMaster) ExistsTel(ctx context.Context, tel string) (code int32
 func (s *sUcSystemMaster) AccountIdCastTel(ctx context.Context, accountId uint64) (code int32, message string, output interface{}, err error) {
 	code, message, output, err = utility.RCCastHashData(utility.RedisCastData{
 		Config: "uc_center",
-		Key:    dao.UcAccount.Table() + ":account_id_cast_tel",
+		Key:    dao.UcSystemMaster.Table() + ":account_id_cast_tel",
 		Field:  gconv.String(accountId),
 	}, func(condition interface{}) (code int32, message string, output interface{}, err error) {
-		code, message, out, err := utility.DBGetMapById(dao.UcAccount.Ctx(ctx), utility.DBGetByIdInput{
-			Field: "id",
+		code, message, out, err := utility.DBGetMapById(dao.UcSystemMaster.Ctx(ctx), utility.DBGetByIdInput{
+			Field: "tel",
 			Where: "account_id=?",
 			Args:  condition,
 		})
@@ -131,10 +132,23 @@ func (s *sUcSystemMaster) AccountIdCastTel(ctx context.Context, accountId uint64
 	return code, message, output, err
 }
 
+// UpdateAccountIdCastTel
+//
+// @Title 更新account id转换信息的电话
+// @Description 更新account id转换信息的电话
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-28 10:15:18
+// @receiver s
+// @param ctx
+// @param accountId
+// @param tel
+// @return code
+// @return message
+// @return err
 func (s *sUcSystemMaster) UpdateAccountIdCastTel(ctx context.Context, accountId uint64, tel string) (code int32, message string, err error) {
 	code, message, err = utility.UpdateCastHashData(utility.RedisCastData{
 		Config: "uc_center",
-		Key:    dao.UcAccount.Table() + ":account_id_cast_tel",
+		Key:    dao.UcSystemMaster.Table() + ":account_id_cast_tel",
 		Field:  gconv.String(accountId),
 		Data:   tel,
 	})
@@ -517,9 +531,11 @@ func (s *sUcSystemMaster) ModifySystemMasterByAccountId(ctx context.Context, in 
 		return code, message, err
 	}
 
+	outputTel := gconv.String(output)
 	// 判断电话号信息是否变更，变更需要验证新电话号是否存在
-	if output != in.Tel {
+	if outputTel != in.Tel {
 		code, message, err = s.ExistsTel(ctx, in.Tel)
+		fmt.Println(code)
 		if code != 1 {
 			return code, message, err
 		}
@@ -533,7 +549,7 @@ func (s *sUcSystemMaster) ModifySystemMasterByAccountId(ctx context.Context, in 
 				"tel":  in.Tel,
 				"name": in.Name,
 			},
-			Where: "account_id = ? and supper_master == 0",
+			Where: "account_id=? and supper_master=0",
 			Args:  in.AccountId,
 		})
 
@@ -556,6 +572,11 @@ func (s *sUcSystemMaster) ModifySystemMasterByAccountId(ctx context.Context, in 
 			return err
 		}
 
+		// 更新电话转换信息
+		if outputTel != in.Tel {
+			_, _, _ = s.UpdateAccountIdCastTel(ctx, in.AccountId, in.Tel)
+		}
+
 		return nil
 	})
 
@@ -564,4 +585,53 @@ func (s *sUcSystemMaster) ModifySystemMasterByAccountId(ctx context.Context, in 
 	}
 
 	return 0, "修改成功", nil
+}
+
+// ResetPasswordByAccountId
+//
+// @Title 重置管理员密码
+// @Description 重置管理员，密码为空重置初始密码为123456
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-28 14:39:59
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sUcSystemMaster) ResetPasswordByAccountId(ctx context.Context, in system_master.ResetPasswordByAccountIdInput) (code int32, message string, err error) {
+	// 没设置新密码，初始化密码
+	if in.Password == "" {
+		in.Password = "123456"
+	}
+
+	// 新密码hash
+	in.Password, err = utility.PasswordHash(in.Password)
+	if err != nil {
+		return -1, "", err
+	}
+
+	return utility.DBModifyById(dao.UcAccount.Ctx(ctx), utility.DBModifyByIdInput{
+		Data:  g.Map{"password_hash": in.Password},
+		Where: in.AccountId,
+	})
+}
+
+// ModifyStatusByAccountId
+//
+// @Title 修改管理用户状态
+// @Description 修改管理用户状态
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-02-28 15:50:46
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sUcSystemMaster) ModifyStatusByAccountId(ctx context.Context, in system_master.ModifyStatusByAccountIdInput) (code int32, message string, err error) {
+	return utility.DBModifyById(dao.UcAccount.Ctx(ctx), utility.DBModifyByIdInput{
+		Data:  g.Map{"status": in.Status},
+		Where: in.AccountId,
+	})
 }
