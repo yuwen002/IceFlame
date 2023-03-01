@@ -7,7 +7,7 @@ package service
 
 import (
 	"context"
-	system_master "ice_flame/internal/model/uc_center"
+	"ice_flame/internal/model/uc_center/system_master"
 )
 
 type (
@@ -30,10 +30,17 @@ type (
 		ResetPasswordByAccountId(ctx context.Context, in system_master.ResetPasswordByAccountIdInput) (code int32, message string, err error)
 		ModifyStatusByAccountId(ctx context.Context, in system_master.ModifyStatusByAccountIdInput) (code int32, message string, err error)
 	}
+	IUcSystemMasterVisitorLogs interface {
+		AddVisitCategory(ctx context.Context, in system_master.AddVisitCategoryInput) (code int32, message string, err error)
+		ModifyVisitCategoryById(ctx context.Context, in system_master.ModifyVisitCategoryByIdInput) (code int32, message string, err error)
+		ListVisitCategory(ctx context.Context) (code int32, message string, output []map[string]string, err error)
+		AddVisitorLogs(ctx context.Context)
+	}
 )
 
 var (
-	localUcSystemMaster IUcSystemMaster
+	localUcSystemMaster            IUcSystemMaster
+	localUcSystemMasterVisitorLogs IUcSystemMasterVisitorLogs
 )
 
 func UcSystemMaster() IUcSystemMaster {
@@ -45,4 +52,15 @@ func UcSystemMaster() IUcSystemMaster {
 
 func RegisterUcSystemMaster(i IUcSystemMaster) {
 	localUcSystemMaster = i
+}
+
+func UcSystemMasterVisitorLogs() IUcSystemMasterVisitorLogs {
+	if localUcSystemMasterVisitorLogs == nil {
+		panic("implement not found for interface IUcSystemMasterVisitorLogs, forgot register?")
+	}
+	return localUcSystemMasterVisitorLogs
+}
+
+func RegisterUcSystemMasterVisitorLogs(i IUcSystemMasterVisitorLogs) {
+	localUcSystemMasterVisitorLogs = i
 }

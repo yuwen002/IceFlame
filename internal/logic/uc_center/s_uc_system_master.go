@@ -9,7 +9,7 @@ import (
 	"github.com/gogf/gf/v2/util/gconv"
 	"ice_flame/internal/consts"
 	"ice_flame/internal/dao"
-	"ice_flame/internal/model/uc_center"
+	"ice_flame/internal/model/uc_center/system_master"
 	"ice_flame/internal/service"
 	"ice_flame/utility"
 	"strings"

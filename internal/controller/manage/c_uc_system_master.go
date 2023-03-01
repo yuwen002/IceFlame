@@ -5,7 +5,7 @@ import (
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/util/gconv"
 	"ice_flame/api/manage"
-	"ice_flame/internal/model/uc_center"
+	"ice_flame/internal/model/uc_center/system_master"
 	"ice_flame/internal/service"
 )
 
