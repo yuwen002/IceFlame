@@ -118,3 +118,10 @@ type EditStatusSystemMasterReq struct {
 }
 type EditStatusSystemMasterRes struct {
 }
+
+type UnlockSystemMasterReq struct {
+	g.Meta    `path:"/master/unlock_system_master" tags:"重置管理员密码" method:"put" summary:"重置管理员密码"`
+	AccountId uint64 `p:"account_id" v:"required|min:1|integer#ID不能为空|ID要大于等于1|ID只为正整数"`
+}
+type UnlockSystemMasterRes struct {
+}

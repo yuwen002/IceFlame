@@ -3,6 +3,7 @@ package manage
 import (
 	"context"
 	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/util/gconv"
 	"ice_flame/api/manage"
 	"ice_flame/internal/model/uc_center"
 	"ice_flame/internal/service"
@@ -309,6 +310,35 @@ func (c *cUcSystemMaster) EditStatus(ctx context.Context, req *manage.EditStatus
 		Status:    req.Status,
 	})
 
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}
+
+// UnlockSystemMaster
+//
+// @Title 解锁用户
+// @Description 按account ID 解锁用户
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-01 10:51:56
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMaster) UnlockSystemMaster(ctx context.Context, req *manage.UnlockSystemMasterReq) (res *manage.UnlockSystemMasterRes, err error) {
+	code, message, err := service.UcSystemMaster().DelLoginCount(ctx, gconv.String(req.AccountId))
 	var json = g.RequestFromCtx(ctx).Response
 	if err != nil {
 		json.WriteJsonExit(g.Map{
