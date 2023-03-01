@@ -100,7 +100,7 @@ func (s *sUcSystemMasterVisitorLogs) ModifyVisitCategoryById(ctx context.Context
 // @Date 2023-03-01 17:31:21
 // @receiver s
 // @param ctx
-func (s *sUcSystemMasterVisitorLogs) ListVisitCategory(ctx context.Context) (code int32, message string, output []map[string]string, err error) {
+func (s *sUcSystemMasterVisitorLogs) ListVisitCategory(ctx context.Context) (code int32, message string, output []*system_master.ListVisitCategoryOutput, err error) {
 	var out []*system_master.ListVisitCategoryOutput
 	code, message, err = utility.DBGetAllStructByWhere(dao.UcSystemMasterVisitCategory.Ctx(ctx), utility.DBGetAllByWhereInput{
 		Field: "id, title",
@@ -111,7 +111,28 @@ func (s *sUcSystemMasterVisitorLogs) ListVisitCategory(ctx context.Context) (cod
 		return code, message, nil, err
 	}
 
-	return
+	return code, message, out, nil
+}
+
+func (s *sUcSystemMasterVisitorLogs) GetRCacheVisitCategory(ctx context.Context) (code int32, message string, output []map[string]string, err error) {
+	redis := utility.InitRedis(s.redisConfig)
+	res, err := redis.HGetAll(ctx, s.VisitCategoryRKey)
+	if err != nil {
+		return -1, "", nil, err
+	}
+
+	if res.IsEmpty() {
+		code, message, out, err := s.ListVisitCategory(ctx)
+		if code != 0 {
+			return code, message, nil, err
+		}
+
+		for index := range out {
+			value := map[string]string{gconv.String(out[index].Id): out[index].Title}
+			output = append(output, value)
+			redis.HSet(ctx, s.VisitCategoryRKey, gconv.Map(value))
+		}
+	}
 }
 
 func (s *sUcSystemMasterVisitorLogs) AddVisitorLogs(ctx context.Context) {

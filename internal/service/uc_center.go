@@ -33,7 +33,8 @@ type (
 	IUcSystemMasterVisitorLogs interface {
 		AddVisitCategory(ctx context.Context, in system_master.AddVisitCategoryInput) (code int32, message string, err error)
 		ModifyVisitCategoryById(ctx context.Context, in system_master.ModifyVisitCategoryByIdInput) (code int32, message string, err error)
-		ListVisitCategory(ctx context.Context) (code int32, message string, output []map[string]string, err error)
+		ListVisitCategory(ctx context.Context) (code int32, message string, output []*system_master.ListVisitCategoryOutput, err error)
+		GetRCacheVisitCategory(ctx context.Context) (code int32, message string, output []map[string]string, err error)
 		AddVisitorLogs(ctx context.Context)
 	}
 )
