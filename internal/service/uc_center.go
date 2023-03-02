@@ -35,6 +35,9 @@ type (
 		ModifyVisitCategoryById(ctx context.Context, in system_master.ModifyVisitCategoryByIdInput) (code int32, message string, err error)
 		ListVisitCategory(ctx context.Context) (code int32, message string, output []*system_master.ListVisitCategoryOutput, err error)
 		GetRCacheVisitCategory(ctx context.Context) (code int32, message string, output []map[string]interface{}, err error)
+		GetRCacheVisitCategoryById(id string) (code int32, message string, output map[string]interface{}, err error)
+		DelRCacheVisitCategory(key string)
+		DelRCacheVisitCategoryById(id string)
 		AddVisitorLogs(ctx context.Context)
 	}
 )

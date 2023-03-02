@@ -173,6 +173,30 @@ func (s *sUcSystemMasterVisitorLogs) GetRCacheVisitCategory(ctx context.Context)
 	return 0, "取出数据成功", out, nil
 }
 
+// GetRCacheVisitCategoryById
+//
+// @Title 按ID获取缓存信息
+// @Description 按ID获取缓存信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-02 20:39:20
+// @receiver s
+// @param id
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sUcSystemMasterVisitorLogs) GetRCacheVisitCategoryById(id string) (code int32, message string, output map[string]interface{}, err error) {
+	return utility.RCGetMapHashId(utility.RedisHashIdData{Id: id})
+}
+
+func (s *sUcSystemMasterVisitorLogs) DelRCacheVisitCategory(key string) {
+
+}
+
+func (s *sUcSystemMasterVisitorLogs) DelRCacheVisitCategoryById(id string) {
+
+}
+
 func (s *sUcSystemMasterVisitorLogs) AddVisitorLogs(ctx context.Context) {
 
 }
