@@ -428,12 +428,28 @@ func RCUpdateCastHashData(data RedisCastData) (code int32, message string, err e
 
 // RCSetHashId
 //
-// @Title 按ID获取缓存
-// @Description 按ID获取缓存信息
+// @Title 按ID添加缓存
+// @Description 按ID添加缓存信息
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-02 14:10:52
 // @param data
-func RCSetHashId(data RedisHashIdData) (code int32, message string, output *g.Var, err error) {
+func RCSetHashId(data RedisHashIdData) (code int32, message string, err error) {
+	var redis = RedisCache{Config: data.Config}
+	return redis.SetHashId(data)
+}
+
+// RCGetHashId
+//
+// @Title 按ID获取缓存
+// @Description 按ID获取缓存信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-02 14:38:35
+// @param data
+// @return code
+// @return message
+// @return output
+// @return err
+func RCGetHashId(data RedisHashIdData) (code int32, message string, output *g.Var, err error) {
 	var redis = RedisCache{Config: data.Config}
 	return redis.GetHashId(data)
 }
@@ -468,4 +484,19 @@ func RCGetMapHashId(data RedisHashIdData) (code int32, message string, output ma
 func RCGeStructHashId(data RedisHashIdData, output interface{}) (code int32, message string, err error) {
 	var redis = RedisCache{Config: data.Config}
 	return redis.GeStructHashId(data, output)
+}
+
+// RCDelHashId
+//
+// @Title 按ID删除缓存
+// @Description 按ID删除缓存信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-02 14:40:26
+// @param data
+// @return code
+// @return message
+// @return err
+func RCDelHashId(data RedisHashIdData) (code int32, message string, err error) {
+	var redis = RedisCache{Config: data.Config}
+	return redis.DelHashId(data)
 }

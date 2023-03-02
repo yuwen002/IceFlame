@@ -52,7 +52,12 @@ func (s *sUcSystemMasterVisitorLogs) AddVisitCategory(ctx context.Context, in sy
 	}
 
 	// 缓存信息Redis缓存
-	_, err = utility.InitRedis(s.redisConfig).HSet(ctx, s.VisitCategoryRKey, g.Map{gconv.String(lastInsertId): in.Title})
+	code, message, err = utility.RCSetHashId(utility.RedisHashIdData{
+		Config: s.redisConfig,
+		Key:    s.VisitCategoryRKey,
+		Id:     gconv.String(lastInsertId),
+		Data:   in.Title,
+	})
 	if err != nil {
 		return code, message, err
 	}
