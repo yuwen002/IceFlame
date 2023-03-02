@@ -149,7 +149,7 @@ func (s *sUcSystemMaster) AccountIdCastTel(ctx context.Context, accountId uint64
 // @return message
 // @return err
 func (s *sUcSystemMaster) UpdateAccountIdCastTel(ctx context.Context, accountId uint64, tel string) (code int32, message string, err error) {
-	code, message, err = utility.UpdateCastHashData(utility.RedisCastData{
+	code, message, err = utility.RCUpdateCastHashData(utility.RedisCastData{
 		Config: s.redisConfig,
 		Key:    dao.UcSystemMaster.Table() + ":account_id_cast_tel",
 		Field:  gconv.String(accountId),

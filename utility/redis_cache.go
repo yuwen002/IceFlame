@@ -29,6 +29,18 @@ type RedisCastData struct {
 	Expire int64       // Redis过期时间
 }
 
+// RedisHashIdData
+// @Description: hash ID 数据
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-02 10:07:24
+type RedisHashIdData struct {
+	Config string      // Redis配置信息
+	Key    string      // Redis键值
+	Id     string      // Redis字段
+	Data   interface{} // 更新数据字段
+	Expire int64       // Redis过期时间
+}
+
 // RedisCache
 // @Description: Redis缓存
 // @Author liuxingyu <yuwen002@163.com>
@@ -161,7 +173,9 @@ func (rc *RedisCache) CastHashData(data RedisCastData, f func(condition interfac
 	// 添加元素成功，验证过期时间是否开启
 	if data.Expire > 0 {
 		result, err = redis.Expire(rc.ctx, data.Key, data.Expire)
-		return -1, "", nil, err
+		if err != nil {
+			return -1, "", nil, err
+		}
 
 		if result == 0 {
 			return 2, "添加元素成功, 不能为key设置过期时间", output, nil
@@ -204,6 +218,147 @@ func (rc *RedisCache) UpdateCastHashData(data RedisCastData) (code int32, messag
 	}
 
 	return 0, "取出转换数据成功(覆盖字段值)", nil
+}
+
+// SetHashId
+//
+// @Title 按ID添加缓存
+// @Description 按ID添加缓存信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-02 10:33:57
+// @receiver rc
+// @param data
+// @return code
+// @return message
+// @return err
+func (rc *RedisCache) SetHashId(data RedisHashIdData) (code int32, message string, err error) {
+	// 初始化Redis
+	redis := rc.InitRedis()
+	// 写入或更新ID信息
+	field := map[string]interface{}{data.Id: data.Data}
+	res, err := redis.HSet(rc.ctx, data.Key, field)
+	if err != nil {
+		return -1, "", err
+	}
+
+	// 添加元素成功，验证过期时间是否开启
+	if data.Expire > 0 {
+		result, err := redis.Expire(rc.ctx, data.Key, data.Expire)
+		if err != nil {
+			return -1, "", err
+		}
+		if result == 0 {
+			return 1, "缓存设置成功, 不能为key设置过期时间", nil
+		}
+	}
+
+	if res == 1 {
+		message = "(新字段)"
+	} else {
+		message = "(覆盖字段值)"
+	}
+
+	return 0, "缓存设置成功" + message, nil
+}
+
+// GetHashId
+//
+// @Title 按ID获取缓存
+// @Description 按ID获取缓存信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-02 13:53:32
+// @receiver rc
+// @param data
+// @return code
+// @return message
+// @return output
+// @return err
+func (rc *RedisCache) GetHashId(data RedisHashIdData) (code int32, message string, output *g.Var, err error) {
+	// 初始化Redis
+	redis := rc.InitRedis()
+	res, err := redis.HGet(rc.ctx, data.Key, data.Id)
+	if err != nil {
+		return -1, "", nil, err
+	}
+	if res.IsEmpty() {
+		return 1, "缓存数据不存在", nil, nil
+	}
+
+	return 0, "取出缓存数据成功", output, nil
+}
+
+// GetMapHashId
+//
+// @Title 按ID获取缓存
+// @Description 按ID获取缓存信息，返回map
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-02 13:54:36
+// @receiver rc
+// @param data
+// @return code
+// @return message
+// @return output
+// @return err
+func (rc *RedisCache) GetMapHashId(data RedisHashIdData) (code int32, message string, output map[string]interface{}, err error) {
+	code, message, out, err := rc.GetHashId(data)
+	if code != 0 {
+		return code, message, nil, err
+	}
+
+	return 0, "取出缓存数据成功", out.Map(), nil
+}
+
+// GeStructHashId
+//
+// @Title 按ID获取缓存
+// @Description 按ID获取缓存信息，返回struct
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-02 13:06:24
+// @receiver rc
+// @param data
+// @param output
+// @return code
+// @return message
+// @return err
+func (rc *RedisCache) GeStructHashId(data RedisHashIdData, output interface{}) (code int32, message string, err error) {
+	code, message, out, err := rc.GetHashId(data)
+	if code != 0 {
+		return code, message, err
+	}
+
+	err = out.Struct(output)
+	if err != nil {
+		return -1, "", err
+	}
+
+	return 0, "取出缓存数据成功", nil
+}
+
+// DelHashId
+//
+// @Title 按ID删除缓存
+// @Description 按ID删除缓存信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-02 11:14:38
+// @receiver rc
+// @param data
+// @return code
+// @return message
+// @return err
+func (rc *RedisCache) DelHashId(data RedisHashIdData) (code int32, message string, err error) {
+	// 初始化Redis
+	redis := rc.InitRedis()
+	// 按ID删除缓存信息
+	res, err := redis.HDel(rc.ctx, data.Key, data.Id)
+	if err != nil {
+		return -1, "", err
+	}
+
+	if res == 1 {
+		return 1, "删除数据成功", nil
+	}
+
+	return 1, "删除ID不存在", nil
 }
 
 // InitRedis
@@ -256,7 +411,7 @@ func RCCastHashData(data RedisCastData, f func(condition interface{}) (code int3
 	return redis.CastHashData(data, f)
 }
 
-// UpdateCastHashData
+// RCUpdateCastHashData
 //
 // @Title 更新数据转换
 // @Description 更新数据转换，例如：店铺ID转换商家IDn
@@ -266,7 +421,51 @@ func RCCastHashData(data RedisCastData, f func(condition interface{}) (code int3
 // @return code
 // @return message
 // @return err
-func UpdateCastHashData(data RedisCastData) (code int32, message string, err error) {
+func RCUpdateCastHashData(data RedisCastData) (code int32, message string, err error) {
 	var redis = RedisCache{Config: data.Config}
 	return redis.UpdateCastHashData(data)
+}
+
+// RCSetHashId
+//
+// @Title 按ID获取缓存
+// @Description 按ID获取缓存信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-02 14:10:52
+// @param data
+func RCSetHashId(data RedisHashIdData) (code int32, message string, output *g.Var, err error) {
+	var redis = RedisCache{Config: data.Config}
+	return redis.GetHashId(data)
+}
+
+// RCGetMapHashId
+//
+// @Title 按ID获取缓存
+// @Description 按ID获取缓存信息，返回map
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-02 14:14:57
+// @param data
+// @return code
+// @return message
+// @return output
+// @return err
+func RCGetMapHashId(data RedisHashIdData) (code int32, message string, output map[string]interface{}, err error) {
+	var redis = RedisCache{Config: data.Config}
+	return redis.GetMapHashId(data)
+}
+
+// RCGeStructHashId
+//
+// @Title 按ID获取缓存
+// @Description 按ID获取缓存信息，返回struct
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-02 14:19:02
+// @param data
+// @param output
+// @return code
+// @return message
+// @return err
+func RCGeStructHashId(data RedisHashIdData, output interface{}) (code int32, message string, err error) {
+	var redis = RedisCache{Config: data.Config}
+	return redis.GeStructHashId(data, output)
 }
