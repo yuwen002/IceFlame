@@ -334,6 +334,80 @@ func (rc *RedisCache) GeStructHashId(data RedisHashIdData, output interface{}) (
 	return 0, "取出缓存数据成功", nil
 }
 
+// GetHashAll
+//
+// @Title 获取所有字段和值
+// @Description 获取所有字段和值
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-02 15:58:57
+// @receiver rc
+// @param data
+// @return code
+// @return message
+// @return output
+// @return err
+func (rc *RedisCache) GetHashAll(data RedisHashIdData) (code int32, message string, output *g.Var, err error) {
+	// 初始化数据
+	redis := rc.InitRedis()
+	res, err := redis.HGetAll(rc.ctx, data.Key)
+	if err != nil {
+		return -1, "", nil, err
+	}
+
+	if res.IsEmpty() {
+		return 1, "缓存数据不存在", nil, nil
+	}
+
+	return 0, "取出缓存数据成功", output, nil
+}
+
+// GetMapsHashAll
+//
+// @Title 获取所有字段和值
+// @Description 获取所有字段和值,返回map数组
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-02 16:05:22
+// @receiver rc
+// @param data
+// @return code
+// @return message
+// @return output
+// @return err
+func (rc *RedisCache) GetMapsHashAll(data RedisHashIdData) (code int32, message string, output []map[string]interface{}, err error) {
+	code, message, out, err := rc.GetHashAll(data)
+	if code != 0 {
+		return code, message, nil, err
+	}
+
+	return code, message, out.Maps(), nil
+}
+
+// GetStructsHashAll
+//
+// @Title 获取所有字段和值
+// @Description 获取所有字段和值,返回struct数组
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-02 16:15:53
+// @receiver rc
+// @param data
+// @param output
+// @return code
+// @return message
+// @return err
+func (rc *RedisCache) GetStructsHashAll(data RedisHashIdData, output interface{}) (code int32, message string, err error) {
+	code, message, out, err := rc.GetHashAll(data)
+	if code != 0 {
+		return code, message, err
+	}
+
+	err = out.Structs(output)
+	if err != nil {
+		return -1, "", err
+	}
+
+	return 0, message, nil
+}
+
 // DelHashId
 //
 // @Title 按ID删除缓存
@@ -499,4 +573,52 @@ func RCGeStructHashId(data RedisHashIdData, output interface{}) (code int32, mes
 func RCDelHashId(data RedisHashIdData) (code int32, message string, err error) {
 	var redis = RedisCache{Config: data.Config}
 	return redis.DelHashId(data)
+}
+
+// RCGetHashAll
+//
+// @Title 获取所有字段和值
+// @Description 获取所有字段和值
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-02 16:51:54
+// @param data
+// @return code
+// @return message
+// @return output
+// @return err
+func RCGetHashAll(data RedisHashIdData) (code int32, message string, output *g.Var, err error) {
+	var redis = RedisCache{Config: data.Config}
+	return redis.GetHashAll(data)
+}
+
+// RCGetMapsHashAll
+//
+// @Title 获取所有字段和值
+// @Description 获取所有字段和值,返回map数组
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-02 16:35:25
+// @param data
+// @return code
+// @return message
+// @return output
+// @return err
+func RCGetMapsHashAll(data RedisHashIdData) (code int32, message string, output []map[string]interface{}, err error) {
+	var redis = RedisCache{Config: data.Config}
+	return redis.GetMapsHashAll(data)
+}
+
+// RCGetStructsHashAll
+//
+// @Title 获取所有字段和值
+// @Description 获取所有字段和值,返回struct数组
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-02 16:53:08
+// @param data
+// @param output
+// @return code
+// @return message
+// @return err
+func RCGetStructsHashAll(data RedisHashIdData, output interface{}) (code int32, message string, err error) {
+	var redis = RedisCache{Config: data.Config}
+	return redis.GetStructsHashAll(data, output)
 }

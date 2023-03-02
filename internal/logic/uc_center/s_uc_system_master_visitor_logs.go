@@ -62,7 +62,7 @@ func (s *sUcSystemMasterVisitorLogs) AddVisitCategory(ctx context.Context, in sy
 		return code, message, err
 	}
 
-	return 0, message, nil
+	return 0, "数据写入成功", nil
 }
 
 // ModifyVisitCategoryById
@@ -89,12 +89,17 @@ func (s *sUcSystemMasterVisitorLogs) ModifyVisitCategoryById(ctx context.Context
 	}
 
 	// 缓存信息Redis缓存
-	_, err = utility.InitRedis(s.redisConfig).HSet(ctx, s.VisitCategoryRKey, g.Map{gconv.String(in.Id): in.Title})
+	code, message, err = utility.RCSetHashId(utility.RedisHashIdData{
+		Config: s.redisConfig,
+		Key:    s.VisitCategoryRKey,
+		Id:     gconv.String(in.Id),
+		Data:   in.Title,
+	})
 	if err != nil {
 		return code, message, err
 	}
 
-	return 0, message, nil
+	return 0, "修改数据成功", nil
 }
 
 // ListVisitCategory
@@ -119,25 +124,53 @@ func (s *sUcSystemMasterVisitorLogs) ListVisitCategory(ctx context.Context) (cod
 	return code, message, out, nil
 }
 
-func (s *sUcSystemMasterVisitorLogs) GetRCacheVisitCategory(ctx context.Context) (code int32, message string, output []map[string]string, err error) {
-	redis := utility.InitRedis(s.redisConfig)
-	res, err := redis.HGetAll(ctx, s.VisitCategoryRKey)
+// GetRCacheVisitCategory
+//
+// @Title
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-02 15:53:56
+// @receiver s
+// @param ctx
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sUcSystemMasterVisitorLogs) GetRCacheVisitCategory(ctx context.Context) (code int32, message string, output []map[string]interface{}, err error) {
+	code, message, out, err := utility.RCGetMapsHashAll(utility.RedisHashIdData{
+		Config: s.redisConfig,
+		Key:    s.VisitCategoryRKey,
+	})
 	if err != nil {
 		return -1, "", nil, err
 	}
 
-	if res.IsEmpty() {
+	if code == 1 {
+		// 查询数据中数据
 		code, message, out, err := s.ListVisitCategory(ctx)
 		if code != 0 {
 			return code, message, nil, err
 		}
 
+		// 缓存信息写入
 		for index := range out {
-			value := map[string]string{gconv.String(out[index].Id): out[index].Title}
+			value := map[string]interface{}{gconv.String(out[index].Id): out[index].Title}
 			output = append(output, value)
-			redis.HSet(ctx, s.VisitCategoryRKey, gconv.Map(value))
+			_, _, err := utility.RCSetHashId(utility.RedisHashIdData{
+				Config: s.redisConfig,
+				Key:    s.VisitCategoryRKey,
+				Id:     gconv.String(out[index].Id),
+				Data:   out[index].Title,
+			})
+			if err != nil {
+				return 0, "", nil, err
+			}
 		}
+
+		return 0, "取出数据成功", output, nil
 	}
+
+	return 0, "取出数据成功", out, nil
 }
 
 func (s *sUcSystemMasterVisitorLogs) AddVisitorLogs(ctx context.Context) {
