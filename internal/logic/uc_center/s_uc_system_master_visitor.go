@@ -2,32 +2,34 @@ package uc_center
 
 import (
 	"context"
-	"github.com/gogf/gf/v2/frame/g"
-	"github.com/gogf/gf/v2/util/gconv"
 	"ice_flame/internal/dao"
 	"ice_flame/internal/model/uc_center/system_master"
 	"ice_flame/internal/service"
 	"ice_flame/utility"
+	"strings"
+
+	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/util/gconv"
 )
 
-var insUcSystemMasterVisitorLogs = sUcSystemMasterVisitorLogs{
+var insUcSystemMasterVisitor = sUcSystemMasterVisitor{
 	VisitCategoryRKey: dao.UcSystemMasterVisitCategory.Table() + ":list_visit_category",
 	redisConfig:       "uc_center",
 }
 
-func UcSystemMasterVisitorLogs() *sUcSystemMasterVisitorLogs {
-	return &insUcSystemMasterVisitorLogs
+func UcSystemMasterVisitorLogs() *sUcSystemMasterVisitor {
+	return &insUcSystemMasterVisitor
 }
 
 func init() {
-	service.RegisterUcSystemMasterVisitorLogs(UcSystemMasterVisitorLogs())
+	service.RegisterUcSystemMasterVisitor(UcSystemMasterVisitorLogs())
 }
 
-// sUcSystemMasterVisitorLogs
+// sUcSystemMasterVisitor
 // @Description: 用户访问记录结构体
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-01 15:11:14
-type sUcSystemMasterVisitorLogs struct {
+type sUcSystemMasterVisitor struct {
 	VisitCategoryRKey string
 	redisConfig       string
 }
@@ -44,7 +46,7 @@ type sUcSystemMasterVisitorLogs struct {
 // @return code
 // @return message
 // @return err
-func (s *sUcSystemMasterVisitorLogs) AddVisitCategory(ctx context.Context, in system_master.AddVisitCategoryInput) (code int32, message string, err error) {
+func (s *sUcSystemMasterVisitor) AddVisitCategory(ctx context.Context, in system_master.AddVisitCategoryInput) (code int32, message string, err error) {
 	// 数据写入
 	code, message, lastInsertId, err := utility.DBInsertAndGetId(dao.UcSystemMasterVisitCategory.Ctx(ctx), utility.DBInsertInput{Data: in})
 	if code != 0 {
@@ -77,7 +79,7 @@ func (s *sUcSystemMasterVisitorLogs) AddVisitCategory(ctx context.Context, in sy
 // @return code
 // @return message
 // @return err
-func (s *sUcSystemMasterVisitorLogs) ModifyVisitCategoryById(ctx context.Context, in system_master.ModifyVisitCategoryByIdInput) (code int32, message string, err error) {
+func (s *sUcSystemMasterVisitor) ModifyVisitCategoryById(ctx context.Context, in system_master.ModifyVisitCategoryByIdInput) (code int32, message string, err error) {
 	// 修改数据
 	code, message, err = utility.DBModifyById(dao.UcSystemMasterVisitCategory.Ctx(ctx), utility.DBModifyByIdInput{
 		Data:  g.Map{"title": in.Title},
@@ -110,7 +112,7 @@ func (s *sUcSystemMasterVisitorLogs) ModifyVisitCategoryById(ctx context.Context
 // @Date 2023-03-01 17:31:21
 // @receiver s
 // @param ctx
-func (s *sUcSystemMasterVisitorLogs) ListVisitCategory(ctx context.Context, in system_master.ListVisitCategoryInput) (code int32, message string, output []*system_master.ListVisitCategoryOutput, err error) {
+func (s *sUcSystemMasterVisitor) ListVisitCategory(ctx context.Context, in system_master.ListVisitCategoryInput) (code int32, message string, output []*system_master.ListVisitCategoryOutput, err error) {
 	var out []*system_master.ListVisitCategoryOutput
 	code, message, err = utility.DBGetAllStructByWhere(dao.UcSystemMasterVisitCategory.Ctx(ctx), utility.DBGetAllByWhereInput{
 		Field:    "id, title",
@@ -141,7 +143,7 @@ func (s *sUcSystemMasterVisitorLogs) ListVisitCategory(ctx context.Context, in s
 // @return message
 // @return output
 // @return err
-func (s *sUcSystemMasterVisitorLogs) GetRCacheVisitCategory(ctx context.Context) (code int32, message string, output []map[string]interface{}, err error) {
+func (s *sUcSystemMasterVisitor) GetRCacheVisitCategory(ctx context.Context) (code int32, message string, output []map[string]interface{}, err error) {
 	code, message, output, err = utility.RCGetMapsHashAll(utility.RedisHashIdData{
 		Config: s.redisConfig,
 		Key:    s.VisitCategoryRKey,
@@ -191,7 +193,7 @@ func (s *sUcSystemMasterVisitorLogs) GetRCacheVisitCategory(ctx context.Context)
 // @return message
 // @return output
 // @return err
-func (s *sUcSystemMasterVisitorLogs) GetRCacheVisitCategoryById(id string) (code int32, message string, output map[string]interface{}, err error) {
+func (s *sUcSystemMasterVisitor) GetRCacheVisitCategoryById(id string) (code int32, message string, output map[string]interface{}, err error) {
 	return utility.RCGetMapHashId(utility.RedisHashIdData{Id: id})
 }
 
@@ -206,10 +208,10 @@ func (s *sUcSystemMasterVisitorLogs) GetRCacheVisitCategoryById(id string) (code
 // @return code
 // @return message
 // @return err
-func (s *sUcSystemMasterVisitorLogs) DelRCacheVisitCategory(key string) (code int32, message string, err error) {
+func (s *sUcSystemMasterVisitor) DelRCacheVisitCategory() (code int32, message string, err error) {
 	return utility.RCDelKey(utility.RedisDelKey{
 		Config: s.redisConfig,
-		Key:    key,
+		Key:    s.VisitCategoryRKey,
 	})
 }
 
@@ -224,10 +226,73 @@ func (s *sUcSystemMasterVisitorLogs) DelRCacheVisitCategory(key string) (code in
 // @return code
 // @return message
 // @return err
-func (s *sUcSystemMasterVisitorLogs) DelRCacheVisitCategoryById(key string) (code int32, message string, err error) {
-	return utility.RCDelHashId(utility.RedisHashIdData{Key: key})
+func (s *sUcSystemMasterVisitor) DelRCacheVisitCategoryById(id string) (code int32, message string, err error) {
+	return utility.RCDelHashId(utility.RedisHashIdData{
+		Config: s.redisConfig,
+		Key:    s.VisitCategoryRKey,
+		Id:     id,
+	})
 }
 
-func (s *sUcSystemMasterVisitorLogs) AddVisitorLogs(ctx context.Context, in system_master.AddVisitorLogsInput) {
+// AddVisitorLogs
+//
+// @Title 访问日志信息写入
+// @Description 访问日志信息写入
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-03 23:18:31
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sUcSystemMasterVisitor) AddVisitorLogs(ctx context.Context, in system_master.AddVisitorLogsInput) (code int32, message string, err error) {
+	return utility.DBInsert(dao.UcSystemMasterVisitorLogs.Ctx(ctx), utility.DBInsertInput{Data: in})
+}
 
+// ListVisitorLogs
+//
+// @Title 访问日志信息列表
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-04 00:01:46
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sUcSystemMasterVisitor) ListVisitorLogs(ctx context.Context, in system_master.ListVisitorLogsInput) (code int32, message string, output []*system_master.ListVisitorLogsOutput, err error) {
+	// 判断查询条件
+	var condition []string
+
+	// 用户ID
+	if in.AccountId > 0 {
+		condition = append(condition, "account="+gconv.String(in.AccountId))
+	}
+
+	// 判断系统平台
+	if in.OsCategory > 0 {
+		condition = append(condition, "os_category=?"+gconv.String(in.OsCategory))
+	}
+
+	// 判断访问类型
+	if in.VisitCategory > 0 {
+		condition = append(condition, "visit_category=?"+gconv.String(in.VisitCategory))
+	}
+
+	where := ""
+	if len(condition) > 0 {
+		where = strings.Join(condition, " and ")
+	}
+
+	code, message, err = utility.DBGetAllStructByWhere(dao.UcSystemMasterVisitorLogs.Ctx(ctx), utility.DBGetAllByWhereInput{
+		Where:        where,
+		Order:        "id desc",
+		PageType:     1,
+		DBPagination: utility.DBPagination{Page: in.Page, Size: in.Size},
+	}, &output)
+
+	return code, message, output, err
 }

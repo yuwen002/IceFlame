@@ -54,17 +54,6 @@ var (
 	localJwtTokenTest   IJwtTokenTest
 )
 
-func DBTest() IDBTest {
-	if localDBTest == nil {
-		panic("implement not found for interface IDBTest, forgot register?")
-	}
-	return localDBTest
-}
-
-func RegisterDBTest(i IDBTest) {
-	localDBTest = i
-}
-
 func RedisCacheTest() IRedisCacheTest {
 	if localRedisCacheTest == nil {
 		panic("implement not found for interface IRedisCacheTest, forgot register?")
@@ -85,4 +74,15 @@ func JwtTokenTest() IJwtTokenTest {
 
 func RegisterJwtTokenTest(i IJwtTokenTest) {
 	localJwtTokenTest = i
+}
+
+func DBTest() IDBTest {
+	if localDBTest == nil {
+		panic("implement not found for interface IDBTest, forgot register?")
+	}
+	return localDBTest
+}
+
+func RegisterDBTest(i IDBTest) {
+	localDBTest = i
 }

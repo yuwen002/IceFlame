@@ -37,7 +37,45 @@ type ListVisitCategoryOutput struct {
 	UpdatedAt string
 }
 
+// DeleteVisitCategoryInput
+// @Description: 删除缓存key
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-03 20:38:04
+type DeleteVisitCategoryInput struct {
+	Id  string
+	Key string
+}
+
+// AddVisitorLogsInput
+// @Description:访问信息写入
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-03 23:16:26
 type AddVisitorLogsInput struct {
-	AccountId  uint64
-	OsCategory int8
+	AccountId     uint64
+	OsCategory    int8
+	VisitCategory int16
+	UnionId       uint64
+	Description   string
+}
+
+// ListVisitorLogsInput
+// @Description: 访问日志列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-03 23:20:02
+type ListVisitorLogsInput struct {
+	AccountId     uint64
+	OsCategory    int8
+	VisitCategory int16
+	Page          int
+	Size          int
+}
+
+type ListVisitorLogsOutput struct {
+	Id            uint64
+	AccountId     uint64
+	OsCategory    int8
+	VisitCategory int16
+	UnionId       uint64
+	Description   string
+	CreateAt      string
 }

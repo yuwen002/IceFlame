@@ -25,6 +25,16 @@ type EditVisitCategoryReq struct {
 type EditVisitCategoryRes struct {
 }
 
+// DeleteVisitCategoryReq
+// @Description: 删除访问类型缓存
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-03 20:51:34
+type DeleteVisitCategoryReq struct {
+	g.Meta `path:"/visit_category/delete" tags:"编辑访问类型" method:"delete" summary:"编辑访问类型"`
+}
+type DeleteVisitCategoryRes struct {
+}
+
 // ListVisitCategoryReq
 // @Description: 访问类型列表
 // @Author liuxingyu <yuwen002@163.com>

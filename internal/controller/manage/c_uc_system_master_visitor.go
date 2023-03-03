@@ -25,7 +25,7 @@ type cUcSystemMasterVisitor struct {
 // @return res
 // @return err
 func (c *cUcSystemMasterVisitor) AddVisitCategory(ctx context.Context, req *manage.AddVisitCategoryReq) (res *manage.AddVisitCategoryRes, err error) {
-	code, message, err := service.UcSystemMasterVisitorLogs().AddVisitCategory(ctx, system_master.AddVisitCategoryInput{Title: req.Title})
+	code, message, err := service.UcSystemMasterVisitor().AddVisitCategory(ctx, system_master.AddVisitCategoryInput{Title: req.Title})
 	var json = g.RequestFromCtx(ctx).Response
 	if err != nil {
 		json.WriteJsonExit(g.Map{
@@ -54,7 +54,7 @@ func (c *cUcSystemMasterVisitor) AddVisitCategory(ctx context.Context, req *mana
 // @return res
 // @return err
 func (c *cUcSystemMasterVisitor) EditVisitCategory(ctx context.Context, req *manage.EditVisitCategoryReq) (res *manage.EditVisitCategoryRes, err error) {
-	code, message, err := service.UcSystemMasterVisitorLogs().ModifyVisitCategoryById(ctx, system_master.ModifyVisitCategoryByIdInput{
+	code, message, err := service.UcSystemMasterVisitor().ModifyVisitCategoryById(ctx, system_master.ModifyVisitCategoryByIdInput{
 		Id:    req.Id,
 		Title: req.Title,
 	})
@@ -87,7 +87,7 @@ func (c *cUcSystemMasterVisitor) EditVisitCategory(ctx context.Context, req *man
 // @return res
 // @return err
 func (c *cUcSystemMasterVisitor) ListVisitCategory(ctx context.Context, req *manage.ListVisitCategoryReq) (res *manage.ListVisitCategoryRes, err error) {
-	code, message, output, err := service.UcSystemMasterVisitorLogs().ListVisitCategory(ctx, system_master.ListVisitCategoryInput{
+	code, message, output, err := service.UcSystemMasterVisitor().ListVisitCategory(ctx, system_master.ListVisitCategoryInput{
 		Page: req.Page,
 		Size: req.Size,
 	})
@@ -105,5 +105,34 @@ func (c *cUcSystemMasterVisitor) ListVisitCategory(ctx context.Context, req *man
 		"data":    g.Map{"list": output},
 	})
 
+	return
+}
+
+// DeleteCacheVisitCategory
+//
+// @Title 删除缓存信息
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-03 21:04:03
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMasterVisitor) DeleteCacheVisitCategory(ctx context.Context, req *manage.DeleteVisitCategoryReq) (res *manage.DeleteVisitCategoryRes, err error) {
+	code, message, err := service.UcSystemMasterVisitor().DelRCacheVisitCategory()
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
 	return
 }
