@@ -38,7 +38,7 @@ type (
 		GetRCacheVisitCategoryById(id string) (code int32, message string, output map[string]interface{}, err error)
 		DelRCacheVisitCategory(key string) (code int32, message string, err error)
 		DelRCacheVisitCategoryById(key string) (code int32, message string, err error)
-		AddVisitorLogs(ctx context.Context)
+		AddVisitorLogs(ctx context.Context, in system_master.AddVisitorLogsInput)
 	}
 )
 

@@ -228,6 +228,6 @@ func (s *sUcSystemMasterVisitorLogs) DelRCacheVisitCategoryById(key string) (cod
 	return utility.RCDelHashId(utility.RedisHashIdData{Key: key})
 }
 
-func (s *sUcSystemMasterVisitorLogs) AddVisitorLogs(ctx context.Context) {
+func (s *sUcSystemMasterVisitorLogs) AddVisitorLogs(ctx context.Context, in system_master.AddVisitorLogsInput) {
 
 }
