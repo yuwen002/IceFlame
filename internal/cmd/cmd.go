@@ -80,6 +80,7 @@ var (
 						service.Middleware().MiddlewareHandlerResponse,
 					)
 					group.Bind(
+						// 管理员用户管理
 						manage.UcSystemMaster.CreateSystemMaster,
 						manage.UcSystemMaster.EditPassword,
 						manage.UcSystemMaster.ListSystemMaster,
@@ -87,6 +88,11 @@ var (
 						manage.UcSystemMaster.ResetPassword,
 						manage.UcSystemMaster.EditStatus,
 						manage.UcSystemMaster.UnlockSystemMaster,
+
+						// 操作日志
+						manage.UcSystemMasterVisitor.AddVisitCategory,
+						manage.UcSystemMasterVisitor.EditVisitCategory,
+						manage.UcSystemMasterVisitor.ListVisitCategory,
 					)
 				},
 			)

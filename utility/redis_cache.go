@@ -41,6 +41,11 @@ type RedisHashIdData struct {
 	Expire int64       // Redis过期时间
 }
 
+type RedisDelKey struct {
+	Config string // Redis配置信息
+	Key    string // Redis键值
+}
+
 // RedisCache
 // @Description: Redis缓存
 // @Author liuxingyu <yuwen002@163.com>
@@ -68,6 +73,32 @@ func (rc *RedisCache) InitRedis() *gredis.Redis {
 	}
 
 	return redis
+}
+
+// DelKey
+//
+// @Title 删除缓存key
+// @Description 删除缓存key
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-03 14:13:04
+// @receiver rc
+// @param key
+// @return code
+// @return message
+// @return err
+func (rc *RedisCache) DelKey(data RedisDelKey) (code int32, message string, err error) {
+	// 初始化Redis
+	redis := rc.InitRedis()
+	res, err := redis.Del(rc.ctx, data.Key)
+	if err != nil {
+		return -1, "", err
+	}
+
+	if res == 0 {
+		return 1, "删除成功", nil
+	}
+
+	return 0, "删除成功", nil
 }
 
 // ExistsSetData
@@ -446,6 +477,21 @@ func (rc *RedisCache) DelHashId(data RedisHashIdData) (code int32, message strin
 func InitRedis(config ...string) *gredis.Redis {
 	var redis = RedisCache{Config: config[0]}
 	return redis.InitRedis()
+}
+
+// RCDelKey
+//
+// @Title 删除缓存key
+// @Description 删除缓存key
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-03 14:45:33
+// @param data
+// @return code
+// @return message
+// @return err
+func RCDelKey(data RedisDelKey) (code int32, message string, err error) {
+	var redis = RedisCache{Config: data.Config}
+	return redis.DelKey(data)
 }
 
 // RCExistsSetData

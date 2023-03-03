@@ -110,11 +110,16 @@ func (s *sUcSystemMasterVisitorLogs) ModifyVisitCategoryById(ctx context.Context
 // @Date 2023-03-01 17:31:21
 // @receiver s
 // @param ctx
-func (s *sUcSystemMasterVisitorLogs) ListVisitCategory(ctx context.Context) (code int32, message string, output []*system_master.ListVisitCategoryOutput, err error) {
+func (s *sUcSystemMasterVisitorLogs) ListVisitCategory(ctx context.Context, in system_master.ListVisitCategoryInput) (code int32, message string, output []*system_master.ListVisitCategoryOutput, err error) {
 	var out []*system_master.ListVisitCategoryOutput
 	code, message, err = utility.DBGetAllStructByWhere(dao.UcSystemMasterVisitCategory.Ctx(ctx), utility.DBGetAllByWhereInput{
-		Field: "id, title",
-		Order: "id asc",
+		Field:    "id, title",
+		Order:    "id asc",
+		PageType: 1,
+		DBPagination: utility.DBPagination{
+			Page: in.Page,
+			Size: in.Size,
+		},
 	}, &out)
 
 	if code != 0 {
@@ -137,7 +142,7 @@ func (s *sUcSystemMasterVisitorLogs) ListVisitCategory(ctx context.Context) (cod
 // @return output
 // @return err
 func (s *sUcSystemMasterVisitorLogs) GetRCacheVisitCategory(ctx context.Context) (code int32, message string, output []map[string]interface{}, err error) {
-	code, message, out, err := utility.RCGetMapsHashAll(utility.RedisHashIdData{
+	code, message, output, err = utility.RCGetMapsHashAll(utility.RedisHashIdData{
 		Config: s.redisConfig,
 		Key:    s.VisitCategoryRKey,
 	})
@@ -147,30 +152,31 @@ func (s *sUcSystemMasterVisitorLogs) GetRCacheVisitCategory(ctx context.Context)
 
 	if code == 1 {
 		// 查询数据中数据
-		code, message, out, err := s.ListVisitCategory(ctx)
+		code, message, out, err := utility.DBGetAllMapByWhere(dao.UcSystemMasterVisitCategory.Ctx(ctx), utility.DBGetAllByWhereInput{
+			Field: "id, title",
+			Order: "id asc",
+		})
 		if code != 0 {
 			return code, message, nil, err
 		}
 
 		// 缓存信息写入
 		for index := range out {
-			value := map[string]interface{}{gconv.String(out[index].Id): out[index].Title}
-			output = append(output, value)
 			_, _, err := utility.RCSetHashId(utility.RedisHashIdData{
 				Config: s.redisConfig,
 				Key:    s.VisitCategoryRKey,
-				Id:     gconv.String(out[index].Id),
-				Data:   out[index].Title,
+				Id:     gconv.String(out[index]["id"]),
+				Data:   out[index]["title"],
 			})
 			if err != nil {
 				return 0, "", nil, err
 			}
 		}
 
-		return 0, "取出数据成功", output, nil
+		return 0, "取出数据成功", out, nil
 	}
 
-	return 0, "取出数据成功", out, nil
+	return 0, "取出数据成功", output, nil
 }
 
 // GetRCacheVisitCategoryById
@@ -189,12 +195,37 @@ func (s *sUcSystemMasterVisitorLogs) GetRCacheVisitCategoryById(id string) (code
 	return utility.RCGetMapHashId(utility.RedisHashIdData{Id: id})
 }
 
-func (s *sUcSystemMasterVisitorLogs) DelRCacheVisitCategory(key string) {
-
+// DelRCacheVisitCategory
+//
+// @Title 删除缓存信息
+// @Description  删除缓存信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-03 11:53:25
+// @receiver s
+// @param key
+// @return code
+// @return message
+// @return err
+func (s *sUcSystemMasterVisitorLogs) DelRCacheVisitCategory(key string) (code int32, message string, err error) {
+	return utility.RCDelKey(utility.RedisDelKey{
+		Config: s.redisConfig,
+		Key:    key,
+	})
 }
 
-func (s *sUcSystemMasterVisitorLogs) DelRCacheVisitCategoryById(id string) {
-
+// DelRCacheVisitCategoryById
+//
+// @Title 按ID删除缓存信息
+// @Description 按ID删除缓存信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-03 11:54:15
+// @receiver s
+// @param id
+// @return code
+// @return message
+// @return err
+func (s *sUcSystemMasterVisitorLogs) DelRCacheVisitCategoryById(key string) (code int32, message string, err error) {
+	return utility.RCDelHashId(utility.RedisHashIdData{Key: key})
 }
 
 func (s *sUcSystemMasterVisitorLogs) AddVisitorLogs(ctx context.Context) {

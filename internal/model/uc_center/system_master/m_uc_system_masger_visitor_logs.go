@@ -17,6 +17,15 @@ type ModifyVisitCategoryByIdInput struct {
 	Title string
 }
 
+// ListVisitCategoryInput
+// @Description: 访问标题列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-03 17:35:28
+type ListVisitCategoryInput struct {
+	Page int
+	Size int
+}
+
 // ListVisitCategoryOutput
 // @Description: 访问标题列表
 // @Author liuxingyu <yuwen002@163.com>
