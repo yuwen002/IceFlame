@@ -2,6 +2,7 @@ package manage
 
 import (
 	"context"
+	"fmt"
 	"github.com/gogf/gf/v2/frame/g"
 	"ice_flame/api/manage"
 	"ice_flame/internal/model/uc_center/system_master"
@@ -133,6 +134,43 @@ func (c *cUcSystemMasterVisitor) DeleteCacheVisitCategory(ctx context.Context, r
 	json.WriteJsonExit(g.Map{
 		"code":    code,
 		"message": message,
+	})
+	return
+}
+
+// ListVisitorLogs
+//
+// @Title 管理员用户访问记录日志列表
+// @Description 管理员用户访问记录日志列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-04 15:21:15
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMasterVisitor) ListVisitorLogs(ctx context.Context, req *manage.ListVisitorLogsReq) (res *manage.ListSystemMasterRes, err error) {
+	fmt.Println(g.RequestFromCtx(ctx).Header)
+	code, message, output, err := service.UcSystemMasterVisitor().ListVisitorLogs(ctx, system_master.ListVisitorLogsInput{
+		AccountId:     req.Id,
+		OsCategory:    req.OsCategory,
+		VisitCategory: req.VisitCategory,
+		Page:          req.Page,
+		Size:          req.Size,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    g.Map{"list": output},
 	})
 	return
 }

@@ -25,8 +25,7 @@ type LoginTelPasswordReq struct {
 	Tel      string `p:"tel" v:"required|phone#用户电话不能为空|请填写正确电话"`
 	Password string `p:"password" v:"required|length:5,32#密码不能为空|密码在5到32之间"`
 }
-type LoginTelPasswordRes struct {
-}
+type LoginTelPasswordRes struct{}
 
 // LoginUsernamePasswordReq
 // @Description: 管理员登入，登入方式用户名密码登入
@@ -37,8 +36,7 @@ type LoginUsernamePasswordReq struct {
 	Username string `p:"username" v:"required#用户名不能为空"`
 	Password string `p:"password" v:"required|length:5,32#密码不能为空|密码在5到32之间"`
 }
-type LoginUsernamePasswordRes struct {
-}
+type LoginUsernamePasswordRes struct{}
 
 // CreateSystemMasterReq
 // @Description: 管理员新建管理用户
@@ -52,8 +50,7 @@ type CreateSystemMasterReq struct {
 	ConfirmPassword string `p:"confirm_password" v:"required|same:password#确认密码不能为空|两次输入密码不一致"`
 	Name            string `p:"name" v:"required#姓名不能为空"`
 }
-type CreateSystemMasterRes struct {
-}
+type CreateSystemMasterRes struct{}
 
 // EditPasswordReq
 // @Description:修改关联
@@ -65,8 +62,7 @@ type EditPasswordReq struct {
 	NewPassword        string `p:"new_password" v:"required|length:5,32#密码不能为空|密码在5到32之间"`
 	ConfirmNewPassword string `p:"confirm_new_password" v:"required|same:new_password#确认密码不能为空|两次输入密码不一致"`
 }
-type EditPasswordRes struct {
-}
+type EditPasswordRes struct{}
 
 // ListSystemMasterReq
 // @Description: 管理员列表
@@ -77,8 +73,7 @@ type ListSystemMasterReq struct {
 	Page   int `p:"page" v:"min:1|integer#页码要大于等于1|页码只为正整数"`
 	Size   int `p:"size" v:"min:1|integer#显示条数要大于等于1|显示条数只为正整数"`
 }
-type ListSystemMasterRes struct {
-}
+type ListSystemMasterRes struct{}
 
 // EditSystemMasterReq
 // @Description:编辑管理员列表
@@ -91,8 +86,7 @@ type EditSystemMasterReq struct {
 	Name      string `p:"name" v:"required#姓名不能为空"`
 	Status    int8   `p:"status" v:"required#用户状态不能为空"`
 }
-type EditSystemMasterRes struct {
-}
+type EditSystemMasterRes struct{}
 
 // ResetPasswordSystemMasterReq
 // @Description: 管理员重置密码
@@ -104,8 +98,7 @@ type ResetPasswordSystemMasterReq struct {
 	Password        string `p:"password" v:"length:5,32#密码在5到32之间"`
 	ConfirmPassword string `p:"confirm_password" v:"same:password#两次输入密码不一致"`
 }
-type ResetPasswordSystemMasterRes struct {
-}
+type ResetPasswordSystemMasterRes struct{}
 
 // EditStatusSystemMasterReq
 // @Description: 管理员修改管理员登入状态
@@ -116,12 +109,10 @@ type EditStatusSystemMasterReq struct {
 	AccountId uint64 `p:"account_id" v:"required|min:1|integer#ID不能为空|ID要大于等于1|ID只为正整数"`
 	Status    string `p:"status" v:"in:required|0,1#用户状态不能为空|用户状态值错误"`
 }
-type EditStatusSystemMasterRes struct {
-}
+type EditStatusSystemMasterRes struct{}
 
 type UnlockSystemMasterReq struct {
 	g.Meta    `path:"/master/unlock_system_master" tags:"重置管理员密码" method:"put" summary:"重置管理员密码"`
 	AccountId uint64 `p:"account_id" v:"required|min:1|integer#ID不能为空|ID要大于等于1|ID只为正整数"`
 }
-type UnlockSystemMasterRes struct {
-}
+type UnlockSystemMasterRes struct{}

@@ -94,6 +94,7 @@ var (
 						manage.UcSystemMasterVisitor.EditVisitCategory,
 						manage.UcSystemMasterVisitor.ListVisitCategory,
 						manage.UcSystemMasterVisitor.DeleteCacheVisitCategory,
+						manage.UcSystemMasterVisitor.ListVisitorLogs,
 					)
 				},
 			)
