@@ -2,11 +2,12 @@ package manage
 
 import (
 	"context"
-	"github.com/gogf/gf/v2/frame/g"
-	"github.com/gogf/gf/v2/util/gconv"
 	"ice_flame/api/manage"
 	"ice_flame/internal/model/uc_center/system_master"
 	"ice_flame/internal/service"
+
+	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/util/gconv"
 )
 
 var UcSystemMaster = cUcSystemMaster{}
@@ -135,6 +136,13 @@ func (c *cUcSystemMaster) CreateSystemMaster(ctx context.Context, req *manage.Cr
 		Name:     req.Name,
 	})
 
+	// 访问日志写入
+	service.UcSystemMasterVisitor().AddVisitorLogs(ctx, system_master.AddVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("id")),
+		VisitCategory: 3,
+		Description:   "新建管理员用户",
+	})
+
 	var json = g.RequestFromCtx(ctx).Response
 	if err != nil {
 		json.WriteJsonExit(g.Map{
@@ -166,6 +174,13 @@ func (c *cUcSystemMaster) EditPassword(ctx context.Context, req *manage.EditPass
 	code, message, err := service.UcSystemMaster().ModifyPasswordSelfById(ctx, system_master.ModifyPasswordInput{
 		OldPassword: req.OldPassword,
 		NewPassword: req.OldPassword,
+	})
+
+	// 访问日志写入
+	service.UcSystemMasterVisitor().AddVisitorLogs(ctx, system_master.AddVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("id")),
+		VisitCategory: 2,
+		Description:   "管理员修改自己密码",
 	})
 
 	var json = g.RequestFromCtx(ctx).Response

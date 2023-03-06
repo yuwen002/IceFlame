@@ -8,6 +8,8 @@ import (
 	"ice_flame/utility"
 	"strings"
 
+	"github.com/gogf/gf/v2/database/gdb"
+
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/util/gconv"
 )
@@ -249,7 +251,17 @@ func (s *sUcSystemMasterVisitor) DelRCacheVisitCategoryById(id string) (code int
 // @return message
 // @return err
 func (s *sUcSystemMasterVisitor) AddVisitorLogs(ctx context.Context, in system_master.AddVisitorLogsInput) (code int32, message string, err error) {
+	// IP写入
+	ip := g.RequestFromCtx(ctx).GetRemoteIp()
+	in.IP = ip
+	in.IPLong = gdb.Raw("INET6_ATON('" + ip + "')")
+	// os 类别写入
+	in.OsCategory = utility.GetOsCategory(g.RequestFromCtx(ctx))
 	return utility.DBInsert(dao.UcSystemMasterVisitorLogs.Ctx(ctx), utility.DBInsertInput{Data: in})
+}
+
+func (s *sUcSystemMasterVisitor) SimplifyAddVisitorLogs(ctx context.Context) {
+
 }
 
 // ListVisitorLogs
