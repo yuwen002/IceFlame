@@ -56,6 +56,8 @@ type AddVisitorLogsInput struct {
 	VisitCategory int16
 	UnionId       uint64
 	Description   string
+	IPLong        string
+	IP            string
 }
 
 // ListVisitorLogsInput
@@ -71,11 +73,13 @@ type ListVisitorLogsInput struct {
 }
 
 type ListVisitorLogsOutput struct {
-	Id            uint64
-	AccountId     uint64
-	OsCategory    int8
-	VisitCategory int16
-	UnionId       uint64
-	Description   string
-	CreateAt      string
+	Id                uint64 `json:"id"`
+	AccountId         uint64 `json:"account_id"`
+	OsCategory        int8   `json:"os_category"`
+	OsCategoryName    string `json:"os_category_name"`
+	VisitCategory     int16  `json:"visit_category"`
+	VisitCategoryName string `json:"visit_category_name"`
+	UnionId           uint64 `json:"union_id"`
+	Description       string `json:"description"`
+	CreatedAt         string `json:"created_at"`
 }

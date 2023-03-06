@@ -2,7 +2,6 @@ package manage
 
 import (
 	"context"
-	"fmt"
 	"github.com/gogf/gf/v2/frame/g"
 	"ice_flame/api/manage"
 	"ice_flame/internal/model/uc_center/system_master"
@@ -150,7 +149,6 @@ func (c *cUcSystemMasterVisitor) DeleteCacheVisitCategory(ctx context.Context, r
 // @return res
 // @return err
 func (c *cUcSystemMasterVisitor) ListVisitorLogs(ctx context.Context, req *manage.ListVisitorLogsReq) (res *manage.ListSystemMasterRes, err error) {
-	fmt.Println(g.RequestFromCtx(ctx).Header)
 	code, message, output, err := service.UcSystemMasterVisitor().ListVisitorLogs(ctx, system_master.ListVisitorLogsInput{
 		AccountId:     req.Id,
 		OsCategory:    req.OsCategory,

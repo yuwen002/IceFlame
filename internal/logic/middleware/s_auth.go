@@ -45,6 +45,8 @@ func (s *sAuthMiddleware) MiddlewareAuthMaster(r *ghttp.Request) {
 		})
 	}
 
+	claims.UserInfo["os_category"] = utility.GetOsCategory(r)
+
 	r.SetCtxVar("master_id", claims.Id)
 	r.SetCtxVar("user_info", claims.UserInfo)
 	r.Middleware.Next()

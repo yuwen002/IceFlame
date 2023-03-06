@@ -22,10 +22,12 @@ type UcSystemMasterVisitorLogsDao struct {
 type UcSystemMasterVisitorLogsColumns struct {
 	Id            string // 自增ID
 	AccountId     string // 关联用户ID
-	OsCategory    string // 系统访问类别（1=web端，2=android端，3=IOS端）
+	OsCategory    string // 系统访问类型（1=web端，2=android端，3=IOS端）
 	VisitCategory string // 访问类型
 	UnionId       string // 关联ID
 	Description   string // 访问信息描述
+	IpLong        string //
+	Ip            string //
 	CreatedAt     string //
 	UpdatedAt     string //
 }
@@ -38,6 +40,8 @@ var ucSystemMasterVisitorLogsColumns = UcSystemMasterVisitorLogsColumns{
 	VisitCategory: "visit_category",
 	UnionId:       "union_id",
 	Description:   "description",
+	IpLong:        "ip_long",
+	Ip:            "ip",
 	CreatedAt:     "created_at",
 	UpdatedAt:     "updated_at",
 }

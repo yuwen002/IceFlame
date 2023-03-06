@@ -389,10 +389,10 @@ func (rc *RedisCache) GetHashAll(data RedisHashIdData) (code int32, message stri
 		return 1, "缓存数据不存在", nil, nil
 	}
 
-	return 0, "取出缓存数据成功", output, nil
+	return 0, "取出缓存数据成功", res, nil
 }
 
-// GetMapsHashAll
+// GetMapHashAll
 //
 // @Title 获取所有字段和值
 // @Description 获取所有字段和值,返回map数组
@@ -404,13 +404,12 @@ func (rc *RedisCache) GetHashAll(data RedisHashIdData) (code int32, message stri
 // @return message
 // @return output
 // @return err
-func (rc *RedisCache) GetMapsHashAll(data RedisHashIdData) (code int32, message string, output []map[string]interface{}, err error) {
+func (rc *RedisCache) GetMapHashAll(data RedisHashIdData) (code int32, message string, output map[string]interface{}, err error) {
 	code, message, out, err := rc.GetHashAll(data)
 	if code != 0 {
 		return code, message, nil, err
 	}
-
-	return code, message, out.Maps(), nil
+	return code, message, out.Map(), nil
 }
 
 // GetStructsHashAll
@@ -648,9 +647,9 @@ func RCGetHashAll(data RedisHashIdData) (code int32, message string, output *g.V
 // @return message
 // @return output
 // @return err
-func RCGetMapsHashAll(data RedisHashIdData) (code int32, message string, output []map[string]interface{}, err error) {
+func RCGetMapsHashAll(data RedisHashIdData) (code int32, message string, output map[string]interface{}, err error) {
 	var redis = RedisCache{Config: data.Config}
-	return redis.GetMapsHashAll(data)
+	return redis.GetMapHashAll(data)
 }
 
 // RCGetStructsHashAll

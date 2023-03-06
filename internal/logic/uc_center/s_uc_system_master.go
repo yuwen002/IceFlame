@@ -391,12 +391,16 @@ func (s *sUcSystemMaster) LoginTelPassword(ctx context.Context, in system_master
 
 	// 登入成功，删除次数限制
 	_, _, _ = s.DelLoginCount(ctx, id)
+	ip := g.RequestFromCtx(ctx).GetRemoteIp()
 	// 访问日志写入
 	service.UcSystemMasterVisitor().AddVisitorLogs(ctx, system_master.AddVisitorLogsInput{
 		AccountId:     gconv.Uint64(data["id"]),
-		OsCategory:    1,
-		VisitCategory: 0,
-		Description:   "",
+		OsCategory:    utility.GetOsCategory(g.RequestFromCtx(ctx)),
+		VisitCategory: 1,
+		Description:   "电话、密码登入",
+		IP:            ip,
+		//IPLong:        string(gdb.Raw("INET6_ATON(" + ip + ")")),
+		IPLong: gdb.Raw("127.0.0.1"),
 	})
 	return 0, "登入成功", token, nil
 }

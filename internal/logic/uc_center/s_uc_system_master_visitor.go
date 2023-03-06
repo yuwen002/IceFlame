@@ -2,6 +2,7 @@ package uc_center
 
 import (
 	"context"
+	"fmt"
 	"ice_flame/internal/dao"
 	"ice_flame/internal/model/uc_center/system_master"
 	"ice_flame/internal/service"
@@ -143,7 +144,7 @@ func (s *sUcSystemMasterVisitor) ListVisitCategory(ctx context.Context, in syste
 // @return message
 // @return output
 // @return err
-func (s *sUcSystemMasterVisitor) GetRCacheVisitCategory(ctx context.Context) (code int32, message string, output []map[string]interface{}, err error) {
+func (s *sUcSystemMasterVisitor) GetRCacheVisitCategory(ctx context.Context) (code int32, message string, output map[string]interface{}, err error) {
 	code, message, output, err = utility.RCGetMapsHashAll(utility.RedisHashIdData{
 		Config: s.redisConfig,
 		Key:    s.VisitCategoryRKey,
@@ -164,18 +165,20 @@ func (s *sUcSystemMasterVisitor) GetRCacheVisitCategory(ctx context.Context) (co
 
 		// 缓存信息写入
 		for index := range out {
+			id := gconv.String(out[index]["id"])
 			_, _, err := utility.RCSetHashId(utility.RedisHashIdData{
 				Config: s.redisConfig,
 				Key:    s.VisitCategoryRKey,
-				Id:     gconv.String(out[index]["id"]),
+				Id:     id,
 				Data:   out[index]["title"],
 			})
 			if err != nil {
 				return 0, "", nil, err
 			}
+			output[id] = out[index]["title"]
 		}
 
-		return 0, "取出数据成功", out, nil
+		return 0, "取出数据成功", output, nil
 	}
 
 	return 0, "取出数据成功", output, nil
@@ -269,17 +272,17 @@ func (s *sUcSystemMasterVisitor) ListVisitorLogs(ctx context.Context, in system_
 
 	// 用户ID
 	if in.AccountId > 0 {
-		condition = append(condition, "account="+gconv.String(in.AccountId))
+		condition = append(condition, "account_id="+gconv.String(in.AccountId))
 	}
 
 	// 判断系统平台
 	if in.OsCategory > 0 {
-		condition = append(condition, "os_category=?"+gconv.String(in.OsCategory))
+		condition = append(condition, "os_category="+gconv.String(in.OsCategory))
 	}
 
 	// 判断访问类型
 	if in.VisitCategory > 0 {
-		condition = append(condition, "visit_category=?"+gconv.String(in.VisitCategory))
+		condition = append(condition, "visit_category="+gconv.String(in.VisitCategory))
 	}
 
 	where := ""
@@ -293,6 +296,22 @@ func (s *sUcSystemMasterVisitor) ListVisitorLogs(ctx context.Context, in system_
 		PageType:     1,
 		DBPagination: utility.DBPagination{Page: in.Page, Size: in.Size},
 	}, &output)
+
+	if code != 0 {
+		return code, message, nil, err
+	}
+
+	code, message, visitCategory, err := s.GetRCacheVisitCategory(ctx)
+	if code != 0 {
+		return code, message, nil, err
+	}
+	fmt.Println(visitCategory)
+
+	for index := range output {
+		output[index].OsCategoryName = utility.GetOsCategoryName(output[index].OsCategory)
+		fmt.Println(output[index].VisitCategory)
+		output[index].VisitCategoryName = gconv.String(visitCategory[gconv.String(output[index].VisitCategory)])
+	}
 
 	return code, message, output, err
 }

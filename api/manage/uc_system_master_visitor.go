@@ -49,8 +49,8 @@ type ListVisitCategoryRes struct{}
 // @Date 2023-03-04 14:14:53
 type ListVisitorLogsReq struct {
 	g.Meta        `path:"/visitor_logs/show" tags:"访问类型日志列表" method:"get" summary:"访问类型列表"`
-	Id            uint64 `p:"id" v:"min:1|integer#ID要大于等于1|ID只为正整数"`
-	OsCategory    int8   `p:"os" v:"in:1,2,3|系统访问类型错误"`
+	Id            uint64 `p:"account_id" v:"min:1|integer#ID要大于等于1|ID只为正整数"`
+	OsCategory    int8   `p:"os_category" v:"in:1,2,3#系统访问类型错误"`
 	VisitCategory int16  `p:"visit_category"  v:"min:1|integer#访问类型要大于等于1|访问类型只为正整数"`
 	Page          int    `p:"page" v:"min:1|integer#页码要大于等于1|页码只为正整数"`
 	Size          int    `p:"size" v:"min:1|integer#显示条数要大于等于1|显示条数只为正整数"`

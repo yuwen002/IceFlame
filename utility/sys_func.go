@@ -2,8 +2,10 @@ package utility
 
 import (
 	"bytes"
+	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/shopspring/decimal"
 	"golang.org/x/crypto/bcrypt"
+	"strings"
 )
 
 // PasswordHash
@@ -181,4 +183,47 @@ func ConvertUnitPercentMul(num float64, unit int64, percent float64) float64 {
 	result, _ := n1.Mul(n2).Float64()
 
 	return result
+}
+
+// GetOsCategory
+//
+// @Title 获取访问端ID
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-06 13:29:56
+// @param r
+// @return int8
+func GetOsCategory(r *ghttp.Request) int8 {
+	userAgent := r.Header.Get("User-Agent")
+	userAgent = strings.ToLower(userAgent)
+
+	if strings.Index(userAgent, "android") != -1 {
+		return 2
+	} else if strings.Index(userAgent, "iphone") != -1 {
+		return 3
+	} else {
+		return 1
+	}
+}
+
+// GetOsCategoryName
+//
+// @Title 按ID返回客户端
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-06 13:34:12
+// @param osCategoryId
+// @return name
+func GetOsCategoryName(osCategoryId int8) (name string) {
+	switch osCategoryId {
+	case 1:
+		name = "Web端"
+	case 2:
+		name = "Android端"
+	case 3:
+		name = "IOS端"
+	default:
+		name = "未知端"
+	}
+	return name
 }

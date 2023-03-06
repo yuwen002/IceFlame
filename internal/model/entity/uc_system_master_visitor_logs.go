@@ -12,10 +12,12 @@ import (
 type UcSystemMasterVisitorLogs struct {
 	Id            uint        `json:"id"             ` // 自增ID
 	AccountId     uint        `json:"account_id"     ` // 关联用户ID
-	OsCategory    uint        `json:"os_category"    ` // 系统访问类别（1=web端，2=android端，3=IOS端）
+	OsCategory    uint        `json:"os_category"    ` // 系统访问类型（1=web端，2=android端，3=IOS端）
 	VisitCategory uint        `json:"visit_category" ` // 访问类型
 	UnionId       uint        `json:"union_id"       ` // 关联ID
 	Description   string      `json:"description"    ` // 访问信息描述
+	IpLong        []byte      `json:"ip_long"        ` //
+	Ip            string      `json:"ip"             ` //
 	CreatedAt     *gtime.Time `json:"created_at"     ` //
 	UpdatedAt     *gtime.Time `json:"updated_at"     ` //
 }
