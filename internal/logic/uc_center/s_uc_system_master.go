@@ -4,9 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/gogf/gf/v2/database/gdb"
-	"github.com/gogf/gf/v2/frame/g"
-	"github.com/gogf/gf/v2/util/gconv"
 	"ice_flame/internal/consts"
 	"ice_flame/internal/dao"
 	"ice_flame/internal/model/uc_center/system_master"
@@ -14,6 +11,10 @@ import (
 	"ice_flame/utility"
 	"strings"
 	"time"
+
+	"github.com/gogf/gf/v2/database/gdb"
+	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/util/gconv"
 )
 
 var insUcSystemMaster = sUcSystemMaster{
@@ -399,8 +400,7 @@ func (s *sUcSystemMaster) LoginTelPassword(ctx context.Context, in system_master
 		VisitCategory: 1,
 		Description:   "电话、密码登入",
 		IP:            ip,
-		//IPLong:        string(gdb.Raw("INET6_ATON(" + ip + ")")),
-		IPLong: gdb.Raw("127.0.0.1"),
+		IPLong:        gdb.Raw("INET6_ATON('" + ip + "')"),
 	})
 	return 0, "登入成功", token, nil
 }

@@ -2,7 +2,6 @@ package uc_center
 
 import (
 	"context"
-	"fmt"
 	"ice_flame/internal/dao"
 	"ice_flame/internal/model/uc_center/system_master"
 	"ice_flame/internal/service"
@@ -291,6 +290,7 @@ func (s *sUcSystemMasterVisitor) ListVisitorLogs(ctx context.Context, in system_
 	}
 
 	code, message, err = utility.DBGetAllStructByWhere(dao.UcSystemMasterVisitorLogs.Ctx(ctx), utility.DBGetAllByWhereInput{
+		Field:        "*, INET6_NTOA(ip_long) as ip_long",
 		Where:        where,
 		Order:        "id desc",
 		PageType:     1,
@@ -305,11 +305,9 @@ func (s *sUcSystemMasterVisitor) ListVisitorLogs(ctx context.Context, in system_
 	if code != 0 {
 		return code, message, nil, err
 	}
-	fmt.Println(visitCategory)
 
 	for index := range output {
 		output[index].OsCategoryName = utility.GetOsCategoryName(output[index].OsCategory)
-		fmt.Println(output[index].VisitCategory)
 		output[index].VisitCategoryName = gconv.String(visitCategory[gconv.String(output[index].VisitCategory)])
 	}
 
