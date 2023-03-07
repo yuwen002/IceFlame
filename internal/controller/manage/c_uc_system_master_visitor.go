@@ -3,6 +3,7 @@ package manage
 import (
 	"context"
 	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/util/gconv"
 	"ice_flame/api/manage"
 	"ice_flame/internal/model/uc_center/system_master"
 	"ice_flame/internal/service"
@@ -26,6 +27,14 @@ type cUcSystemMasterVisitor struct {
 // @return err
 func (c *cUcSystemMasterVisitor) AddVisitCategory(ctx context.Context, req *manage.AddVisitCategoryReq) (res *manage.AddVisitCategoryRes, err error) {
 	code, message, err := service.UcSystemMasterVisitor().AddVisitCategory(ctx, system_master.AddVisitCategoryInput{Title: req.Title})
+
+	// 访问日志写入
+	service.UcSystemMasterVisitor().AddVisitorLogs(ctx, system_master.AddVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("id")),
+		VisitCategory: 3,
+		Description:   "新建访问日志分类",
+	})
+
 	var json = g.RequestFromCtx(ctx).Response
 	if err != nil {
 		json.WriteJsonExit(g.Map{
@@ -57,6 +66,13 @@ func (c *cUcSystemMasterVisitor) EditVisitCategory(ctx context.Context, req *man
 	code, message, err := service.UcSystemMasterVisitor().ModifyVisitCategoryById(ctx, system_master.ModifyVisitCategoryByIdInput{
 		Id:    req.Id,
 		Title: req.Title,
+	})
+
+	// 访问日志写入
+	service.UcSystemMasterVisitor().AddVisitorLogs(ctx, system_master.AddVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("id")),
+		VisitCategory: 3,
+		Description:   "编辑访问日志分类",
 	})
 
 	var json = g.RequestFromCtx(ctx).Response
@@ -91,6 +107,14 @@ func (c *cUcSystemMasterVisitor) ListVisitCategory(ctx context.Context, req *man
 		Page: req.Page,
 		Size: req.Size,
 	})
+
+	// 访问日志写入
+	service.UcSystemMasterVisitor().AddVisitorLogs(ctx, system_master.AddVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("id")),
+		VisitCategory: 3,
+		Description:   "查看访问日志分类列表",
+	})
+
 	var json = g.RequestFromCtx(ctx).Response
 	if err != nil {
 		json.WriteJsonExit(g.Map{
@@ -121,6 +145,13 @@ func (c *cUcSystemMasterVisitor) ListVisitCategory(ctx context.Context, req *man
 // @return err
 func (c *cUcSystemMasterVisitor) DeleteCacheVisitCategory(ctx context.Context, req *manage.DeleteVisitCategoryReq) (res *manage.DeleteVisitCategoryRes, err error) {
 	code, message, err := service.UcSystemMasterVisitor().DelRCacheVisitCategory()
+
+	// 访问日志写入
+	service.UcSystemMasterVisitor().AddVisitorLogs(ctx, system_master.AddVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("id")),
+		VisitCategory: 3,
+		Description:   "清除访问日志分类缓存",
+	})
 
 	var json = g.RequestFromCtx(ctx).Response
 	if err != nil {
@@ -155,6 +186,13 @@ func (c *cUcSystemMasterVisitor) ListVisitorLogs(ctx context.Context, req *manag
 		VisitCategory: req.VisitCategory,
 		Page:          req.Page,
 		Size:          req.Size,
+	})
+
+	// 访问日志写入
+	service.UcSystemMasterVisitor().AddVisitorLogs(ctx, system_master.AddVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("id")),
+		VisitCategory: 3,
+		Description:   "查看访问日志列表",
 	})
 
 	var json = g.RequestFromCtx(ctx).Response

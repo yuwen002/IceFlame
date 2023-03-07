@@ -139,7 +139,7 @@ func (c *cUcSystemMaster) CreateSystemMaster(ctx context.Context, req *manage.Cr
 	// 访问日志写入
 	service.UcSystemMasterVisitor().AddVisitorLogs(ctx, system_master.AddVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("id")),
-		VisitCategory: 3,
+		VisitCategory: 2,
 		Description:   "新建管理员用户",
 	})
 
@@ -225,6 +225,13 @@ func (c *cUcSystemMaster) ListSystemMaster(ctx context.Context, req *manage.List
 		Page: req.Page,
 	})
 
+	// 访问日志写入
+	service.UcSystemMasterVisitor().AddVisitorLogs(ctx, system_master.AddVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("id")),
+		VisitCategory: 2,
+		Description:   "查看管理员列表",
+	})
+
 	var json = g.RequestFromCtx(ctx).Response
 	if err != nil {
 		json.WriteJsonExit(g.Map{
@@ -257,6 +264,13 @@ func (c *cUcSystemMaster) EditSystemMaster(ctx context.Context, req *manage.Edit
 		AccountId: req.AccountId,
 		Tel:       req.Tel,
 		Name:      req.Name,
+	})
+
+	// 访问日志写入
+	service.UcSystemMasterVisitor().AddVisitorLogs(ctx, system_master.AddVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("id")),
+		VisitCategory: 2,
+		Description:   "编辑管理员信息",
 	})
 
 	var json = g.RequestFromCtx(ctx).Response
@@ -292,6 +306,13 @@ func (c *cUcSystemMaster) ResetPassword(ctx context.Context, req *manage.ResetPa
 		Password:  req.Password,
 	})
 
+	// 访问日志写入
+	service.UcSystemMasterVisitor().AddVisitorLogs(ctx, system_master.AddVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("id")),
+		VisitCategory: 2,
+		Description:   "重置管理员密码",
+	})
+
 	var json = g.RequestFromCtx(ctx).Response
 	if err != nil {
 		json.WriteJsonExit(g.Map{
@@ -325,6 +346,13 @@ func (c *cUcSystemMaster) EditStatus(ctx context.Context, req *manage.EditStatus
 		Status:    req.Status,
 	})
 
+	// 访问日志写入
+	service.UcSystemMasterVisitor().AddVisitorLogs(ctx, system_master.AddVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("id")),
+		VisitCategory: 2,
+		Description:   "重置管理员密码",
+	})
+
 	var json = g.RequestFromCtx(ctx).Response
 	if err != nil {
 		json.WriteJsonExit(g.Map{
@@ -354,6 +382,14 @@ func (c *cUcSystemMaster) EditStatus(ctx context.Context, req *manage.EditStatus
 // @return err
 func (c *cUcSystemMaster) UnlockSystemMaster(ctx context.Context, req *manage.UnlockSystemMasterReq) (res *manage.UnlockSystemMasterRes, err error) {
 	code, message, err := service.UcSystemMaster().DelLoginCount(ctx, gconv.String(req.AccountId))
+
+	// 访问日志写入
+	service.UcSystemMasterVisitor().AddVisitorLogs(ctx, system_master.AddVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("id")),
+		VisitCategory: 2,
+		Description:   "解锁管理员登入限制",
+	})
+
 	var json = g.RequestFromCtx(ctx).Response
 	if err != nil {
 		json.WriteJsonExit(g.Map{
