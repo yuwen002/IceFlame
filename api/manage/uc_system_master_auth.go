@@ -35,3 +35,35 @@ type ListRoleReq struct {
 	Size   int `p:"size" v:"min:1|integer#显示条数要大于等于1|显示条数只为正整数"`
 }
 type ListRoleRes struct{}
+
+// AddRoleRelationReq
+// @Description: 添加管理员绑定角色信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-08 00:19:37
+type AddRoleRelationReq struct {
+}
+type AddRoleRelationRes struct{}
+
+// EditRoleRelationReq
+// @Description: 编辑管理员绑定角色信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-08 00:20:03
+type EditRoleRelationReq struct {
+}
+type EditRoleRelationRes struct{}
+
+// ListRoleRelationReq
+// @Description:管理员绑定角色信息列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-08 00:20:15
+type ListRoleRelationReq struct {
+}
+type ListRoleRelationRes struct{}
+
+// DeleteRoleRelationReq
+// @Description: 删除管理员绑定角色信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-08 00:20:31
+type DeleteRoleRelationReq struct {
+}
+type DeleteRoleRelationRes struct{}

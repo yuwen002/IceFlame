@@ -2,11 +2,12 @@ package manage
 
 import (
 	"context"
-	"github.com/gogf/gf/v2/frame/g"
-	"github.com/gogf/gf/v2/util/gconv"
 	"ice_flame/api/manage"
 	"ice_flame/internal/model/uc_center/system_master"
 	"ice_flame/internal/service"
+
+	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/util/gconv"
 )
 
 var UcSystemMasterAuth = cUcSystemMasterAuth{}
@@ -136,4 +137,20 @@ func (c *cUcSystemMasterAuth) ListRole(ctx context.Context, req *manage.ListRole
 	})
 
 	return
+}
+
+func (c *cUcSystemMasterAuth) AddRoleRelation(ctx context.Context, req *manage.AddRoleRelationReq) (res *manage.AddRoleRelationRes, err error) {
+
+}
+
+func (c *cUcSystemMasterAuth) EditRoleRelation(ctx context.Context, req *manage.EditRoleRelationReq) (res *manage.EditRoleRelationRes, err error) {
+
+}
+
+func (c *cUcSystemMasterAuth) ListRoleRelation(ctx context.Context, req *manage.ListRoleRelationReq) (res *manage.ListRoleRelationRes, err error) {
+
+}
+
+func (c *cUcSystemMasterAuth) DeleteRoleRelation(ctx context.Context, req *manage.DeleteRoleRelationReq) (res manage.DeleteRoleRelationRes, err error) {
+
 }
