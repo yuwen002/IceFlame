@@ -26,11 +26,11 @@ type cUcSystemMasterVisitor struct {
 // @return res
 // @return err
 func (c *cUcSystemMasterVisitor) AddVisitCategory(ctx context.Context, req *manage.AddVisitCategoryReq) (res *manage.AddVisitCategoryRes, err error) {
-	code, message, err := service.UcSystemMasterVisitor().AddVisitCategory(ctx, system_master.AddVisitCategoryInput{Title: req.Title})
+	code, message, err := service.UcSystemMasterVisitor().CreateVisitCategory(ctx, system_master.CreateVisitCategoryInput{Title: req.Title})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().AddVisitorLogs(ctx, system_master.AddVisitorLogsInput{
-		AccountId:     gconv.Uint64(ctx.Value("id")),
+	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 3,
 		Description:   "新建访问日志分类",
 	})
@@ -69,8 +69,8 @@ func (c *cUcSystemMasterVisitor) EditVisitCategory(ctx context.Context, req *man
 	})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().AddVisitorLogs(ctx, system_master.AddVisitorLogsInput{
-		AccountId:     gconv.Uint64(ctx.Value("id")),
+	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 3,
 		Description:   "编辑访问日志分类",
 	})
@@ -109,8 +109,8 @@ func (c *cUcSystemMasterVisitor) ListVisitCategory(ctx context.Context, req *man
 	})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().AddVisitorLogs(ctx, system_master.AddVisitorLogsInput{
-		AccountId:     gconv.Uint64(ctx.Value("id")),
+	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 3,
 		Description:   "查看访问日志分类列表",
 	})
@@ -147,8 +147,8 @@ func (c *cUcSystemMasterVisitor) DeleteCacheVisitCategory(ctx context.Context, r
 	code, message, err := service.UcSystemMasterVisitor().DelRCacheVisitCategory()
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().AddVisitorLogs(ctx, system_master.AddVisitorLogsInput{
-		AccountId:     gconv.Uint64(ctx.Value("id")),
+	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 3,
 		Description:   "清除访问日志分类缓存",
 	})
@@ -189,8 +189,8 @@ func (c *cUcSystemMasterVisitor) ListVisitorLogs(ctx context.Context, req *manag
 	})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().AddVisitorLogs(ctx, system_master.AddVisitorLogsInput{
-		AccountId:     gconv.Uint64(ctx.Value("id")),
+	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 3,
 		Description:   "查看访问日志列表",
 	})

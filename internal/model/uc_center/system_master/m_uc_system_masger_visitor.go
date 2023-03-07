@@ -1,10 +1,10 @@
 package system_master
 
-// AddVisitCategoryInput
+// CreateVisitCategoryInput
 // @Description: 添加访问标题
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-01 16:45:12
-type AddVisitCategoryInput struct {
+type CreateVisitCategoryInput struct {
 	Title string
 }
 
@@ -46,11 +46,11 @@ type DeleteVisitCategoryInput struct {
 	Key string
 }
 
-// AddVisitorLogsInput
+// CreateVisitorLogsInput
 // @Description:访问信息写入
 // @Author liuxingyu <yuwen002@163.com>
 // @Data 2023-03-03 23:16:26
-type AddVisitorLogsInput struct {
+type CreateVisitorLogsInput struct {
 	AccountId     uint64
 	OsCategory    int8
 	VisitCategory int16

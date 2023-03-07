@@ -95,6 +95,11 @@ var (
 						manage.UcSystemMasterVisitor.ListVisitCategory,
 						manage.UcSystemMasterVisitor.DeleteCacheVisitCategory,
 						manage.UcSystemMasterVisitor.ListVisitorLogs,
+
+						// 角色管理
+						manage.UcSystemMasterAuth.AddRole,
+						manage.UcSystemMasterAuth.EditRole,
+						manage.UcSystemMasterAuth.ListRole,
 					)
 				},
 			)

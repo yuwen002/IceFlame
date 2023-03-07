@@ -36,7 +36,7 @@ type sUcSystemMasterVisitor struct {
 	redisConfig       string
 }
 
-// AddVisitCategory
+// CreateVisitCategory
 //
 // @Title 添加访问类型分类
 // @Description 添加访问类型分类
@@ -48,7 +48,7 @@ type sUcSystemMasterVisitor struct {
 // @return code
 // @return message
 // @return err
-func (s *sUcSystemMasterVisitor) AddVisitCategory(ctx context.Context, in system_master.AddVisitCategoryInput) (code int32, message string, err error) {
+func (s *sUcSystemMasterVisitor) CreateVisitCategory(ctx context.Context, in system_master.CreateVisitCategoryInput) (code int32, message string, err error) {
 	// 数据写入
 	code, message, lastInsertId, err := utility.DBInsertAndGetId(dao.UcSystemMasterVisitCategory.Ctx(ctx), utility.DBInsertInput{Data: in})
 	if code != 0 {
@@ -117,7 +117,6 @@ func (s *sUcSystemMasterVisitor) ModifyVisitCategoryById(ctx context.Context, in
 func (s *sUcSystemMasterVisitor) ListVisitCategory(ctx context.Context, in system_master.ListVisitCategoryInput) (code int32, message string, output []*system_master.ListVisitCategoryOutput, err error) {
 	var out []*system_master.ListVisitCategoryOutput
 	code, message, err = utility.DBGetAllStructByWhere(dao.UcSystemMasterVisitCategory.Ctx(ctx), utility.DBGetAllByWhereInput{
-		Field:    "id, title",
 		Order:    "id asc",
 		PageType: 1,
 		DBPagination: utility.DBPagination{
@@ -238,7 +237,7 @@ func (s *sUcSystemMasterVisitor) DelRCacheVisitCategoryById(id string) (code int
 	})
 }
 
-// AddVisitorLogs
+// CreateVisitorLogs
 //
 // @Title 访问日志信息写入
 // @Description 访问日志信息写入
@@ -250,7 +249,7 @@ func (s *sUcSystemMasterVisitor) DelRCacheVisitCategoryById(id string) (code int
 // @return code
 // @return message
 // @return err
-func (s *sUcSystemMasterVisitor) AddVisitorLogs(ctx context.Context, in system_master.AddVisitorLogsInput) (code int32, message string, err error) {
+func (s *sUcSystemMasterVisitor) CreateVisitorLogs(ctx context.Context, in system_master.CreateVisitorLogsInput) (code int32, message string, err error) {
 	// IP写入
 	ip := g.RequestFromCtx(ctx).GetRemoteIp()
 	in.IP = ip
@@ -258,10 +257,6 @@ func (s *sUcSystemMasterVisitor) AddVisitorLogs(ctx context.Context, in system_m
 	// os 类别写入
 	in.OsCategory = utility.GetOsCategory(g.RequestFromCtx(ctx))
 	return utility.DBInsert(dao.UcSystemMasterVisitorLogs.Ctx(ctx), utility.DBInsertInput{Data: in})
-}
-
-func (s *sUcSystemMasterVisitor) SimplifyAddVisitorLogs(ctx context.Context) {
-
 }
 
 // ListVisitorLogs

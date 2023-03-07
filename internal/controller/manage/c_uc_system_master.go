@@ -137,8 +137,8 @@ func (c *cUcSystemMaster) CreateSystemMaster(ctx context.Context, req *manage.Cr
 	})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().AddVisitorLogs(ctx, system_master.AddVisitorLogsInput{
-		AccountId:     gconv.Uint64(ctx.Value("id")),
+	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 2,
 		Description:   "新建管理员用户",
 	})
@@ -177,8 +177,8 @@ func (c *cUcSystemMaster) EditPassword(ctx context.Context, req *manage.EditPass
 	})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().AddVisitorLogs(ctx, system_master.AddVisitorLogsInput{
-		AccountId:     gconv.Uint64(ctx.Value("id")),
+	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 2,
 		Description:   "管理员修改自己密码",
 	})
@@ -226,8 +226,8 @@ func (c *cUcSystemMaster) ListSystemMaster(ctx context.Context, req *manage.List
 	})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().AddVisitorLogs(ctx, system_master.AddVisitorLogsInput{
-		AccountId:     gconv.Uint64(ctx.Value("id")),
+	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 2,
 		Description:   "查看管理员列表",
 	})
@@ -267,8 +267,8 @@ func (c *cUcSystemMaster) EditSystemMaster(ctx context.Context, req *manage.Edit
 	})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().AddVisitorLogs(ctx, system_master.AddVisitorLogsInput{
-		AccountId:     gconv.Uint64(ctx.Value("id")),
+	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 2,
 		Description:   "编辑管理员信息",
 	})
@@ -307,8 +307,8 @@ func (c *cUcSystemMaster) ResetPassword(ctx context.Context, req *manage.ResetPa
 	})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().AddVisitorLogs(ctx, system_master.AddVisitorLogsInput{
-		AccountId:     gconv.Uint64(ctx.Value("id")),
+	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 2,
 		Description:   "重置管理员密码",
 	})
@@ -347,8 +347,8 @@ func (c *cUcSystemMaster) EditStatus(ctx context.Context, req *manage.EditStatus
 	})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().AddVisitorLogs(ctx, system_master.AddVisitorLogsInput{
-		AccountId:     gconv.Uint64(ctx.Value("id")),
+	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 2,
 		Description:   "重置管理员密码",
 	})
@@ -384,8 +384,8 @@ func (c *cUcSystemMaster) UnlockSystemMaster(ctx context.Context, req *manage.Un
 	code, message, err := service.UcSystemMaster().DelLoginCount(ctx, gconv.String(req.AccountId))
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().AddVisitorLogs(ctx, system_master.AddVisitorLogsInput{
-		AccountId:     gconv.Uint64(ctx.Value("id")),
+	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 2,
 		Description:   "解锁管理员登入限制",
 	})

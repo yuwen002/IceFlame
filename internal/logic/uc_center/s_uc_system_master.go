@@ -394,7 +394,7 @@ func (s *sUcSystemMaster) LoginTelPassword(ctx context.Context, in system_master
 	_, _, _ = s.DelLoginCount(ctx, id)
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().AddVisitorLogs(ctx, system_master.AddVisitorLogsInput{
+	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(data["id"]),
 		VisitCategory: 1,
 		Description:   "电话、密码登入",
@@ -463,7 +463,7 @@ func (s *sUcSystemMaster) LoginUsernamePassword(ctx context.Context, in system_m
 	// 登入成功，删除次数限制
 	_, _, _ = s.DelLoginCount(ctx, id)
 	// 访问日志写入
-	service.UcSystemMasterVisitor().AddVisitorLogs(ctx, system_master.AddVisitorLogsInput{
+	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(data["id"]),
 		VisitCategory: 1,
 		Description:   "用户名、密码登入",
