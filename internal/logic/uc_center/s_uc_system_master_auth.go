@@ -210,6 +210,7 @@ func (s *sUcSystemMasterAuth) ListRoleRelation(ctx context.Context, in system_ma
 		})
 	}
 
+	return
 }
 func (s *sUcSystemMasterAuth) DeleteRoleRelation(ctx context.Context, in system_master.DeleteRoleRelationInput) (code int32, message string, err error) {
 }
