@@ -2,6 +2,7 @@ package utility
 
 import (
 	"fmt"
+
 	"github.com/gogf/gf/v2/util/gconv"
 )
 
@@ -41,7 +42,7 @@ func ArrayIntersect[T IfInt | IfUint | string](array1, array2 []T) []T {
 // @param data
 // @param column
 // @return []T
-func ArrayColumn[T IfInt | IfUint | string](data []map[string]T, column string) []T {
+func ArrayColumn[T IfInt | IfUint | string | interface{}](data []map[string]T, column string) []T {
 	columnValues := make([]T, len(data))
 	for i, item := range data {
 		columnValues[i] = item[column]

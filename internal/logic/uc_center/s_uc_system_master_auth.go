@@ -2,13 +2,14 @@ package uc_center
 
 import (
 	"context"
-	"github.com/gogf/gf/v2/frame/g"
-	"github.com/gogf/gf/v2/os/gtime"
-	"github.com/gogf/gf/v2/util/gconv"
 	"ice_flame/internal/dao"
 	"ice_flame/internal/model/uc_center/system_master"
 	"ice_flame/internal/service"
 	"ice_flame/utility"
+
+	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/gtime"
+	"github.com/gogf/gf/v2/util/gconv"
 )
 
 var insUcSystemMasterAuth = sUcSystemMasterAuth{}
@@ -199,18 +200,44 @@ func (s *sUcSystemMasterAuth) ListRoleRelation(ctx context.Context, in system_ma
 	roleNames := utility.MapsFromColumns(role, "id", "name")
 
 	for _, val := range out {
+		// 管理员姓名查找
+		masterName := ""
+		if v, ok := masterNames[gconv.String(val["account_id"])]; ok {
+			masterName = gconv.String(v)
+		}
+
+		// 角色名称查找
+		roleName := ""
+		if v, ok := roleNames[gconv.String(val["role_id"])]; ok {
+			roleName = gconv.String(v)
+		}
+
 		output = append(output, &system_master.ListRoleRelationOutput{
 			Id:        gconv.Uint32(val["id"]),
 			AccountId: gconv.Uint64(val["account_id"]),
-			Name:      "",
+			Name:      masterName,
 			RoleId:    gconv.Uint16(val["role_id"]),
-			RoleName:  "",
+			RoleName:  roleName,
 			CreatedAt: gtime.Time{},
 			UpdatedAt: gtime.Time{},
 		})
 	}
 
-	return
+	return 0, "查询数据成功", output, nil
 }
+
+// DeleteRoleRelation
+//
+// @Title 删除管理员与用户角色绑定信息
+// @Description 删除管理员与用户角色绑定信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-09 00:02:55
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
 func (s *sUcSystemMasterAuth) DeleteRoleRelation(ctx context.Context, in system_master.DeleteRoleRelationInput) (code int32, message string, err error) {
+	return utility.DBDelById(dao.UcSystemMasterRoleRelation.Ctx(ctx), utility.DBDelByIdInput{Where: in.Id})
 }
