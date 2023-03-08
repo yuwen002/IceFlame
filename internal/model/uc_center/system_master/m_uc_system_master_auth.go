@@ -70,6 +70,16 @@ type ListRoleRelationInput struct {
 	Size int
 }
 
+type ListRoleRelationOutput struct {
+	Id        uint32     `json:"id"`
+	AccountId uint64     `json:"account_id"`
+	Name      string     `json:"name"`
+	RoleId    uint16     `json:"role_id"`
+	RoleName  string     `json:"role_name"`
+	CreatedAt gtime.Time `json:"created_at"`
+	UpdatedAt gtime.Time `json:"updated_at"`
+}
+
 // DeleteRoleRelationInput
 // @Description: 删除管理员角色绑定信息
 // @Author liuxingyu <yuwen002@163.com>

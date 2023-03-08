@@ -36,7 +36,7 @@ type (
 		ListRole(ctx context.Context, in system_master.ListRoleInput) (code int32, message string, output []*system_master.ListRoleOutput, err error)
 		CreateRoleRelation(ctx context.Context, in system_master.CreateRoleRelationInput) (code int32, message string, err error)
 		ModifyRoleRelationById(ctx context.Context, in system_master.ModifyRoleRelationByIdInput) (code int32, message string, err error)
-		ListRoleRelation(ctx context.Context, in system_master.ListRoleRelationInput)
+		ListRoleRelation(ctx context.Context, in system_master.ListRoleRelationInput) (code int32, message string, output []*system_master.ListRoleRelationOutput, err error)
 		DeleteRoleRelation(ctx context.Context, in system_master.DeleteRoleRelationInput) (code int32, message string, err error)
 	}
 	IUcSystemMasterVisitor interface {
@@ -53,9 +53,9 @@ type (
 )
 
 var (
+	localUcSystemMaster        IUcSystemMaster
 	localUcSystemMasterAuth    IUcSystemMasterAuth
 	localUcSystemMasterVisitor IUcSystemMasterVisitor
-	localUcSystemMaster        IUcSystemMaster
 )
 
 func UcSystemMaster() IUcSystemMaster {
