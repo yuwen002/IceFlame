@@ -87,3 +87,34 @@ type ListRoleRelationOutput struct {
 type DeleteRoleRelationInput struct {
 	Id uint32
 }
+
+// CreateMenuInput
+// @Description: 新建菜单
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-09 16:36:31
+type CreateMenuInput struct {
+	Fid    uint32
+	Name   string
+	Remark string
+}
+
+// ModifyMenuByIdInput
+// @Description: 按ID修改菜单信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-09 16:48:22
+type ModifyMenuByIdInput struct {
+	Id     uint32
+	Fid    uint32
+	Name   string
+	Status int8
+	Remark string
+}
+
+// ListMenuInput
+// @Description: 菜单列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-09 16:48:54
+type ListMenuInput struct {
+	Page int
+	Size int
+}

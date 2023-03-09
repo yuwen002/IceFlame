@@ -245,3 +245,51 @@ func (s *sUcSystemMasterAuth) ListRoleRelation(ctx context.Context, in system_ma
 func (s *sUcSystemMasterAuth) DeleteRoleRelation(ctx context.Context, in system_master.DeleteRoleRelationInput) (code int32, message string, err error) {
 	return utility.DBDelById(dao.UcSystemMasterRoleRelation.Ctx(ctx), utility.DBDelByIdInput{Where: in.Id})
 }
+
+// CreateMenu
+//
+// @Title 新建菜单
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-09 16:35:23
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sUcSystemMasterAuth) CreateMenu(ctx context.Context, in system_master.CreateMenuInput) (code int32, message string, err error) {
+	return utility.DBInsert(dao.UcSystemMenu.Ctx(ctx), utility.DBInsertInput{Data: in})
+}
+
+// ModifyMenuById
+//
+// @Title 按ID修改菜单信息
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-09 17:14:54
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sUcSystemMasterAuth) ModifyMenuById(ctx context.Context, in system_master.ModifyMenuByIdInput) (code int32, message string, err error) {
+	return utility.DBModifyById(dao.UcSystemMenu.Ctx(ctx), utility.DBModifyByIdInput{
+		Data: g.Map{
+			"fid":    in.Fid,
+			"name":   in.Name,
+			"status": in.Status,
+			"remark": in.Remark,
+		},
+		Where: in.Id,
+	})
+}
+
+func (s *sUcSystemMasterAuth) GetMenuAll(ctx context.Context) {
+
+}
+
+func (s *sUcSystemMasterAuth) ListMenu(ctx context.Context, in system_master.ListMenuInput) {
+
+}

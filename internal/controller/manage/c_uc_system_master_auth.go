@@ -272,7 +272,7 @@ func (c *cUcSystemMasterAuth) ListRoleRelation(ctx context.Context, req *manage.
 // @param req
 // @return res
 // @return err
-func (c *cUcSystemMasterAuth) DeleteRoleRelation(ctx context.Context, req *manage.DeleteRoleRelationReq) (res manage.DeleteRoleRelationRes, err error) {
+func (c *cUcSystemMasterAuth) DeleteRoleRelation(ctx context.Context, req *manage.DeleteRoleRelationReq) (res *manage.DeleteRoleRelationRes, err error) {
 	code, message, err := service.UcSystemMasterAuth().DeleteRoleRelation(ctx, system_master.DeleteRoleRelationInput{Id: req.Id})
 
 	// 访问日志写入
@@ -280,6 +280,47 @@ func (c *cUcSystemMasterAuth) DeleteRoleRelation(ctx context.Context, req *manag
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 4,
 		Description:   "删除管理员角色信息绑定",
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}
+
+// AddMenu
+//
+// @Title 添加菜单信息
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-09 17:45:18
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMasterAuth) AddMenu(ctx context.Context, req *manage.AddMenuReq) (res *manage.AddRoleRes, err error) {
+	code, message, err := service.UcSystemMasterAuth().CreateMenu(ctx, system_master.CreateMenuInput{
+		Fid:    req.Fid,
+		Name:   req.Name,
+		Remark: req.Name,
+	})
+
+	// 访问日志写入
+	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 5,
+		Description:   "添加菜单信息",
 	})
 
 	var json = g.RequestFromCtx(ctx).Response

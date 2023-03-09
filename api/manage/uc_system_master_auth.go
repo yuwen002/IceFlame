@@ -79,3 +79,15 @@ type DeleteRoleRelationReq struct {
 	Id     uint32 `p:"id" v:"required|min:1|integer#ID不能为空|ID要大于等于1|ID只为正整数"`
 }
 type DeleteRoleRelationRes struct{}
+
+// AddMenuReq
+// @Description: 添加菜单信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-09 17:44:16
+type AddMenuReq struct {
+	g.Meta `path:"/master/auth/add_menu" tags:"添加菜单" method:"post" summary:"添加菜单"`
+	Fid    uint32 `p:"id" v:"required|min:0|integer#ID不能为空|ID要大于等于0|ID只为整数"`
+	Name   string `p:"name" v:"required#菜单名称不能为空"`
+	Remark string `p:"remark"`
+}
+type AddMenuRes struct{}

@@ -38,6 +38,10 @@ type (
 		ModifyRoleRelationById(ctx context.Context, in system_master.ModifyRoleRelationByIdInput) (code int32, message string, err error)
 		ListRoleRelation(ctx context.Context, in system_master.ListRoleRelationInput) (code int32, message string, output []*system_master.ListRoleRelationOutput, err error)
 		DeleteRoleRelation(ctx context.Context, in system_master.DeleteRoleRelationInput) (code int32, message string, err error)
+		CreateMenu(ctx context.Context, in system_master.CreateMenuInput) (code int32, message string, err error)
+		ModifyMenuById(ctx context.Context, in system_master.ModifyMenuByIdInput) (code int32, message string, err error)
+		GetMenuAll(ctx context.Context)
+		ListMenu(ctx context.Context, in system_master.ListMenuInput)
 	}
 	IUcSystemMasterVisitor interface {
 		CreateVisitCategory(ctx context.Context, in system_master.CreateVisitCategoryInput) (code int32, message string, err error)
@@ -53,9 +57,9 @@ type (
 )
 
 var (
+	localUcSystemMasterVisitor IUcSystemMasterVisitor
 	localUcSystemMaster        IUcSystemMaster
 	localUcSystemMasterAuth    IUcSystemMasterAuth
-	localUcSystemMasterVisitor IUcSystemMasterVisitor
 )
 
 func UcSystemMaster() IUcSystemMaster {
