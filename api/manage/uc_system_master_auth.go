@@ -86,8 +86,18 @@ type DeleteRoleRelationRes struct{}
 // @Date 2023-03-09 17:44:16
 type AddMenuReq struct {
 	g.Meta `path:"/master/auth/add_menu" tags:"添加菜单" method:"post" summary:"添加菜单"`
-	Fid    uint32 `p:"id" v:"required|min:0|integer#ID不能为空|ID要大于等于0|ID只为整数"`
+	Fid    uint32 `p:"fid" v:"required|min:0|integer#父类ID不能为空|ID要大于等于0|ID只为整数"`
 	Name   string `p:"name" v:"required#菜单名称不能为空"`
 	Remark string `p:"remark"`
 }
 type AddMenuRes struct{}
+
+type EditMenuReq struct {
+	g.Meta `path:"/master/auth/add_menu" tags:"添加菜单" method:"post" summary:"添加菜单"`
+	ID     uint32 `p:"id" v:"required|min:0|integer#ID不能为空|ID要大于等于0|ID只为整数"`
+	Fid    uint32 `p:"fid" v:"required|min:0|integer#父类ID不能为空|ID要大于等于0|ID只为整数"`
+	Name   string `p:"name" v:"required#菜单名称不能为空"`
+	Status int8   `p:"status" v:"required|in:0,1#菜单状态不能为空|菜单状态输入不正确"`
+	Remark string `p:"remark"`
+}
+type EditMenuRes struct{}

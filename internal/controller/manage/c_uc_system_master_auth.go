@@ -338,3 +338,46 @@ func (c *cUcSystemMasterAuth) AddMenu(ctx context.Context, req *manage.AddMenuRe
 
 	return
 }
+
+// EditMenu
+//
+// @Title 编辑菜单信息
+// @Description 编辑菜单信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-09 22:00:41
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMasterAuth) EditMenu(ctx context.Context, req *manage.EditMenuReq) (res *manage.EditMenuRes, err error) {
+	code, message, err := service.UcSystemMasterAuth().ModifyMenuById(ctx, system_master.ModifyMenuByIdInput{
+		Id:     req.ID,
+		Fid:    req.Fid,
+		Name:   req.Name,
+		Status: req.Status,
+		Remark: req.Remark,
+	})
+
+	// 访问日志写入
+	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 5,
+		Description:   "编辑菜单信息",
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}
