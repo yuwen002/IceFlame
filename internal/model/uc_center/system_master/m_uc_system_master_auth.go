@@ -35,11 +35,11 @@ type ListRoleInput struct {
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-07 15:44:17
 type ListRoleOutput struct {
-	Id        uint16     `json:"id"`
-	Name      string     `json:"name"`
-	Remark    string     `json:"remark"`
-	CreatedAt gtime.Time `json:"created_at"`
-	UpdatedAt gtime.Time `json:"updated_at"`
+	Id        uint16      `json:"id"`
+	Name      string      `json:"name"`
+	Remark    string      `json:"remark"`
+	CreatedAt *gtime.Time `json:"created_at"`
+	UpdatedAt *gtime.Time `json:"updated_at"`
 }
 
 // CreateRoleRelationInput
@@ -71,13 +71,13 @@ type ListRoleRelationInput struct {
 }
 
 type ListRoleRelationOutput struct {
-	Id        uint32     `json:"id"`
-	AccountId uint64     `json:"account_id"`
-	Name      string     `json:"name"`
-	RoleId    uint16     `json:"role_id"`
-	RoleName  string     `json:"role_name"`
-	CreatedAt gtime.Time `json:"created_at"`
-	UpdatedAt gtime.Time `json:"updated_at"`
+	Id        uint32      `json:"id"`
+	AccountId uint64      `json:"account_id"`
+	Name      string      `json:"name"`
+	RoleId    uint16      `json:"role_id"`
+	RoleName  string      `json:"role_name"`
+	CreatedAt *gtime.Time `json:"created_at"`
+	UpdatedAt *gtime.Time `json:"updated_at"`
 }
 
 // DeleteRoleRelationInput

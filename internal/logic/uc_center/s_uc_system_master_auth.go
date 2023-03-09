@@ -109,8 +109,12 @@ func (s *sUcSystemMasterAuth) CreateRoleRelation(ctx context.Context, in system_
 		Args:  g.Slice{in.AccountId, in.RoleId},
 	})
 
-	if code != 1 {
-		return code, message, err
+	if err != nil {
+		return -1, "", err
+	}
+
+	if code == 0 {
+		return 1, "添加数据失败，数据已存在", err
 	}
 
 	return utility.DBInsert(dao.UcSystemMasterRoleRelation.Ctx(ctx), utility.DBInsertInput{Data: in})
@@ -218,8 +222,8 @@ func (s *sUcSystemMasterAuth) ListRoleRelation(ctx context.Context, in system_ma
 			Name:      masterName,
 			RoleId:    gconv.Uint16(val["role_id"]),
 			RoleName:  roleName,
-			CreatedAt: gtime.Time{},
-			UpdatedAt: gtime.Time{},
+			CreatedAt: gtime.New(val["created_at"]),
+			UpdatedAt: gtime.New(val["updated_at"]),
 		})
 	}
 

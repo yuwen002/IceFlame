@@ -139,19 +139,161 @@ func (c *cUcSystemMasterAuth) ListRole(ctx context.Context, req *manage.ListRole
 	return
 }
 
+// AddRoleRelation
 //
-//func (c *cUcSystemMasterAuth) AddRoleRelation(ctx context.Context, req *manage.AddRoleRelationReq) (res *manage.AddRoleRelationRes, err error) {
+// @Title 添加管理员绑定角色
+// @Description 添加管理员绑定角色
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-09 10:37:22
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMasterAuth) AddRoleRelation(ctx context.Context, req *manage.AddRoleRelationReq) (res *manage.AddRoleRelationRes, err error) {
+	code, message, err := service.UcSystemMasterAuth().CreateRoleRelation(ctx, system_master.CreateRoleRelationInput{
+		AccountId: req.AccountId,
+		RoleId:    req.RoleId,
+	})
+
+	// 访问日志写入
+	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 4,
+		Description:   "添加管理员角色信息绑定",
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}
+
+// EditRoleRelation
 //
-//}
+// @Title 编辑管理员绑定角色
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-09 11:11:02
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMasterAuth) EditRoleRelation(ctx context.Context, req *manage.EditRoleRelationReq) (res *manage.EditRoleRelationRes, err error) {
+	code, message, err := service.UcSystemMasterAuth().ModifyRoleRelationById(ctx, system_master.ModifyRoleRelationByIdInput{
+		Id:        req.Id,
+		AccountId: req.AccountId,
+		RoleId:    req.RoleId,
+	})
+
+	// 访问日志写入
+	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 4,
+		Description:   "编辑管理员角色信息绑定",
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}
+
+// ListRoleRelation
 //
-//func (c *cUcSystemMasterAuth) EditRoleRelation(ctx context.Context, req *manage.EditRoleRelationReq) (res *manage.EditRoleRelationRes, err error) {
+// @Title 管理员绑定角色列表
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-09 11:11:15
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMasterAuth) ListRoleRelation(ctx context.Context, req *manage.ListRoleRelationReq) (res *manage.ListRoleRelationRes, err error) {
+	code, message, out, err := service.UcSystemMasterAuth().ListRoleRelation(ctx, system_master.ListRoleRelationInput{
+		Page: req.Page,
+		Size: req.Size,
+	})
+
+	// 访问日志写入
+	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 4,
+		Description:   "查看管理员角色信息绑定列表",
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    g.Map{"list": out},
+	})
+
+	return
+}
+
+// DeleteRoleRelation
 //
-//}
-//
-//func (c *cUcSystemMasterAuth) ListRoleRelation(ctx context.Context, req *manage.ListRoleRelationReq) (res *manage.ListRoleRelationRes, err error) {
-//
-//}
-//
-//func (c *cUcSystemMasterAuth) DeleteRoleRelation(ctx context.Context, req *manage.DeleteRoleRelationReq) (res manage.DeleteRoleRelationRes, err error) {
-//
-//}
+// @Title 删除管理员角色信息绑定
+// @Description 删除管理员角色信息绑定
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-09 11:53:40
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMasterAuth) DeleteRoleRelation(ctx context.Context, req *manage.DeleteRoleRelationReq) (res manage.DeleteRoleRelationRes, err error) {
+	code, message, err := service.UcSystemMasterAuth().DeleteRoleRelation(ctx, system_master.DeleteRoleRelationInput{Id: req.Id})
+
+	// 访问日志写入
+	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 4,
+		Description:   "删除管理员角色信息绑定",
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}

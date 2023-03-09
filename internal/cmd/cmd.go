@@ -100,6 +100,10 @@ var (
 						manage.UcSystemMasterAuth.AddRole,
 						manage.UcSystemMasterAuth.EditRole,
 						manage.UcSystemMasterAuth.ListRole,
+						manage.UcSystemMasterAuth.AddRoleRelation,
+						manage.UcSystemMasterAuth.EditRoleRelation,
+						manage.UcSystemMasterAuth.ListRoleRelation,
+						manage.UcSystemMasterAuth.DeleteRoleRelation,
 					)
 				},
 			)
