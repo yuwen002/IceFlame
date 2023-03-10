@@ -92,8 +92,12 @@ type AddMenuReq struct {
 }
 type AddMenuRes struct{}
 
+// EditMenuReq
+// @Description: 修改菜单信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-10 14:22:05
 type EditMenuReq struct {
-	g.Meta `path:"/master/auth/add_menu" tags:"添加菜单" method:"post" summary:"添加菜单"`
+	g.Meta `path:"/master/auth/edit_menu" tags:"修改菜单" method:"put" summary:"修改菜单"`
 	ID     uint32 `p:"id" v:"required|min:0|integer#ID不能为空|ID要大于等于0|ID只为整数"`
 	Fid    uint32 `p:"fid" v:"required|min:0|integer#父类ID不能为空|ID要大于等于0|ID只为整数"`
 	Name   string `p:"name" v:"required#菜单名称不能为空"`
@@ -101,3 +105,10 @@ type EditMenuReq struct {
 	Remark string `p:"remark"`
 }
 type EditMenuRes struct{}
+
+type ListMenuReq struct {
+	g.Meta `path:"/master/auth/show_menu" tags:"菜单列表" method:"get" summary:"菜单列表"`
+	Page   int `p:"page" v:"min:1|integer#页码要大于等于1|页码只为正整数"`
+	Size   int `p:"size" v:"min:1|integer#显示条数要大于等于1|显示条数只为正整数"`
+}
+type ListMenuRes struct{}

@@ -108,6 +108,7 @@ var (
 						// 菜单管理
 						manage.UcSystemMasterAuth.AddMenu,
 						manage.UcSystemMasterAuth.EditMenu,
+						manage.UcSystemMasterAuth.ListMenu,
 					)
 				},
 			)

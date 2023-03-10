@@ -118,3 +118,13 @@ type ListMenuInput struct {
 	Page int
 	Size int
 }
+
+type ListMenuOutput struct {
+	Id        uint32      `json:"id"`
+	Fid       uint32      `json:"fid"`
+	Name      string      `json:"name"`
+	Status    int8        `json:"status"`
+	Remark    string      `json:"remark"`
+	CreatedAt *gtime.Time `json:"created_at"`
+	UpdatedAt *gtime.Time `json:"updated_at"`
+}

@@ -319,7 +319,7 @@ func (c *cUcSystemMasterAuth) AddMenu(ctx context.Context, req *manage.AddMenuRe
 	// 访问日志写入
 	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
-		VisitCategory: 5,
+		VisitCategory: 4,
 		Description:   "添加菜单信息",
 	})
 
@@ -362,7 +362,7 @@ func (c *cUcSystemMasterAuth) EditMenu(ctx context.Context, req *manage.EditMenu
 	// 访问日志写入
 	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
-		VisitCategory: 5,
+		VisitCategory: 4,
 		Description:   "编辑菜单信息",
 	})
 
@@ -377,6 +377,36 @@ func (c *cUcSystemMasterAuth) EditMenu(ctx context.Context, req *manage.EditMenu
 	json.WriteJsonExit(g.Map{
 		"code":    code,
 		"message": message,
+	})
+
+	return
+}
+
+func (c *cUcSystemMasterAuth) ListMenu(ctx context.Context, req *manage.ListMenuReq) (res *manage.ListRoleRes, err error) {
+	code, message, output, err := service.UcSystemMasterAuth().ListMenu(ctx, system_master.ListMenuInput{
+		Page: req.Page,
+		Size: req.Size,
+	})
+
+	// 访问日志写入
+	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 4,
+		Description:   "编辑菜单信息",
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    g.Map{"list": output},
 	})
 
 	return

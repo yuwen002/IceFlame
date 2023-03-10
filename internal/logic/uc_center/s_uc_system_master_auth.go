@@ -290,6 +290,28 @@ func (s *sUcSystemMasterAuth) GetMenuAll(ctx context.Context) {
 
 }
 
-func (s *sUcSystemMasterAuth) ListMenu(ctx context.Context, in system_master.ListMenuInput) {
+// ListMenu
+//
+// @Title 菜单信息列表
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-10 15:57:58
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sUcSystemMasterAuth) ListMenu(ctx context.Context, in system_master.ListMenuInput) (code int32, message string, output []*system_master.ListMenuOutput, err error) {
+	code, message, err = utility.DBGetAllStructByWhere(dao.UcSystemMenu.Ctx(ctx), utility.DBGetAllByWhereInput{
+		Order:    "id asc",
+		PageType: 1,
+		DBPagination: utility.DBPagination{
+			Page: in.Page,
+			Size: in.Size,
+		},
+	}, &output)
 
+	return code, message, output, err
 }

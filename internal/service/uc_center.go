@@ -11,6 +11,30 @@ import (
 )
 
 type (
+	IUcSystemMasterAuth interface {
+		CreateRole(ctx context.Context, in system_master.CreateRoleInput) (code int32, message string, err error)
+		ModifyRoleById(ctx context.Context, in system_master.ModifyRoleByIdInput) (code int32, message string, err error)
+		ListRole(ctx context.Context, in system_master.ListRoleInput) (code int32, message string, output []*system_master.ListRoleOutput, err error)
+		CreateRoleRelation(ctx context.Context, in system_master.CreateRoleRelationInput) (code int32, message string, err error)
+		ModifyRoleRelationById(ctx context.Context, in system_master.ModifyRoleRelationByIdInput) (code int32, message string, err error)
+		ListRoleRelation(ctx context.Context, in system_master.ListRoleRelationInput) (code int32, message string, output []*system_master.ListRoleRelationOutput, err error)
+		DeleteRoleRelation(ctx context.Context, in system_master.DeleteRoleRelationInput) (code int32, message string, err error)
+		CreateMenu(ctx context.Context, in system_master.CreateMenuInput) (code int32, message string, err error)
+		ModifyMenuById(ctx context.Context, in system_master.ModifyMenuByIdInput) (code int32, message string, err error)
+		GetMenuAll(ctx context.Context)
+		ListMenu(ctx context.Context, in system_master.ListMenuInput) (code int32, message string, output []*system_master.ListMenuOutput, err error)
+	}
+	IUcSystemMasterVisitor interface {
+		CreateVisitCategory(ctx context.Context, in system_master.CreateVisitCategoryInput) (code int32, message string, err error)
+		ModifyVisitCategoryById(ctx context.Context, in system_master.ModifyVisitCategoryByIdInput) (code int32, message string, err error)
+		ListVisitCategory(ctx context.Context, in system_master.ListVisitCategoryInput) (code int32, message string, output []*system_master.ListVisitCategoryOutput, err error)
+		GetRCacheVisitCategory(ctx context.Context) (code int32, message string, output map[string]interface{}, err error)
+		GetRCacheVisitCategoryById(id string) (code int32, message string, output map[string]interface{}, err error)
+		DelRCacheVisitCategory() (code int32, message string, err error)
+		DelRCacheVisitCategoryById(id string) (code int32, message string, err error)
+		CreateVisitorLogs(ctx context.Context, in system_master.CreateVisitorLogsInput) (code int32, message string, err error)
+		ListVisitorLogs(ctx context.Context, in system_master.ListVisitorLogsInput) (code int32, message string, output []*system_master.ListVisitorLogsOutput, err error)
+	}
 	IUcSystemMaster interface {
 		ExistsUsername(ctx context.Context, username string) (code int32, message string, err error)
 		ExistsTel(ctx context.Context, tel string) (code int32, message string, err error)
@@ -30,48 +54,13 @@ type (
 		ResetPasswordByAccountId(ctx context.Context, in system_master.ResetPasswordByAccountIdInput) (code int32, message string, err error)
 		ModifyStatusByAccountId(ctx context.Context, in system_master.ModifyStatusByAccountIdInput) (code int32, message string, err error)
 	}
-	IUcSystemMasterAuth interface {
-		CreateRole(ctx context.Context, in system_master.CreateRoleInput) (code int32, message string, err error)
-		ModifyRoleById(ctx context.Context, in system_master.ModifyRoleByIdInput) (code int32, message string, err error)
-		ListRole(ctx context.Context, in system_master.ListRoleInput) (code int32, message string, output []*system_master.ListRoleOutput, err error)
-		CreateRoleRelation(ctx context.Context, in system_master.CreateRoleRelationInput) (code int32, message string, err error)
-		ModifyRoleRelationById(ctx context.Context, in system_master.ModifyRoleRelationByIdInput) (code int32, message string, err error)
-		ListRoleRelation(ctx context.Context, in system_master.ListRoleRelationInput) (code int32, message string, output []*system_master.ListRoleRelationOutput, err error)
-		DeleteRoleRelation(ctx context.Context, in system_master.DeleteRoleRelationInput) (code int32, message string, err error)
-		CreateMenu(ctx context.Context, in system_master.CreateMenuInput) (code int32, message string, err error)
-		ModifyMenuById(ctx context.Context, in system_master.ModifyMenuByIdInput) (code int32, message string, err error)
-		GetMenuAll(ctx context.Context)
-		ListMenu(ctx context.Context, in system_master.ListMenuInput)
-	}
-	IUcSystemMasterVisitor interface {
-		CreateVisitCategory(ctx context.Context, in system_master.CreateVisitCategoryInput) (code int32, message string, err error)
-		ModifyVisitCategoryById(ctx context.Context, in system_master.ModifyVisitCategoryByIdInput) (code int32, message string, err error)
-		ListVisitCategory(ctx context.Context, in system_master.ListVisitCategoryInput) (code int32, message string, output []*system_master.ListVisitCategoryOutput, err error)
-		GetRCacheVisitCategory(ctx context.Context) (code int32, message string, output map[string]interface{}, err error)
-		GetRCacheVisitCategoryById(id string) (code int32, message string, output map[string]interface{}, err error)
-		DelRCacheVisitCategory() (code int32, message string, err error)
-		DelRCacheVisitCategoryById(id string) (code int32, message string, err error)
-		CreateVisitorLogs(ctx context.Context, in system_master.CreateVisitorLogsInput) (code int32, message string, err error)
-		ListVisitorLogs(ctx context.Context, in system_master.ListVisitorLogsInput) (code int32, message string, output []*system_master.ListVisitorLogsOutput, err error)
-	}
 )
 
 var (
+	localUcSystemMasterAuth    IUcSystemMasterAuth
 	localUcSystemMasterVisitor IUcSystemMasterVisitor
 	localUcSystemMaster        IUcSystemMaster
-	localUcSystemMasterAuth    IUcSystemMasterAuth
 )
-
-func UcSystemMaster() IUcSystemMaster {
-	if localUcSystemMaster == nil {
-		panic("implement not found for interface IUcSystemMaster, forgot register?")
-	}
-	return localUcSystemMaster
-}
-
-func RegisterUcSystemMaster(i IUcSystemMaster) {
-	localUcSystemMaster = i
-}
 
 func UcSystemMasterAuth() IUcSystemMasterAuth {
 	if localUcSystemMasterAuth == nil {
@@ -93,4 +82,15 @@ func UcSystemMasterVisitor() IUcSystemMasterVisitor {
 
 func RegisterUcSystemMasterVisitor(i IUcSystemMasterVisitor) {
 	localUcSystemMasterVisitor = i
+}
+
+func UcSystemMaster() IUcSystemMaster {
+	if localUcSystemMaster == nil {
+		panic("implement not found for interface IUcSystemMaster, forgot register?")
+	}
+	return localUcSystemMaster
+}
+
+func RegisterUcSystemMaster(i IUcSystemMaster) {
+	localUcSystemMaster = i
 }
