@@ -79,6 +79,7 @@ var (
 						service.AuthMiddleware().MiddlewareAuthMaster,
 						service.Middleware().MiddlewareHandlerResponse,
 					)
+
 					group.Bind(
 						// 管理员用户管理
 						manage.UcSystemMaster.CreateSystemMaster,

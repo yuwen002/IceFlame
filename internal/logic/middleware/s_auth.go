@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"ice_flame/internal/consts"
@@ -29,6 +30,9 @@ type sAuthMiddleware struct{}
 // @receiver s
 // @param r
 func (s *sAuthMiddleware) MiddlewareAuthMaster(r *ghttp.Request) {
+	router := r.GetServeHandler().Handler
+	fmt.Println(router)
+
 	token := r.Get("token")
 	// token 未传入
 	if token.String() == "" {

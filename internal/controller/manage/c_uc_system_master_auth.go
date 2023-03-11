@@ -382,6 +382,17 @@ func (c *cUcSystemMasterAuth) EditMenu(ctx context.Context, req *manage.EditMenu
 	return
 }
 
+// ListMenu
+//
+// @Title 菜单信息列表
+// @Description 菜单信息列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-11 10:35:29
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
 func (c *cUcSystemMasterAuth) ListMenu(ctx context.Context, req *manage.ListMenuReq) (res *manage.ListRoleRes, err error) {
 	code, message, output, err := service.UcSystemMasterAuth().ListMenu(ctx, system_master.ListMenuInput{
 		Page: req.Page,
