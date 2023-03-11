@@ -12,6 +12,7 @@ import (
 type (
 	IAuthMiddleware interface {
 		MiddlewareAuthMaster(r *ghttp.Request)
+		MiddlewareVerifyPermission(r *ghttp.Request)
 	}
 	IMiddleware interface {
 		MiddlewareHandlerResponse(r *ghttp.Request)
