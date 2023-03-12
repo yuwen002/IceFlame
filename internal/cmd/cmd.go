@@ -107,9 +107,9 @@ var (
 						manage.UcSystemMasterAuth.DeleteRoleRelation,
 
 						// 菜单管理
-						manage.UcSystemMasterAuth.AddMenu,
-						manage.UcSystemMasterAuth.EditMenu,
-						manage.UcSystemMasterAuth.ListMenu,
+						manage.UcSystemMasterAuth.AddPermission,
+						manage.UcSystemMasterAuth.EditPermission,
+						manage.UcSystemMasterAuth.ListPermission,
 					)
 				},
 			)

@@ -80,35 +80,39 @@ type DeleteRoleRelationReq struct {
 }
 type DeleteRoleRelationRes struct{}
 
-// AddMenuReq
-// @Description: 添加菜单信息
+// AddPermissionReq
+// @Description: 添加权限信息
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-09 17:44:16
-type AddMenuReq struct {
-	g.Meta `path:"/master/auth/add_menu" tags:"添加菜单" method:"post" summary:"添加菜单"`
+type AddPermissionReq struct {
+	g.Meta `path:"/master/auth/add_permission" tags:"添加权限" method:"post" summary:"添加权限"`
 	Fid    uint32 `p:"fid" v:"required|min:0|integer#父类ID不能为空|ID要大于等于0|ID只为整数"`
-	Name   string `p:"name" v:"required#菜单名称不能为空"`
+	Name   string `p:"name" v:"required#权限名称不能为空"`
 	Remark string `p:"remark"`
 }
-type AddMenuRes struct{}
+type AddPermissionRes struct{}
 
-// EditMenuReq
-// @Description: 修改菜单信息
+// EditPermissionReq
+// @Description: 修改权限信息
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-10 14:22:05
-type EditMenuReq struct {
-	g.Meta `path:"/master/auth/edit_menu" tags:"修改菜单" method:"put" summary:"修改菜单"`
+type EditPermissionReq struct {
+	g.Meta `path:"/master/auth/edit_permission" tags:"修改权限" method:"put" summary:"修改权限"`
 	ID     uint32 `p:"id" v:"required|min:0|integer#ID不能为空|ID要大于等于0|ID只为整数"`
 	Fid    uint32 `p:"fid" v:"required|min:0|integer#父类ID不能为空|ID要大于等于0|ID只为整数"`
-	Name   string `p:"name" v:"required#菜单名称不能为空"`
-	Status int8   `p:"status" v:"required|in:0,1#菜单状态不能为空|菜单状态输入不正确"`
+	Name   string `p:"name" v:"required#权限名称不能为空"`
+	Status int8   `p:"status" v:"required|in:0,1#权限状态不能为空|权限状态输入不正确"`
 	Remark string `p:"remark"`
 }
-type EditMenuRes struct{}
+type EditPermissionRes struct{}
 
-type ListMenuReq struct {
-	g.Meta `path:"/master/auth/show_menu" tags:"菜单列表" method:"get" summary:"菜单列表"`
+// ListPermissionReq
+// @Description: 权限信息列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-13 00:15:38
+type ListPermissionReq struct {
+	g.Meta `path:"/master/auth/show_permission" tags:"权限列表" method:"get" summary:"权限列表"`
 	Page   int `p:"page" v:"min:1|integer#页码要大于等于1|页码只为正整数"`
 	Size   int `p:"size" v:"min:1|integer#显示条数要大于等于1|显示条数只为正整数"`
 }
-type ListMenuRes struct{}
+type ListPermissionRes struct{}

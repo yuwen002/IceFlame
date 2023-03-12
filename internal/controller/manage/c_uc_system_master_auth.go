@@ -298,10 +298,10 @@ func (c *cUcSystemMasterAuth) DeleteRoleRelation(ctx context.Context, req *manag
 	return
 }
 
-// AddMenu
+// AddPermission
 //
-// @Title 添加菜单信息
-// @Description
+// @Title 添加权限信息
+// @Description 添加权限信息
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-09 17:45:18
 // @receiver c
@@ -309,8 +309,8 @@ func (c *cUcSystemMasterAuth) DeleteRoleRelation(ctx context.Context, req *manag
 // @param req
 // @return res
 // @return err
-func (c *cUcSystemMasterAuth) AddMenu(ctx context.Context, req *manage.AddMenuReq) (res *manage.AddRoleRes, err error) {
-	code, message, err := service.UcSystemMasterAuth().CreateMenu(ctx, system_master.CreateMenuInput{
+func (c *cUcSystemMasterAuth) AddPermission(ctx context.Context, req *manage.AddPermissionReq) (res *manage.AddRoleRes, err error) {
+	code, message, err := service.UcSystemMasterAuth().CreatePermission(ctx, system_master.CreateListPermissionInput{
 		Fid:    req.Fid,
 		Name:   req.Name,
 		Remark: req.Name,
@@ -339,10 +339,10 @@ func (c *cUcSystemMasterAuth) AddMenu(ctx context.Context, req *manage.AddMenuRe
 	return
 }
 
-// EditMenu
+// EditPermission
 //
-// @Title 编辑菜单信息
-// @Description 编辑菜单信息
+// @Title 编辑权限信息
+// @Description 编辑权限信息
 // @Author liuxingyu <yuwen002@163.com>
 // @Data 2023-03-09 22:00:41
 // @receiver c
@@ -350,8 +350,8 @@ func (c *cUcSystemMasterAuth) AddMenu(ctx context.Context, req *manage.AddMenuRe
 // @param req
 // @return res
 // @return err
-func (c *cUcSystemMasterAuth) EditMenu(ctx context.Context, req *manage.EditMenuReq) (res *manage.EditMenuRes, err error) {
-	code, message, err := service.UcSystemMasterAuth().ModifyMenuById(ctx, system_master.ModifyMenuByIdInput{
+func (c *cUcSystemMasterAuth) EditPermission(ctx context.Context, req *manage.EditPermissionReq) (res *manage.EditPermissionRes, err error) {
+	code, message, err := service.UcSystemMasterAuth().ModifyPermissionById(ctx, system_master.ModifyMenuByIdInput{
 		Id:     req.ID,
 		Fid:    req.Fid,
 		Name:   req.Name,
@@ -382,10 +382,10 @@ func (c *cUcSystemMasterAuth) EditMenu(ctx context.Context, req *manage.EditMenu
 	return
 }
 
-// ListMenu
+// ListPermission
 //
-// @Title 菜单信息列表
-// @Description 菜单信息列表
+// @Title 权限信息列表
+// @Description 权限信息列表
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-11 10:35:29
 // @receiver c
@@ -393,8 +393,8 @@ func (c *cUcSystemMasterAuth) EditMenu(ctx context.Context, req *manage.EditMenu
 // @param req
 // @return res
 // @return err
-func (c *cUcSystemMasterAuth) ListMenu(ctx context.Context, req *manage.ListMenuReq) (res *manage.ListRoleRes, err error) {
-	code, message, output, err := service.UcSystemMasterAuth().ListMenu(ctx, system_master.ListMenuInput{
+func (c *cUcSystemMasterAuth) ListPermission(ctx context.Context, req *manage.ListPermissionReq) (res *manage.ListRoleRes, err error) {
+	code, message, output, err := service.UcSystemMasterAuth().ListPermission(ctx, system_master.ListPermissionInput{
 		Page: req.Page,
 		Size: req.Size,
 	})

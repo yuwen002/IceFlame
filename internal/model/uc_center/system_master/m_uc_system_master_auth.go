@@ -88,11 +88,11 @@ type DeleteRoleRelationInput struct {
 	Id uint32
 }
 
-// CreateMenuInput
+// CreateListPermissionInput
 // @Description: 新建菜单
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-09 16:36:31
-type CreateMenuInput struct {
+type CreateListPermissionInput struct {
 	Fid    uint32
 	Name   string
 	Remark string
@@ -110,16 +110,16 @@ type ModifyMenuByIdInput struct {
 	Remark string
 }
 
-// ListMenuInput
+// ListPermissionInput
 // @Description: 菜单列表
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-09 16:48:54
-type ListMenuInput struct {
+type ListPermissionInput struct {
 	Page int
 	Size int
 }
 
-type ListMenuOutput struct {
+type ListPermissionOutput struct {
 	Id        uint32      `json:"id"`
 	Fid       uint32      `json:"fid"`
 	Name      string      `json:"name"`

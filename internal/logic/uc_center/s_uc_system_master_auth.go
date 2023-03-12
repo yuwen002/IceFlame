@@ -246,9 +246,9 @@ func (s *sUcSystemMasterAuth) DeleteRoleRelation(ctx context.Context, in system_
 	return utility.DBDelById(dao.UcSystemMasterRoleRelation.Ctx(ctx), utility.DBDelByIdInput{Where: in.Id})
 }
 
-// CreateMenu
+// CreatePermission
 //
-// @Title 新建菜单
+// @Title 新建权限
 // @Description
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-09 16:35:23
@@ -258,13 +258,13 @@ func (s *sUcSystemMasterAuth) DeleteRoleRelation(ctx context.Context, in system_
 // @return code
 // @return message
 // @return err
-func (s *sUcSystemMasterAuth) CreateMenu(ctx context.Context, in system_master.CreateMenuInput) (code int32, message string, err error) {
-	return utility.DBInsert(dao.UcSystemMenu.Ctx(ctx), utility.DBInsertInput{Data: in})
+func (s *sUcSystemMasterAuth) CreatePermission(ctx context.Context, in system_master.CreateListPermissionInput) (code int32, message string, err error) {
+	return utility.DBInsert(dao.UcSystemPermission.Ctx(ctx), utility.DBInsertInput{Data: in})
 }
 
-// ModifyMenuById
+// ModifyPermissionById
 //
-// @Title 按ID修改菜单信息
+// @Title 按ID修改权限信息
 // @Description
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-09 17:14:54
@@ -274,8 +274,8 @@ func (s *sUcSystemMasterAuth) CreateMenu(ctx context.Context, in system_master.C
 // @return code
 // @return message
 // @return err
-func (s *sUcSystemMasterAuth) ModifyMenuById(ctx context.Context, in system_master.ModifyMenuByIdInput) (code int32, message string, err error) {
-	return utility.DBModifyById(dao.UcSystemMenu.Ctx(ctx), utility.DBModifyByIdInput{
+func (s *sUcSystemMasterAuth) ModifyPermissionById(ctx context.Context, in system_master.ModifyMenuByIdInput) (code int32, message string, err error) {
+	return utility.DBModifyById(dao.UcSystemPermission.Ctx(ctx), utility.DBModifyByIdInput{
 		Data: g.Map{
 			"fid":    in.Fid,
 			"name":   in.Name,
@@ -290,9 +290,9 @@ func (s *sUcSystemMasterAuth) GetMenuAll(ctx context.Context) {
 
 }
 
-// ListMenu
+// ListPermission
 //
-// @Title 菜单信息列表
+// @Title 权限信息列表
 // @Description
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-10 15:57:58
@@ -303,8 +303,8 @@ func (s *sUcSystemMasterAuth) GetMenuAll(ctx context.Context) {
 // @return message
 // @return output
 // @return err
-func (s *sUcSystemMasterAuth) ListMenu(ctx context.Context, in system_master.ListMenuInput) (code int32, message string, output []*system_master.ListMenuOutput, err error) {
-	code, message, err = utility.DBGetAllStructByWhere(dao.UcSystemMenu.Ctx(ctx), utility.DBGetAllByWhereInput{
+func (s *sUcSystemMasterAuth) ListPermission(ctx context.Context, in system_master.ListPermissionInput) (code int32, message string, output []*system_master.ListPermissionOutput, err error) {
+	code, message, err = utility.DBGetAllStructByWhere(dao.UcSystemPermission.Ctx(ctx), utility.DBGetAllByWhereInput{
 		Order:    "id asc",
 		PageType: 1,
 		DBPagination: utility.DBPagination{

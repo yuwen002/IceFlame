@@ -26,7 +26,7 @@ type sAuthMiddleware struct{}
 // extractHandler
 //
 // @Title 解析Handler
-// @Description 传入"controller/manage.(*cUcSystemMasterAuth).ListMenu-fm" 解析package, struct, method
+// @Description 传入"controller/manage.(*cUcSystemMasterAuth).ListPermission-fm" 解析package, struct, method
 // @Author liuxingyu <yuwen002@163.com>
 // @Data 2023-03-12 02:00:20
 // @receiver s
@@ -93,5 +93,6 @@ func (s *sAuthMiddleware) MiddlewareAuthMaster(r *ghttp.Request) {
 }
 
 func (s *sAuthMiddleware) MiddlewareVerifyPermission(r *ghttp.Request) {
-	module := s.concatModule(s.extractHandler(r.GetServeHandler().Handler.Name))
+	//module := s.concatModule(s.extractHandler(r.GetServeHandler().Handler.Name))
+
 }

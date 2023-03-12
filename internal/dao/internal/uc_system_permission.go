@@ -11,66 +11,70 @@ import (
 	"github.com/gogf/gf/v2/frame/g"
 )
 
-// UcSystemMenuDao is the data access object for table uc_system_menu.
-type UcSystemMenuDao struct {
-	table   string              // table is the underlying table name of the DAO.
-	group   string              // group is the database configuration group name of current DAO.
-	columns UcSystemMenuColumns // columns contains all the column names of Table for convenient usage.
+// UcSystemPermissionDao is the data access object for table uc_system_permission.
+type UcSystemPermissionDao struct {
+	table   string                    // table is the underlying table name of the DAO.
+	group   string                    // group is the database configuration group name of current DAO.
+	columns UcSystemPermissionColumns // columns contains all the column names of Table for convenient usage.
 }
 
-// UcSystemMenuColumns defines and stores column names for table uc_system_menu.
-type UcSystemMenuColumns struct {
+// UcSystemPermissionColumns defines and stores column names for table uc_system_permission.
+type UcSystemPermissionColumns struct {
 	Id        string //
 	Fid       string // 父级ID
 	Name      string // 菜单名称
-	Status    string // 菜单状态（0=启用，停用）
+	Moudule   string // 对应的程序模块
+	Type      string // 类型（1=菜单，2=按钮）
+	Status    string // 程序模块状态（0=启用，1=停用）
 	Remark    string // 备注信息
 	CreatedAt string //
 	UpdatedAt string //
 }
 
-// ucSystemMenuColumns holds the columns for table uc_system_menu.
-var ucSystemMenuColumns = UcSystemMenuColumns{
+// ucSystemPermissionColumns holds the columns for table uc_system_permission.
+var ucSystemPermissionColumns = UcSystemPermissionColumns{
 	Id:        "id",
 	Fid:       "fid",
 	Name:      "name",
+	Moudule:   "moudule",
+	Type:      "type",
 	Status:    "status",
 	Remark:    "remark",
 	CreatedAt: "created_at",
 	UpdatedAt: "updated_at",
 }
 
-// NewUcSystemMenuDao creates and returns a new DAO object for table data access.
-func NewUcSystemMenuDao() *UcSystemMenuDao {
-	return &UcSystemMenuDao{
+// NewUcSystemPermissionDao creates and returns a new DAO object for table data access.
+func NewUcSystemPermissionDao() *UcSystemPermissionDao {
+	return &UcSystemPermissionDao{
 		group:   "default",
-		table:   "uc_system_menu",
-		columns: ucSystemMenuColumns,
+		table:   "uc_system_permission",
+		columns: ucSystemPermissionColumns,
 	}
 }
 
 // DB retrieves and returns the underlying raw database management object of current DAO.
-func (dao *UcSystemMenuDao) DB() gdb.DB {
+func (dao *UcSystemPermissionDao) DB() gdb.DB {
 	return g.DB(dao.group)
 }
 
 // Table returns the table name of current dao.
-func (dao *UcSystemMenuDao) Table() string {
+func (dao *UcSystemPermissionDao) Table() string {
 	return dao.table
 }
 
 // Columns returns all column names of current dao.
-func (dao *UcSystemMenuDao) Columns() UcSystemMenuColumns {
+func (dao *UcSystemPermissionDao) Columns() UcSystemPermissionColumns {
 	return dao.columns
 }
 
 // Group returns the configuration group name of database of current dao.
-func (dao *UcSystemMenuDao) Group() string {
+func (dao *UcSystemPermissionDao) Group() string {
 	return dao.group
 }
 
 // Ctx creates and returns the Model for current DAO, It automatically sets the context for current operation.
-func (dao *UcSystemMenuDao) Ctx(ctx context.Context) *gdb.Model {
+func (dao *UcSystemPermissionDao) Ctx(ctx context.Context) *gdb.Model {
 	return dao.DB().Model(dao.table).Safe().Ctx(ctx)
 }
 
@@ -80,6 +84,6 @@ func (dao *UcSystemMenuDao) Ctx(ctx context.Context) *gdb.Model {
 //
 // Note that, you should not Commit or Rollback the transaction in function f
 // as it is automatically handled by this function.
-func (dao *UcSystemMenuDao) Transaction(ctx context.Context, f func(ctx context.Context, tx gdb.TX) error) (err error) {
+func (dao *UcSystemPermissionDao) Transaction(ctx context.Context, f func(ctx context.Context, tx gdb.TX) error) (err error) {
 	return dao.Ctx(ctx).Transaction(ctx, f)
 }

@@ -9,13 +9,15 @@ import (
 	"github.com/gogf/gf/v2/os/gtime"
 )
 
-// UcSystemMenu is the golang structure of table uc_system_menu for DAO operations like Where/Data.
-type UcSystemMenu struct {
-	g.Meta    `orm:"table:uc_system_menu, do:true"`
+// UcSystemPermission is the golang structure of table uc_system_permission for DAO operations like Where/Data.
+type UcSystemPermission struct {
+	g.Meta    `orm:"table:uc_system_permission, do:true"`
 	Id        interface{} //
 	Fid       interface{} // 父级ID
 	Name      interface{} // 菜单名称
-	Status    interface{} // 菜单状态（0=启用，停用）
+	Moudule   interface{} // 对应的程序模块
+	Type      interface{} // 类型（1=菜单，2=按钮）
+	Status    interface{} // 程序模块状态（0=启用，1=停用）
 	Remark    interface{} // 备注信息
 	CreatedAt *gtime.Time //
 	UpdatedAt *gtime.Time //
