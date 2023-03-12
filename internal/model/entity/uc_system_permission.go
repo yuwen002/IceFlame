@@ -12,7 +12,7 @@ import (
 type UcSystemPermission struct {
 	Id        uint        `json:"id"         ` //
 	Fid       uint        `json:"fid"        ` // 父级ID
-	Name      string      `json:"name"       ` // 权限名称
+	Name      string      `json:"name"       ` // 菜单名称
 	Moudule   string      `json:"moudule"    ` // 对应的程序模块
 	Type      int         `json:"type"       ` // 类型（1=菜单，2=按钮）
 	Status    uint        `json:"status"     ` // 程序模块状态（0=启用，1=停用）
