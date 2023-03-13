@@ -2,6 +2,7 @@ package utility
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/gogf/gf/v2/util/gconv"
 )
@@ -103,7 +104,7 @@ func ArrayCombine(keys []string, values []interface{}) map[string]interface{} {
 // MapDiff
 //
 // @Title Map差集
-// @Description
+// @Description Map差集 泛型版本
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-13 18:22:19
 // @param map1
@@ -144,8 +145,8 @@ func MapsFromColumns(maps []map[string]interface{}, keyCol, valueCol string) map
 
 // MapsStrStr
 //
-// @Title  []map[string]interface{} 转换成 []map[string]string
-// @Description
+// @Title Map类型转换
+// @Description []map[string]interface{} 转换成 []map[string]string
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-08 17:44:01
 // @param maps
@@ -159,6 +160,61 @@ func MapsStrStr(maps []map[string]interface{}) []map[string]string {
 			temp[k] = fmt.Sprintf("%v", v)
 		}
 		result[i] = temp
+	}
+	return result
+}
+
+// MapsCast
+//
+// @Title Map类型转换
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-14 00:45:12
+// @param maps
+// @param key
+// @return []map[string]T
+func MapsCast[T IfInt | IfUint | string](maps []map[string]interface{}) []map[string]T {
+	result := make([]map[string]T, len(maps))
+
+	for i, m := range maps {
+		newMap := make(map[string]T)
+		for k, v := range m {
+			switch t := v.(type) {
+			case T:
+				newMap[k] = t
+			case int:
+				newMap[k] = T(t).(T)
+			case int8:
+				newMap[k] = T(t).(T)
+			case int16:
+				newMap[k] = T(t).(T)
+			case int32:
+				newMap[k] = T(t).(T)
+			case int64:
+				newMap[k] = T(t).(T)
+			case uint:
+				newMap[k] = T(t).(T)
+			case uint8:
+				newMap[k] = T(t).(T)
+			case uint16:
+				newMap[k] = T(t).(T)
+			case uint32:
+				newMap[k] = T(t).(T)
+			case float32:
+				newMap[k] = T(t).(T)
+			case float64:
+				newMap[k] = T(t).(T)
+			case string:
+				if s, err := strconv.Atoi(t); err == nil {
+					newMap[k] = T(s).(T)
+				} else {
+					newMap[k] = T(0)
+				}
+			default:
+				newMap[k] = T(0)
+			}
+		}
+		result[i] = newMap
 	}
 	return result
 }
