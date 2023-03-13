@@ -33,6 +33,33 @@ func ArrayIntersect[T IfInt | IfUint | string](array1, array2 []T) []T {
 	return res
 }
 
+// ArrayDiff
+//
+// @Title 数组差集
+// @Description 数组差集 泛型版本
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-14 00:25:55
+// @param array1
+// @param array2
+// @return []T
+func ArrayDiff[T IfInt | IfUint | string](array1, array2 []T) []T {
+	m := make(map[T]bool)
+
+	for _, x := range array2 {
+		m[x] = true
+	}
+
+	var diff []T
+
+	for _, x := range array1 {
+		if !m[x] {
+			diff = append(diff, x)
+		}
+	}
+
+	return diff
+}
+
 // ArrayColumn
 //
 // @Title 取出map数组其中一列

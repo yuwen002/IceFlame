@@ -326,6 +326,7 @@ func (s *sUcSystemMasterAuth) ListPermission(ctx context.Context, in system_mast
 // @return message
 // @return err
 func (s *sUcSystemMasterAuth) ModifyPermissionRelation(ctx context.Context, in system_master.ModifyPermissionRelationInput) (code int32, message string, err error) {
+	// 查询已有权限列表
 	code, message, out, err := utility.DBGetAllMapByWhere(dao.UcSystemPermission.Ctx(ctx), utility.DBGetAllByWhereInput{
 		Field: "permission_id",
 		Where: "role_id=?",
@@ -333,8 +334,12 @@ func (s *sUcSystemMasterAuth) ModifyPermissionRelation(ctx context.Context, in s
 		Order: "id asc",
 	})
 
+	// 提取已分配权限ID
 	oldPermissionIds := utility.ArrayColumn[string](utility.MapsStrStr(out), "permission_id")
+	// 分割提交权限数据
 	newPermissionIds := strings.Split(in.PermissionIds, ",")
 
-	insertPermissionIds :=
+	deletePermissionIds := utility.ArrayDiff[string](oldPermissionIds, newPermissionIds)
+	insertPermissionIds := utility.ArrayDiff[string](newPermissionIds, oldPermissionIds)
+
 }
