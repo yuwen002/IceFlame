@@ -101,12 +101,13 @@ var (
 						manage.UcSystemMasterAuth.AddRole,
 						manage.UcSystemMasterAuth.EditRole,
 						manage.UcSystemMasterAuth.ListRole,
+						// 角色关联
 						manage.UcSystemMasterAuth.AddRoleRelation,
 						manage.UcSystemMasterAuth.EditRoleRelation,
 						manage.UcSystemMasterAuth.ListRoleRelation,
 						manage.UcSystemMasterAuth.DeleteRoleRelation,
 
-						// 菜单管理
+						// 权限管理
 						manage.UcSystemMasterAuth.AddPermission,
 						manage.UcSystemMasterAuth.EditPermission,
 						manage.UcSystemMasterAuth.ListPermission,

@@ -6,6 +6,7 @@ import (
 	"ice_flame/internal/model/uc_center/system_master"
 	"ice_flame/internal/service"
 	"ice_flame/utility"
+	"strings"
 
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gtime"
@@ -230,7 +231,7 @@ func (s *sUcSystemMasterAuth) ListRoleRelation(ctx context.Context, in system_ma
 	return 0, "查询数据成功", output, nil
 }
 
-// DeleteRoleRelation
+// DeleteRoleRelationById
 //
 // @Title 删除管理员与用户角色绑定信息
 // @Description 删除管理员与用户角色绑定信息
@@ -242,7 +243,7 @@ func (s *sUcSystemMasterAuth) ListRoleRelation(ctx context.Context, in system_ma
 // @return code
 // @return message
 // @return err
-func (s *sUcSystemMasterAuth) DeleteRoleRelation(ctx context.Context, in system_master.DeleteRoleRelationInput) (code int32, message string, err error) {
+func (s *sUcSystemMasterAuth) DeleteRoleRelationById(ctx context.Context, in system_master.DeleteRoleRelationInput) (code int32, message string, err error) {
 	return utility.DBDelById(dao.UcSystemMasterRoleRelation.Ctx(ctx), utility.DBDelByIdInput{Where: in.Id})
 }
 
@@ -274,7 +275,7 @@ func (s *sUcSystemMasterAuth) CreatePermission(ctx context.Context, in system_ma
 // @return code
 // @return message
 // @return err
-func (s *sUcSystemMasterAuth) ModifyPermissionById(ctx context.Context, in system_master.ModifyMenuByIdInput) (code int32, message string, err error) {
+func (s *sUcSystemMasterAuth) ModifyPermissionById(ctx context.Context, in system_master.ModifyPermissionByIdInput) (code int32, message string, err error) {
 	return utility.DBModifyById(dao.UcSystemPermission.Ctx(ctx), utility.DBModifyByIdInput{
 		Data: g.Map{
 			"fid":    in.Fid,
@@ -284,10 +285,6 @@ func (s *sUcSystemMasterAuth) ModifyPermissionById(ctx context.Context, in syste
 		},
 		Where: in.Id,
 	})
-}
-
-func (s *sUcSystemMasterAuth) GetMenuAll(ctx context.Context) {
-
 }
 
 // ListPermission
@@ -314,4 +311,30 @@ func (s *sUcSystemMasterAuth) ListPermission(ctx context.Context, in system_mast
 	}, &output)
 
 	return code, message, output, err
+}
+
+// ModifyPermissionRelation
+//
+// @Title 角色权限信息关联
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-13 16:51:56
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sUcSystemMasterAuth) ModifyPermissionRelation(ctx context.Context, in system_master.ModifyPermissionRelationInput) (code int32, message string, err error) {
+	code, message, out, err := utility.DBGetAllMapByWhere(dao.UcSystemPermission.Ctx(ctx), utility.DBGetAllByWhereInput{
+		Field: "permission_id",
+		Where: "role_id=?",
+		Args:  in.RoleId,
+		Order: "id asc",
+	})
+
+	oldPermissionIds := utility.ArrayColumn[string](utility.MapsStrStr(out), "permission_id")
+	newPermissionIds := strings.Split(in.PermissionIds, ",")
+
+	insertPermissionIds :=
 }

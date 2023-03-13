@@ -88,6 +88,8 @@ type AddPermissionReq struct {
 	g.Meta `path:"/master/auth/add_permission" tags:"添加权限" method:"post" summary:"添加权限"`
 	Fid    uint32 `p:"fid" v:"required|min:0|integer#父类ID不能为空|ID要大于等于0|ID只为整数"`
 	Name   string `p:"name" v:"required#权限名称不能为空"`
+	Module string `p:"module"`
+	Type   uint8  `p:"type" v:"in:1,2#请输入正确的菜单分"`
 	Remark string `p:"remark"`
 }
 type AddPermissionRes struct{}
@@ -101,6 +103,8 @@ type EditPermissionReq struct {
 	ID     uint32 `p:"id" v:"required|min:0|integer#ID不能为空|ID要大于等于0|ID只为整数"`
 	Fid    uint32 `p:"fid" v:"required|min:0|integer#父类ID不能为空|ID要大于等于0|ID只为整数"`
 	Name   string `p:"name" v:"required#权限名称不能为空"`
+	Module string `p:"module"`
+	Type   uint8  `p:"type" v:"in:1,2#请输入正确的菜单分"`
 	Status int8   `p:"status" v:"required|in:0,1#权限状态不能为空|权限状态输入不正确"`
 	Remark string `p:"remark"`
 }

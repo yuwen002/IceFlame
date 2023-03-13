@@ -73,6 +73,30 @@ func ArrayCombine(keys []string, values []interface{}) map[string]interface{} {
 	return result
 }
 
+// MapDiff
+//
+// @Title Map差集
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-13 18:22:19
+// @param map1
+// @param map2
+// @return map[string]T
+func MapDiff[T IfInt | IfUint | string](map1, map2 map[string]T) map[string]T {
+	result := make(map[string]T)
+	for key, value := range map1 {
+		if map2Value, ok := map2[key]; !ok || value != map2Value {
+			result[key] = value
+		}
+	}
+	for key, value := range map2 {
+		if _, ok := map1[key]; !ok {
+			result[key] = value
+		}
+	}
+	return result
+}
+
 // MapsFromColumns
 //
 // @Title 将一个map数组元素为键名，另一个数组元素为键值

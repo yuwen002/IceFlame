@@ -89,20 +89,22 @@ type DeleteRoleRelationInput struct {
 }
 
 // CreateListPermissionInput
-// @Description: 新建菜单
+// @Description: 新建权限
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-09 16:36:31
 type CreateListPermissionInput struct {
 	Fid    uint32
 	Name   string
+	Module string
+	Type   uint8
 	Remark string
 }
 
-// ModifyMenuByIdInput
+// ModifyPermissionByIdInput
 // @Description: 按ID修改菜单信息
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-09 16:48:22
-type ModifyMenuByIdInput struct {
+type ModifyPermissionByIdInput struct {
 	Id     uint32
 	Fid    uint32
 	Name   string
@@ -127,4 +129,13 @@ type ListPermissionOutput struct {
 	Remark    string      `json:"remark"`
 	CreatedAt *gtime.Time `json:"created_at"`
 	UpdatedAt *gtime.Time `json:"updated_at"`
+}
+
+// ModifyPermissionRelationInput
+// @Description:
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-13 16:20:05
+type ModifyPermissionRelationInput struct {
+	PermissionIds string
+	RoleId        uint32
 }

@@ -273,7 +273,7 @@ func (c *cUcSystemMasterAuth) ListRoleRelation(ctx context.Context, req *manage.
 // @return res
 // @return err
 func (c *cUcSystemMasterAuth) DeleteRoleRelation(ctx context.Context, req *manage.DeleteRoleRelationReq) (res *manage.DeleteRoleRelationRes, err error) {
-	code, message, err := service.UcSystemMasterAuth().DeleteRoleRelation(ctx, system_master.DeleteRoleRelationInput{Id: req.Id})
+	code, message, err := service.UcSystemMasterAuth().DeleteRoleRelationById(ctx, system_master.DeleteRoleRelationInput{Id: req.Id})
 
 	// 访问日志写入
 	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
@@ -313,7 +313,9 @@ func (c *cUcSystemMasterAuth) AddPermission(ctx context.Context, req *manage.Add
 	code, message, err := service.UcSystemMasterAuth().CreatePermission(ctx, system_master.CreateListPermissionInput{
 		Fid:    req.Fid,
 		Name:   req.Name,
-		Remark: req.Name,
+		Module: req.Module,
+		Type:   req.Type,
+		Remark: req.Remark,
 	})
 
 	// 访问日志写入
@@ -351,7 +353,7 @@ func (c *cUcSystemMasterAuth) AddPermission(ctx context.Context, req *manage.Add
 // @return res
 // @return err
 func (c *cUcSystemMasterAuth) EditPermission(ctx context.Context, req *manage.EditPermissionReq) (res *manage.EditPermissionRes, err error) {
-	code, message, err := service.UcSystemMasterAuth().ModifyPermissionById(ctx, system_master.ModifyMenuByIdInput{
+	code, message, err := service.UcSystemMasterAuth().ModifyPermissionById(ctx, system_master.ModifyPermissionByIdInput{
 		Id:     req.ID,
 		Fid:    req.Fid,
 		Name:   req.Name,
