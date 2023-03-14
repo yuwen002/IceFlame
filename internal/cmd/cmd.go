@@ -111,6 +111,9 @@ var (
 						manage.UcSystemMasterAuth.AddPermission,
 						manage.UcSystemMasterAuth.EditPermission,
 						manage.UcSystemMasterAuth.ListPermission,
+
+						// 权限分配
+						manage.UcSystemMasterAuth.EditPermissionRelation,
 					)
 				},
 			)

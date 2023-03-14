@@ -2,9 +2,8 @@ package utility
 
 import (
 	"fmt"
-	"strconv"
-
 	"github.com/gogf/gf/v2/util/gconv"
+	"reflect"
 )
 
 // ArrayIntersect
@@ -76,6 +75,14 @@ func ArrayColumn[T IfInt | IfUint | string | interface{}](data []map[string]T, c
 		columnValues[i] = item[column]
 	}
 	return columnValues
+}
+
+func ArrayCast[T IfInt | IfUint | string, U IfInt | IfUint | string](array []T, f func(T) U) []U {
+	result := make([]U, len(array))
+	for i, v := range array {
+		result[i] = f(v)
+	}
+	return result
 }
 
 // ArrayCombine
@@ -173,48 +180,44 @@ func MapsStrStr(maps []map[string]interface{}) []map[string]string {
 // @param maps
 // @param key
 // @return []map[string]T
-func MapsCast[T IfInt | IfUint | string](maps []map[string]interface{}) []map[string]T {
-	result := make([]map[string]T, len(maps))
+//func MapsCast[T string](maps []map[string]interface{}) []map[string]T {
+//	t := reflect.TypeOf(T{}).Kind()
+//	result := make([]map[string]T, len(maps))
+//	for i, val := range maps {
+//		temp := make(map[string]T)
+//		for k, v := range val {
+//			if val, ok := v.(string); ok {
+//				temp[k] = reflect.Interface{}T(val)
+//			}
+//		}
+//		result[i] = temp
+//	}
+//	return result
+//}
 
-	for i, m := range maps {
-		newMap := make(map[string]T)
-		for k, v := range m {
-			switch t := v.(type) {
-			case T:
-				newMap[k] = t
-			case int:
-				newMap[k] = T(t).(T)
-			case int8:
-				newMap[k] = T(t).(T)
-			case int16:
-				newMap[k] = T(t).(T)
-			case int32:
-				newMap[k] = T(t).(T)
-			case int64:
-				newMap[k] = T(t).(T)
-			case uint:
-				newMap[k] = T(t).(T)
-			case uint8:
-				newMap[k] = T(t).(T)
-			case uint16:
-				newMap[k] = T(t).(T)
-			case uint32:
-				newMap[k] = T(t).(T)
-			case float32:
-				newMap[k] = T(t).(T)
-			case float64:
-				newMap[k] = T(t).(T)
-			case string:
-				if s, err := strconv.Atoi(t); err == nil {
-					newMap[k] = T(s).(T)
-				} else {
-					newMap[k] = T(0)
-				}
-			default:
-				newMap[k] = T(0)
-			}
-		}
-		result[i] = newMap
+// InterfaceToSlice
+//
+// @Title interface转数组
+// @Description  interface{} 转换为 []interface{}
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-14 18:14:20
+// @param data
+// @return []interface{}
+func InterfaceToSlice(data interface{}) []interface{} {
+	if slice, ok := data.([]interface{}); ok {
+		return slice
 	}
-	return result
+
+	// 如果 data 不是 []interface{} 类型，尝试将其转换为 []interface{}
+	value := reflect.ValueOf(data)
+	if value.Kind() == reflect.Slice {
+		length := value.Len()
+		slice := make([]interface{}, length)
+		for i := 0; i < length; i++ {
+			slice[i] = value.Index(i).Interface()
+		}
+		return slice
+	}
+
+	return nil
 }

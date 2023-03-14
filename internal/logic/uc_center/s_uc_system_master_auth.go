@@ -2,15 +2,15 @@ package uc_center
 
 import (
 	"context"
+	"fmt"
+	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/gtime"
+	"github.com/gogf/gf/v2/util/gconv"
 	"ice_flame/internal/dao"
 	"ice_flame/internal/model/uc_center/system_master"
 	"ice_flame/internal/service"
 	"ice_flame/utility"
 	"strings"
-
-	"github.com/gogf/gf/v2/frame/g"
-	"github.com/gogf/gf/v2/os/gtime"
-	"github.com/gogf/gf/v2/util/gconv"
 )
 
 var insUcSystemMasterAuth = sUcSystemMasterAuth{}
@@ -327,19 +327,60 @@ func (s *sUcSystemMasterAuth) ListPermission(ctx context.Context, in system_mast
 // @return err
 func (s *sUcSystemMasterAuth) ModifyPermissionRelation(ctx context.Context, in system_master.ModifyPermissionRelationInput) (code int32, message string, err error) {
 	// 查询已有权限列表
-	code, message, out, err := utility.DBGetAllMapByWhere(dao.UcSystemPermission.Ctx(ctx), utility.DBGetAllByWhereInput{
+	code, message, out, err := utility.DBGetAllMapByWhere(dao.UcSystemPermissionRelation.Ctx(ctx), utility.DBGetAllByWhereInput{
 		Field: "permission_id",
 		Where: "role_id=?",
 		Args:  in.RoleId,
 		Order: "id asc",
 	})
 
+	if err != nil {
+		return -1, "", err
+	}
+
+	funcData := func(data interface{}) []map[string]interface{} {
+		d := utility.InterfaceToSlice(data)
+		fmt.Println(d)
+		insertData := make([]map[string]interface{}, len(d))
+		for index := range d {
+			insertData[index] = map[string]interface{}{
+				"permission_id": d[index],
+				"role_id":       123,
+			}
+		}
+
+		return insertData
+	}
+	// 查询数据为空
+	if code == 1 {
+		// 拼接输入数据写入信息
+		insertData := funcData(in.PermissionIds)
+		code, message, err := utility.DBInsert(dao.UcSystemPermissionRelation.Ctx(ctx), utility.DBInsertInput{Data: insertData})
+		if code != 0 {
+			return code, message, err
+		}
+	}
+
 	// 提取已分配权限ID
 	oldPermissionIds := utility.ArrayColumn[string](utility.MapsStrStr(out), "permission_id")
 	// 分割提交权限数据
-	newPermissionIds := strings.Split(in.PermissionIds, ",")
+	newPermissionIds := utility.ArrayCast[uint16](in.PermissionIds, func(v uint16) string {
+		return gconv.String(v)
+	})
 
+	// 需要删除的数据
 	deletePermissionIds := utility.ArrayDiff[string](oldPermissionIds, newPermissionIds)
+	// 需要添加的数据
 	insertPermissionIds := utility.ArrayDiff[string](newPermissionIds, oldPermissionIds)
 
+	fmt.Println(strings.Join(deletePermissionIds, ","))
+	code, message, err = utility.DBDelByWhere(dao.UcSystemPermissionRelation.Ctx(ctx), utility.DBDelByWhereInput{
+		Where: "in (?) and role_id=?",
+		Args:  g.Slice{strings.Join(deletePermissionIds, ","), in.RoleId},
+	})
+	if code != 0 {
+		return code, message, err
+	}
+
+	return utility.DBInsert(dao.UcSystemPermissionRelation.Ctx(ctx), utility.DBInsertInput{Data: funcData(insertPermissionIds)})
 }

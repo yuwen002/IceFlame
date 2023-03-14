@@ -120,3 +120,10 @@ type ListPermissionReq struct {
 	Size   int `p:"size" v:"min:1|integer#显示条数要大于等于1|显示条数只为正整数"`
 }
 type ListPermissionRes struct{}
+
+type EditPermissionRelationReq struct {
+	g.Meta        `path:"/master/auth/edit_permission_relation" tags:"权限列表" method:"put" summary:"权限列表"`
+	PermissionIds []uint16 `p:"permission_ids" v:"required#权限ID不能为空"`
+	RoleId        uint16   `p:"role_id" v:"required#角色ID不能为空"`
+}
+type EditPermissionRelationRes struct{}

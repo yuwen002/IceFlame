@@ -424,3 +424,25 @@ func (c *cUcSystemMasterAuth) ListPermission(ctx context.Context, req *manage.Li
 
 	return
 }
+
+func (c *cUcSystemMasterAuth) EditPermissionRelation(ctx context.Context, req *manage.EditPermissionRelationReq) (res *manage.EditPermissionRelationRes, err error) {
+	code, message, err := service.UcSystemMasterAuth().ModifyPermissionRelation(ctx, system_master.ModifyPermissionRelationInput{
+		PermissionIds: req.PermissionIds,
+		RoleId:        req.RoleId,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}

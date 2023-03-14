@@ -132,10 +132,10 @@ type ListPermissionOutput struct {
 }
 
 // ModifyPermissionRelationInput
-// @Description:
+// @Description: 权限分配
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-13 16:20:05
 type ModifyPermissionRelationInput struct {
-	PermissionIds string
-	RoleId        uint32
+	PermissionIds []uint16
+	RoleId        uint16
 }
