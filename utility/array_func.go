@@ -2,8 +2,9 @@ package utility
 
 import (
 	"fmt"
-	"github.com/gogf/gf/v2/util/gconv"
 	"reflect"
+
+	"github.com/gogf/gf/v2/util/gconv"
 )
 
 // ArrayIntersect
@@ -77,7 +78,7 @@ func ArrayColumn[T IfInt | IfUint | string | interface{}](data []map[string]T, c
 	return columnValues
 }
 
-func ArrayCast[T IfInt | IfUint | string, U IfInt | IfUint | string](array []T, f func(T) U) []U {
+func ArrayCast[T IfInt | IfUint | string | interface{}, U IfInt | IfUint | string](array []T, f func(T) U) []U {
 	result := make([]U, len(array))
 	for i, v := range array {
 		result[i] = f(v)

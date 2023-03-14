@@ -3,14 +3,14 @@ package uc_center
 import (
 	"context"
 	"fmt"
-	"github.com/gogf/gf/v2/frame/g"
-	"github.com/gogf/gf/v2/os/gtime"
-	"github.com/gogf/gf/v2/util/gconv"
 	"ice_flame/internal/dao"
 	"ice_flame/internal/model/uc_center/system_master"
 	"ice_flame/internal/service"
 	"ice_flame/utility"
-	"strings"
+
+	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/gtime"
+	"github.com/gogf/gf/v2/util/gconv"
 )
 
 var insUcSystemMasterAuth = sUcSystemMasterAuth{}
@@ -362,7 +362,7 @@ func (s *sUcSystemMasterAuth) ModifyPermissionRelation(ctx context.Context, in s
 	}
 
 	// 提取已分配权限ID
-	oldPermissionIds := utility.ArrayColumn[string](utility.MapsStrStr(out), "permission_id")
+	oldPermissionIds := utility.ArrayColumn(utility.MapsStrStr(out), "permission_id")
 	// 分割提交权限数据
 	newPermissionIds := utility.ArrayCast[uint16](in.PermissionIds, func(v uint16) string {
 		return gconv.String(v)
@@ -370,17 +370,23 @@ func (s *sUcSystemMasterAuth) ModifyPermissionRelation(ctx context.Context, in s
 
 	// 需要删除的数据
 	deletePermissionIds := utility.ArrayDiff[string](oldPermissionIds, newPermissionIds)
-	// 需要添加的数据
-	insertPermissionIds := utility.ArrayDiff[string](newPermissionIds, oldPermissionIds)
-
-	fmt.Println(strings.Join(deletePermissionIds, ","))
-	code, message, err = utility.DBDelByWhere(dao.UcSystemPermissionRelation.Ctx(ctx), utility.DBDelByWhereInput{
-		Where: "in (?) and role_id=?",
-		Args:  g.Slice{strings.Join(deletePermissionIds, ","), in.RoleId},
-	})
-	if code != 0 {
-		return code, message, err
+	fmt.Println(deletePermissionIds)
+	if len(deletePermissionIds) != 0 {
+		code, message, err = utility.DBDelByWhere(dao.UcSystemPermissionRelation.Ctx(ctx), utility.DBDelByWhereInput{
+			Where: "in (?) and role_id=?",
+			Args:  g.Slice{deletePermissionIds, in.RoleId},
+		})
+		if code != 0 {
+			return code, message, err
+		}
 	}
 
-	return utility.DBInsert(dao.UcSystemPermissionRelation.Ctx(ctx), utility.DBInsertInput{Data: funcData(insertPermissionIds)})
+	// 需要添加的数据
+	insertPermissionIds := utility.ArrayDiff[string](newPermissionIds, oldPermissionIds)
+	fmt.Println(insertPermissionIds)
+	if len(insertPermissionIds) != 0 {
+		return utility.DBInsert(dao.UcSystemPermissionRelation.Ctx(ctx), utility.DBInsertInput{Data: funcData(insertPermissionIds)})
+	}
+
+	return 1, "数据信息未变动", nil
 }
