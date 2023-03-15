@@ -59,21 +59,10 @@ type (
 )
 
 var (
+	localUcSystemMasterAuth    IUcSystemMasterAuth
 	localUcSystemMasterVisitor IUcSystemMasterVisitor
 	localUcSystemMaster        IUcSystemMaster
-	localUcSystemMasterAuth    IUcSystemMasterAuth
 )
-
-func UcSystemMaster() IUcSystemMaster {
-	if localUcSystemMaster == nil {
-		panic("implement not found for interface IUcSystemMaster, forgot register?")
-	}
-	return localUcSystemMaster
-}
-
-func RegisterUcSystemMaster(i IUcSystemMaster) {
-	localUcSystemMaster = i
-}
 
 func UcSystemMasterAuth() IUcSystemMasterAuth {
 	if localUcSystemMasterAuth == nil {
@@ -95,4 +84,15 @@ func UcSystemMasterVisitor() IUcSystemMasterVisitor {
 
 func RegisterUcSystemMasterVisitor(i IUcSystemMasterVisitor) {
 	localUcSystemMasterVisitor = i
+}
+
+func UcSystemMaster() IUcSystemMaster {
+	if localUcSystemMaster == nil {
+		panic("implement not found for interface IUcSystemMaster, forgot register?")
+	}
+	return localUcSystemMaster
+}
+
+func RegisterUcSystemMaster(i IUcSystemMaster) {
+	localUcSystemMaster = i
 }
