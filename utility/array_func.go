@@ -78,12 +78,39 @@ func ArrayColumn[T IfInt | IfUint | string | interface{}](data []map[string]T, c
 	return columnValues
 }
 
+// ArrayCast
+//
+// @Title 强制装换成其他类型
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-15 16:46:19
+// @param array
+// @param f
+// @return []U
 func ArrayCast[T IfInt | IfUint | string | interface{}, U IfInt | IfUint | string](array []T, f func(T) U) []U {
 	result := make([]U, len(array))
 	for i, v := range array {
 		result[i] = f(v)
 	}
 	return result
+}
+
+// ArrayColumnCast
+//
+// @Title 取出map数组其中一列,并强制装换成其他类型
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-15 16:45:33
+// @param data
+// @param column
+// @param f
+// @return []U
+func ArrayColumnCast[T IfInt | IfUint | string | interface{}, U IfInt | IfUint | string](data []map[string]T, column string, f func(T) U) []U {
+	columnValues := make([]U, len(data))
+	for i, item := range data {
+		columnValues[i] = f(item[column])
+	}
+	return columnValues
 }
 
 // ArrayCombine
@@ -107,6 +134,56 @@ func ArrayCombine(keys []string, values []interface{}) map[string]interface{} {
 	}
 
 	return result
+}
+
+// InArray
+//
+// @Title
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-15 16:20:33
+// @param obj
+// @param target
+// @return bool
+func InArray(obj interface{}, target interface{}) bool {
+	targetValue := reflect.ValueOf(target)
+	switch reflect.TypeOf(target).Kind() {
+	case reflect.Slice, reflect.Array:
+		for i := 0; i < targetValue.Len(); i++ {
+			if targetValue.Index(i).Interface() == obj {
+				return true
+			}
+		}
+	case reflect.Map:
+		if targetValue.MapIndex(reflect.ValueOf(obj)).IsValid() {
+			return true
+		}
+	}
+
+	return false
+}
+
+// ArraySetMapKey
+//
+// @Title 从给定切片中创建一个新的集合
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-15 16:37:30
+// @param slice
+// @return func(T) bool
+func ArraySetMapKey[T IfInt | IfUint | string](slice []T) func(T) bool {
+	set := make(map[T]bool)
+
+	// 将每个元素添加到集合中
+	for _, val := range slice {
+		set[val] = true
+	}
+
+	// 返回一个闭包，该闭包接受一个元素并检查该元素是否在集合中
+	return func(elem T) bool {
+		_, exists := set[elem]
+		return exists
+	}
 }
 
 // MapDiff

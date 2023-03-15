@@ -2,7 +2,6 @@ package uc_center
 
 import (
 	"context"
-	"fmt"
 	"ice_flame/internal/dao"
 	"ice_flame/internal/model/uc_center/system_master"
 	"ice_flame/internal/service"
@@ -340,12 +339,11 @@ func (s *sUcSystemMasterAuth) ModifyPermissionRelation(ctx context.Context, in s
 
 	funcData := func(data interface{}) []map[string]interface{} {
 		d := utility.InterfaceToSlice(data)
-		fmt.Println(d)
 		insertData := make([]map[string]interface{}, len(d))
 		for index := range d {
 			insertData[index] = map[string]interface{}{
 				"permission_id": d[index],
-				"role_id":       123,
+				"role_id":       in.RoleId,
 			}
 		}
 
@@ -370,7 +368,6 @@ func (s *sUcSystemMasterAuth) ModifyPermissionRelation(ctx context.Context, in s
 
 	// 需要删除的数据
 	deletePermissionIds := utility.ArrayDiff[string](oldPermissionIds, newPermissionIds)
-	fmt.Println(deletePermissionIds)
 	if len(deletePermissionIds) != 0 {
 		code, message, err = utility.DBDelByWhere(dao.UcSystemPermissionRelation.Ctx(ctx), utility.DBDelByWhereInput{
 			Where: "in (?) and role_id=?",
@@ -383,10 +380,96 @@ func (s *sUcSystemMasterAuth) ModifyPermissionRelation(ctx context.Context, in s
 
 	// 需要添加的数据
 	insertPermissionIds := utility.ArrayDiff[string](newPermissionIds, oldPermissionIds)
-	fmt.Println(insertPermissionIds)
 	if len(insertPermissionIds) != 0 {
 		return utility.DBInsert(dao.UcSystemPermissionRelation.Ctx(ctx), utility.DBInsertInput{Data: funcData(insertPermissionIds)})
 	}
 
 	return 1, "数据信息未变动", nil
+}
+
+// GetPermissionAll
+//
+// @Title 所有开启权限列表
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-15 14:36:19
+// @receiver s
+// @param ctx
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sUcSystemMasterAuth) GetPermissionAll(ctx context.Context) (code int32, message string, output []*system_master.GetPermissionAllOutput, err error) {
+	code, message, err = utility.DBGetAllStructByWhere(dao.UcSystemPermission.Ctx(ctx), utility.DBGetAllByWhereInput{
+		Field: "id,fid,name",
+		Where: "status=0",
+		Order: "",
+	}, &output)
+
+	if code != 0 {
+		return code, message, nil, err
+	}
+
+	return code, message, output, nil
+}
+
+// GetPermissionByRoleId
+//
+// @Title 获取权限信息
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-15 17:04:36
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sUcSystemMasterAuth) GetPermissionByRoleId(ctx context.Context, in system_master.GetPermissionByRoleIdInput) (code int32, message string, output []*system_master.GetPermissionAllOutput, err error) {
+	// 查询所有可用权限列表
+	code, message, permissionAll, err := s.GetPermissionAll(ctx)
+	if code != 0 {
+		return code, message, nil, err
+	}
+
+	// 查询被关联权限列表
+	code, message, permissionRelation, err := utility.DBGetAllMapByWhere(dao.UcSystemPermissionRelation.Ctx(ctx), utility.DBGetAllByWhereInput{
+		Field: "permission_id",
+		Where: "role_id=?",
+		Args:  in.RoleId,
+		Order: "id asc",
+	})
+	if code != 0 {
+		return code, message, nil, err
+	}
+
+	// 已有权限关联
+	permissionIds := utility.ArrayColumnCast(permissionRelation, "permission_id", func(t interface{}) uint32 {
+		return gconv.Uint32(t)
+	})
+	permissionIdsFunc := utility.ArraySetMapKey(permissionIds)
+
+	// 遍历成树形
+	m := make(map[uint32]*system_master.GetPermissionAllOutput)
+	tree := make([]*system_master.GetPermissionAllOutput, 0)
+	for i, item := range permissionAll {
+		// 初始化被选中权限
+		if permissionIdsFunc(item.Id) {
+			permissionAll[i].Checked = 1
+		}
+
+		m[item.Id] = permissionAll[i]
+		if item.Fid == 0 {
+			tree = append(tree, permissionAll[i])
+		}
+	}
+	for _, item := range permissionAll {
+		if item.Fid != 0 {
+			parent := m[item.Fid]
+			parent.Children = append(parent.Children, m[item.Id])
+		}
+	}
+
+	return 0, "查询成功", tree, nil
 }

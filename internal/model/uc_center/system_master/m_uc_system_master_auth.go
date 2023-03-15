@@ -101,7 +101,7 @@ type CreateListPermissionInput struct {
 }
 
 // ModifyPermissionByIdInput
-// @Description: 按ID修改菜单信息
+// @Description: 按ID权限菜单信息
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-09 16:48:22
 type ModifyPermissionByIdInput struct {
@@ -113,7 +113,7 @@ type ModifyPermissionByIdInput struct {
 }
 
 // ListPermissionInput
-// @Description: 菜单列表
+// @Description: 权限菜单列表
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-09 16:48:54
 type ListPermissionInput struct {
@@ -121,6 +121,10 @@ type ListPermissionInput struct {
 	Size int
 }
 
+// ListPermissionOutput
+// @Description: 权限菜单列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-15 14:35:26
 type ListPermissionOutput struct {
 	Id        uint32      `json:"id"`
 	Fid       uint32      `json:"fid"`
@@ -138,4 +142,20 @@ type ListPermissionOutput struct {
 type ModifyPermissionRelationInput struct {
 	PermissionIds []uint16
 	RoleId        uint16
+}
+
+// GetPermissionAllOutput
+// @Description: 开启权限信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-15 14:35:02
+type GetPermissionAllOutput struct {
+	Id       uint32                    `json:"id"`
+	Fid      uint32                    `json:"fid"`
+	Name     string                    `json:"name"`
+	Checked  uint8                     `json:"checked"`
+	Children []*GetPermissionAllOutput `json:"children"`
+}
+
+type GetPermissionByRoleIdInput struct {
+	RoleId uint16
 }

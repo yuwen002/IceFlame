@@ -121,9 +121,23 @@ type ListPermissionReq struct {
 }
 type ListPermissionRes struct{}
 
+// EditPermissionRelationReq
+// @Description: 按角色ID权限信息修改
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-15 17:14:04
 type EditPermissionRelationReq struct {
-	g.Meta        `path:"/master/auth/edit_permission_relation" tags:"权限列表" method:"put" summary:"权限列表"`
+	g.Meta        `path:"/master/auth/edit_permission_relation" tags:"权限信息修改" method:"put" summary:"权限信息修改"`
 	PermissionIds []uint16 `p:"permission_ids" v:"required#权限ID不能为空"`
 	RoleId        uint16   `p:"role_id" v:"required#角色ID不能为空"`
 }
 type EditPermissionRelationRes struct{}
+
+// ListPermissionRelationReq
+// @Description: 按角色ID权限信息列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-15 17:15:39
+type ListPermissionRelationReq struct {
+	g.Meta `path:"/master/auth/show_permission_relation" tags:"权限信息修改" method:"get" summary:"权限信息修改"`
+	RoleId uint16 `p:"role_id" v:"required#角色ID不能为空"`
+}
+type ListPermissionRelationRes struct{}

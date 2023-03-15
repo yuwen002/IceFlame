@@ -431,6 +431,13 @@ func (c *cUcSystemMasterAuth) EditPermissionRelation(ctx context.Context, req *m
 		RoleId:        req.RoleId,
 	})
 
+	// 访问日志写入
+	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 4,
+		Description:   "编辑分配权限信息",
+	})
+
 	var json = g.RequestFromCtx(ctx).Response
 	if err != nil {
 		json.WriteJsonExit(g.Map{
@@ -442,6 +449,44 @@ func (c *cUcSystemMasterAuth) EditPermissionRelation(ctx context.Context, req *m
 	json.WriteJsonExit(g.Map{
 		"code":    code,
 		"message": message,
+	})
+
+	return
+}
+
+// ListPermissionRelation
+//
+// @Title 获取权限信息
+// @Description 获取权限信息,并分配以选中权限
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-15 17:29:12
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMasterAuth) ListPermissionRelation(ctx context.Context, req *manage.ListPermissionRelationReq) (res *manage.ListPermissionRelationRes, err error) {
+	code, message, output, err := service.UcSystemMasterAuth().GetPermissionByRoleId(ctx, system_master.GetPermissionByRoleIdInput{RoleId: req.RoleId})
+
+	// 访问日志写入
+	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 4,
+		Description:   "查看分配权限信息",
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    g.Map{"list": output},
 	})
 
 	return
