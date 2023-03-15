@@ -42,6 +42,11 @@ type ListRoleOutput struct {
 	UpdatedAt *gtime.Time `json:"updated_at"`
 }
 
+type GetRoleAllOutput struct {
+	Id   uint16 `json:"id"`
+	Name string `json:"name"`
+}
+
 // CreateRoleRelationInput
 // @Description: 绑定管理员角色信息
 // @Author liuxingyu <yuwen002@163.com>

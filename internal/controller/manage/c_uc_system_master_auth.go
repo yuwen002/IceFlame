@@ -139,6 +139,39 @@ func (c *cUcSystemMasterAuth) ListRole(ctx context.Context, req *manage.ListRole
 	return
 }
 
+// GetListRole
+//
+// @Title 获取所有管理员角色信息
+// @Description 获取所有管理员角色信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-15 18:20:48
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMasterAuth) GetListRole(ctx context.Context, req *manage.GetListRoleReq) (res *manage.GetListRoleRes, err error) {
+	code, message, output, err := service.UcSystemMasterAuth().GetRoleAll(ctx)
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data": g.Map{
+			"list": output,
+		},
+	})
+
+	return
+}
+
 // AddRoleRelation
 //
 // @Title 添加管理员绑定角色

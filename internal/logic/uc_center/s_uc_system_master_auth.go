@@ -89,6 +89,27 @@ func (s *sUcSystemMasterAuth) ListRole(ctx context.Context, in system_master.Lis
 	return code, message, output, err
 }
 
+// GetRoleAll
+//
+// @Title 获取管理员角色信息
+// @Description 获取管理员角色信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-15 18:17:26
+// @receiver s
+// @param ctx
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sUcSystemMasterAuth) GetRoleAll(ctx context.Context) (code int32, message string, output []*system_master.GetRoleAllOutput, err error) {
+	code, message, err = utility.DBGetAllStructByWhere(dao.UcSystemMasterRole.Ctx(ctx), utility.DBGetAllByWhereInput{
+		Field: "id,name",
+		Order: "id asc",
+	}, &output)
+
+	return code, message, output, err
+}
+
 // CreateRoleRelation
 //
 // @Title 绑定管理员与用户角色信息

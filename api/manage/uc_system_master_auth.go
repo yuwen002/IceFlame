@@ -34,6 +34,15 @@ type ListRoleReq struct {
 	Page   int `p:"page" v:"min:1|integer#页码要大于等于1|页码只为正整数"`
 	Size   int `p:"size" v:"min:1|integer#显示条数要大于等于1|显示条数只为正整数"`
 }
+type GetListRoleRes struct{}
+
+// GetListRoleReq
+// @Description: 所有管理员角色列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-15 18:19:25
+type GetListRoleReq struct {
+	g.Meta `path:"/master/auth/get_role" tags:"管理员角色列表" method:"get" summary:"管理员角色列表"`
+}
 type ListRoleRes struct{}
 
 // AddRoleRelationReq

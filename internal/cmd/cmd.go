@@ -101,6 +101,7 @@ var (
 						manage.UcSystemMasterAuth.AddRole,
 						manage.UcSystemMasterAuth.EditRole,
 						manage.UcSystemMasterAuth.ListRole,
+						manage.UcSystemMasterAuth.GetListRole,
 						// 角色关联
 						manage.UcSystemMasterAuth.AddRoleRelation,
 						manage.UcSystemMasterAuth.EditRoleRelation,
