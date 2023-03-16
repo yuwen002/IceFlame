@@ -41,6 +41,15 @@ func (s *sUcSystemMasterAuth) CreateRole(ctx context.Context, in system_master.C
 	return utility.DBInsert(dao.UcSystemMasterRole.Ctx(ctx), utility.DBInsertInput{Data: in})
 }
 
+func (s *sUcSystemMasterAuth) GetRoleById(ctx context.Context, id uint16) (code int32, message string, output system_master.GetRoleByIdOutput, err error) {
+	code, message, err = utility.DBGetStructById(dao.UcSystemMasterRole.Ctx(ctx), utility.DBGetByIdInput{
+		Field: "id, name, remark",
+		Where: id,
+	}, &output)
+
+	return code, message, output, err
+}
+
 // ModifyRoleById
 //
 // @Title 按ID修改管理员角色信息
@@ -139,6 +148,28 @@ func (s *sUcSystemMasterAuth) CreateRoleRelation(ctx context.Context, in system_
 	}
 
 	return utility.DBInsert(dao.UcSystemMasterRoleRelation.Ctx(ctx), utility.DBInsertInput{Data: in})
+}
+
+// GetRoleRelationById
+//
+// @Title 按ID获取管理员与用户角色绑定信息
+// @Description 按ID获取管理员与用户角色绑定信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-16 11:44:45
+// @receiver s
+// @param ctx
+// @param id
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sUcSystemMasterAuth) GetRoleRelationById(ctx context.Context, id uint32) (code int32, message string, output system_master.GetRoleRelationByIdOutput, err error) {
+	code, message, err = utility.DBGetStructById(dao.UcSystemMasterRoleRelation.Ctx(ctx), utility.DBGetByIdInput{
+		Field: "id, account_id, role_id",
+		Where: id,
+	}, &output)
+
+	return code, message, output, err
 }
 
 // ModifyRoleRelationById
@@ -283,6 +314,28 @@ func (s *sUcSystemMasterAuth) CreatePermission(ctx context.Context, in system_ma
 	return utility.DBInsert(dao.UcSystemPermission.Ctx(ctx), utility.DBInsertInput{Data: in})
 }
 
+// GetPermissionById
+//
+// @Title 按ID获取权限菜单信息
+// @Description 按ID获取权限菜单信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-16 16:19:47
+// @receiver s
+// @param ctx
+// @param id
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sUcSystemMasterAuth) GetPermissionById(ctx context.Context, id uint32) (code int32, message string, output system_master.GetPermissionByIdOutput, err error) {
+	code, message, err = utility.DBGetStructById(dao.UcSystemPermission.Ctx(ctx), utility.DBGetByIdInput{
+		Field: "id, fid, name, module, type, status, sort, remark",
+		Where: id,
+	}, &output)
+
+	return code, message, output, err
+}
+
 // ModifyPermissionById
 //
 // @Title 按ID修改权限信息
@@ -297,12 +350,7 @@ func (s *sUcSystemMasterAuth) CreatePermission(ctx context.Context, in system_ma
 // @return err
 func (s *sUcSystemMasterAuth) ModifyPermissionById(ctx context.Context, in system_master.ModifyPermissionByIdInput) (code int32, message string, err error) {
 	return utility.DBModifyById(dao.UcSystemPermission.Ctx(ctx), utility.DBModifyByIdInput{
-		Data: g.Map{
-			"fid":    in.Fid,
-			"name":   in.Name,
-			"status": in.Status,
-			"remark": in.Remark,
-		},
+		Data:  in,
 		Where: in.Id,
 	})
 }
@@ -423,8 +471,8 @@ func (s *sUcSystemMasterAuth) ModifyPermissionRelation(ctx context.Context, in s
 func (s *sUcSystemMasterAuth) GetPermissionAll(ctx context.Context) (code int32, message string, output []*system_master.GetPermissionAllOutput, err error) {
 	code, message, err = utility.DBGetAllStructByWhere(dao.UcSystemPermission.Ctx(ctx), utility.DBGetAllByWhereInput{
 		Field: "id,fid,name",
-		Where: "status=0",
-		Order: "",
+		Where: "status=0 and ",
+		Order: "fid asc, sort desc",
 	}, &output)
 
 	if code != 0 {
@@ -493,4 +541,8 @@ func (s *sUcSystemMasterAuth) GetPermissionByRoleId(ctx context.Context, in syst
 	}
 
 	return 0, "查询成功", tree, nil
+}
+
+func (s *sUcSystemMasterAuth) GetMenuAll(ctx context.Context) {
+
 }

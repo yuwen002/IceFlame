@@ -646,6 +646,10 @@ func (s *sUcSystemMaster) ListSystemMaster(ctx context.Context, in system_master
 	return 0, "查询成功", out, nil
 }
 
+func (s *sUcSystemMaster) GetSystemMasterByAccountId(ctx context.Context, account uint64) (code int32, message string, output, err error) {
+	return
+}
+
 // ModifySystemMasterByAccountId
 //
 // @Title 修改管理员用户信息

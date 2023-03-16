@@ -13,6 +13,16 @@ type AddRoleReq struct {
 }
 type AddRoleRes struct{}
 
+// GetEditRoleReq
+// @Description: 获取角色编辑信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-16 14:38:08
+type GetEditRoleReq struct {
+	g.Meta `path:"/master/auth/edit_role" tags:"编辑管理员角色" method:"get" summary:"编辑管理员角色"`
+	Id     uint16 `p:"id" v:"required|min:1|integer#ID不能为空|ID要大于等于1|ID只为正整数"`
+}
+type GetEditRoleRes struct{}
+
 // EditRoleReq
 // @Description: 编辑管理员角色
 // @Author liuxingyu <yuwen002@163.com>
@@ -55,6 +65,17 @@ type AddRoleRelationReq struct {
 	RoleId    uint16 `p:"role_id" v:"required|min:1|integer#角色ID不能为空|角色ID要大于等于1|ID只为正整数"`
 }
 type AddRoleRelationRes struct{}
+
+// GetEditRoleRelationReq
+// @Description: 编辑管理员绑定角色信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-16 11:53:42
+type GetEditRoleRelationReq struct {
+	g.Meta `path:"/master/auth/edit_role_relation" tags:"编辑管理员绑定角色信息" method:"get" summary:"编辑管理员绑定角色信息"`
+	Id     uint32 `p:"id" v:"required|min:1|integer#ID不能为空|ID要大于等于1|ID只为正整数"`
+}
+type GetEditRoleRelationRes struct {
+}
 
 // EditRoleRelationReq
 // @Description: 编辑管理员绑定角色信息
@@ -99,9 +120,20 @@ type AddPermissionReq struct {
 	Name   string `p:"name" v:"required#权限名称不能为空"`
 	Module string `p:"module"`
 	Type   uint8  `p:"type" v:"in:1,2#请输入正确的菜单分"`
+	Sort   uint32 `p:"sort" v:"min:0|integer#ID要大于等于0|ID只为整数"`
 	Remark string `p:"remark"`
 }
 type AddPermissionRes struct{}
+
+// GetEditPermissionReq
+// @Description: 按ID获取权限信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-16 16:28:12
+type GetEditPermissionReq struct {
+	g.Meta `path:"/master/auth/edit_permission" tags:"修改权限" method:"get" summary:"修改权限"`
+	Id     uint32 `p:"id" v:"required|min:0|integer#ID不能为空|ID要大于等于0|ID只为整数"`
+}
+type GetEditPermissionRes struct{}
 
 // EditPermissionReq
 // @Description: 修改权限信息
@@ -114,7 +146,8 @@ type EditPermissionReq struct {
 	Name   string `p:"name" v:"required#权限名称不能为空"`
 	Module string `p:"module"`
 	Type   uint8  `p:"type" v:"in:1,2#请输入正确的菜单分"`
-	Status int8   `p:"status" v:"required|in:0,1#权限状态不能为空|权限状态输入不正确"`
+	Status uint8  `p:"status" v:"required|in:0,1#权限状态不能为空|权限状态输入不正确"`
+	Sort   uint32 `p:"fid" v:"min:0|integer#ID要大于等于0|ID只为整数"`
 	Remark string `p:"remark"`
 }
 type EditPermissionRes struct{}

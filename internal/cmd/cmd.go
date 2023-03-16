@@ -99,17 +99,20 @@ var (
 
 						// 角色管理
 						manage.UcSystemMasterAuth.AddRole,
+						manage.UcSystemMasterAuth.GetEditRole,
 						manage.UcSystemMasterAuth.EditRole,
 						manage.UcSystemMasterAuth.ListRole,
 						manage.UcSystemMasterAuth.GetListRole,
 						// 角色关联
 						manage.UcSystemMasterAuth.AddRoleRelation,
+						manage.UcSystemMasterAuth.GetEditRoleRelation,
 						manage.UcSystemMasterAuth.EditRoleRelation,
 						manage.UcSystemMasterAuth.ListRoleRelation,
 						manage.UcSystemMasterAuth.DeleteRoleRelation,
 
 						// 权限管理
 						manage.UcSystemMasterAuth.AddPermission,
+						manage.UcSystemMasterAuth.GetEditPermission,
 						manage.UcSystemMasterAuth.EditPermission,
 						manage.UcSystemMasterAuth.ListPermission,
 

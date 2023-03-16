@@ -11,6 +11,16 @@ type CreateRoleInput struct {
 	Remark string
 }
 
+// GetRoleByIdOutput
+// @Description: 按ID获取管理员角色信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-16 14:29:23
+type GetRoleByIdOutput struct {
+	Id     uint16
+	Name   string
+	Remark string
+}
+
 // ModifyRoleByIdInput
 // @Description: 按ID修改管理员角色
 // @Author liuxingyu <yuwen002@163.com>
@@ -52,6 +62,16 @@ type GetRoleAllOutput struct {
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-07 17:51:15
 type CreateRoleRelationInput struct {
+	AccountId uint64
+	RoleId    uint16
+}
+
+// GetRoleRelationByIdOutput
+// @Description: 按ID显示管理员角色绑定信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-16 11:36:05
+type GetRoleRelationByIdOutput struct {
+	Id        uint32
 	AccountId uint64
 	RoleId    uint16
 }
@@ -102,6 +122,21 @@ type CreateListPermissionInput struct {
 	Name   string
 	Module string
 	Type   uint8
+	Sort   uint32
+	Remark string
+}
+
+// GetPermissionByIdOutput
+// @Description: 按ID获取权限菜单信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-16 16:19:24
+type GetPermissionByIdOutput struct {
+	Id     uint32
+	Fid    uint32
+	Name   string
+	Type   uint8
+	Status uint8
+	Sort   uint32
 	Remark string
 }
 
@@ -113,7 +148,8 @@ type ModifyPermissionByIdInput struct {
 	Id     uint32
 	Fid    uint32
 	Name   string
-	Status int8
+	Status uint8
+	Sort   uint32
 	Remark string
 }
 
@@ -134,7 +170,7 @@ type ListPermissionOutput struct {
 	Id        uint32      `json:"id"`
 	Fid       uint32      `json:"fid"`
 	Name      string      `json:"name"`
-	Status    int8        `json:"status"`
+	Status    uint8       `json:"status"`
 	Remark    string      `json:"remark"`
 	CreatedAt *gtime.Time `json:"created_at"`
 	UpdatedAt *gtime.Time `json:"updated_at"`

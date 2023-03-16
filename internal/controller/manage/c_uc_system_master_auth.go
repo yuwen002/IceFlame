@@ -55,6 +55,42 @@ func (c *cUcSystemMasterAuth) AddRole(ctx context.Context, req *manage.AddRoleRe
 	return
 }
 
+// GetEditRole
+//
+// @Title 按ID获取角色编辑信息
+// @Description 按ID获取角色编辑信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-16 14:46:29
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMasterAuth) GetEditRole(ctx context.Context, req *manage.GetEditRoleReq) (res *manage.GetEditRoleRes, err error) {
+	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 4,
+		Description:   "查看编辑管理员角色信息",
+	})
+
+	code, message, output, err := service.UcSystemMasterAuth().GetRoleById(ctx, req.Id)
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    output,
+	})
+
+	return
+}
+
 // EditRole
 //
 // @Title 编辑管理员角色信息
@@ -77,7 +113,7 @@ func (c *cUcSystemMasterAuth) EditRole(ctx context.Context, req *manage.EditRole
 	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 4,
-		Description:   "编辑管理员角色信息",
+		Description:   "提交编辑管理员角色信息",
 	})
 
 	var json = g.RequestFromCtx(ctx).Response
@@ -212,6 +248,43 @@ func (c *cUcSystemMasterAuth) AddRoleRelation(ctx context.Context, req *manage.A
 	return
 }
 
+// GetEditRoleRelation
+//
+// @Title 编辑管理员绑定角色
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-16 14:22:24
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMasterAuth) GetEditRoleRelation(ctx context.Context, req *manage.GetEditRoleRelationReq) (res *manage.GetEditRoleRelationRes, err error) {
+	// 访问日志写入
+	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 4,
+		Description:   "查看编辑管理员角色信息绑定",
+	})
+
+	code, message, output, err := service.UcSystemMasterAuth().GetRoleRelationById(ctx, req.Id)
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    output,
+	})
+
+	return
+}
+
 // EditRoleRelation
 //
 // @Title 编辑管理员绑定角色
@@ -234,7 +307,7 @@ func (c *cUcSystemMasterAuth) EditRoleRelation(ctx context.Context, req *manage.
 	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 4,
-		Description:   "编辑管理员角色信息绑定",
+		Description:   "提交编辑管理员角色信息绑定",
 	})
 
 	var json = g.RequestFromCtx(ctx).Response
@@ -348,6 +421,7 @@ func (c *cUcSystemMasterAuth) AddPermission(ctx context.Context, req *manage.Add
 		Name:   req.Name,
 		Module: req.Module,
 		Type:   req.Type,
+		Sort:   req.Sort,
 		Remark: req.Remark,
 	})
 
@@ -374,6 +448,44 @@ func (c *cUcSystemMasterAuth) AddPermission(ctx context.Context, req *manage.Add
 	return
 }
 
+// GetEditPermission
+//
+// @Title 编辑权限信息
+// @Description 编辑权限信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-16 16:42:20
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMasterAuth) GetEditPermission(ctx context.Context, req *manage.GetEditPermissionReq) (res *manage.GetEditPermissionRes, err error) {
+	// 访问日志写入
+	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 4,
+		Description:   "查看编辑菜单信息",
+	})
+
+	code, message, output, err := service.UcSystemMasterAuth().GetPermissionById(ctx, req.Id)
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    output,
+	})
+
+	return
+}
+
 // EditPermission
 //
 // @Title 编辑权限信息
@@ -391,6 +503,7 @@ func (c *cUcSystemMasterAuth) EditPermission(ctx context.Context, req *manage.Ed
 		Fid:    req.Fid,
 		Name:   req.Name,
 		Status: req.Status,
+		Sort:   req.Sort,
 		Remark: req.Remark,
 	})
 
@@ -398,7 +511,7 @@ func (c *cUcSystemMasterAuth) EditPermission(ctx context.Context, req *manage.Ed
 	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 4,
-		Description:   "编辑菜单信息",
+		Description:   "提交编辑菜单信息",
 	})
 
 	var json = g.RequestFromCtx(ctx).Response
