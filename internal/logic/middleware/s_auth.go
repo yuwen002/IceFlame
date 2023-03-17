@@ -1,6 +1,8 @@
 package middleware
 
 import (
+	"context"
+	"github.com/gogf/gf/v2/util/gconv"
 	"ice_flame/internal/consts"
 	"ice_flame/internal/service"
 	"ice_flame/utility"
@@ -21,7 +23,9 @@ func init() {
 	service.RegisterAuthMiddleware(AuthMiddleware())
 }
 
-type sAuthMiddleware struct{}
+type sAuthMiddleware struct {
+	ctx context.Context
+}
 
 // extractHandler
 //
@@ -92,7 +96,73 @@ func (s *sAuthMiddleware) MiddlewareAuthMaster(r *ghttp.Request) {
 	r.Middleware.Next()
 }
 
+// MiddlewareVerifyPermission
+//
+// @Title 管理员权限验证中间件
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-17 17:59:59
+// @receiver s
+// @param r
 func (s *sAuthMiddleware) MiddlewareVerifyPermission(r *ghttp.Request) {
-	//module := s.concatModule(s.extractHandler(r.GetServeHandler().Handler.Name))
+	// 查询管理员所分配的角色关联的权限
+	code, message, rolePermission, err := service.UcSystemMasterAuth().GetRolePermissionByAccountId(s.ctx, gconv.Uint64(r.GetCtxVar("master_id")))
+	if err != nil {
+		r.Response.WriteJsonExit(g.Map{
+			"code":    -1,
+			"message": err.Error(),
+		})
+	}
 
+	if code != 0 {
+		r.Response.WriteJsonExit(g.Map{
+			"code":    -1,
+			"message": message,
+		})
+	}
+
+	// 查询所有可以使用的权限
+	code, message, permission, err := service.UcSystemMasterAuth().GetPermissionAll(s.ctx)
+	if err != nil {
+		r.Response.WriteJsonExit(g.Map{
+			"code":    -1,
+			"message": err.Error(),
+		})
+	}
+	if code != 0 {
+		r.Response.WriteJsonExit(g.Map{
+			"code":    -1,
+			"message": message,
+		})
+	}
+
+	// 获取访问模块信息，controller调用的方法
+	var permissionId uint32
+	module := s.concatModule(s.extractHandler(r.GetServeHandler().Handler.Name))
+	for index := range permission {
+		if permission[index].Module == module {
+			// 匹配权限ID
+			permissionId = permission[index].Id
+			break
+		}
+	}
+
+	// 权限模块不存在
+	if permissionId == 0 {
+		r.Response.WriteJsonExit(g.Map{
+			"code":    -1,
+			"message": "访问权限错误",
+		})
+	}
+
+	// 没有访问权限
+	existsPermission := utility.InArray(permissionId, rolePermission)
+	if existsPermission == false {
+		r.Response.WriteJsonExit(g.Map{
+			"code":    -1,
+			"message": "访问权限错误",
+		})
+	}
+
+	r.Middleware.Next()
 }

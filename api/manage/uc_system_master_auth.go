@@ -183,3 +183,12 @@ type ListPermissionRelationReq struct {
 	RoleId uint16 `p:"role_id" v:"required#角色ID不能为空"`
 }
 type ListPermissionRelationRes struct{}
+
+// ListMenuReq
+// @Description:获取菜单导航列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-17 15:13:18
+type ListMenuReq struct {
+	g.Meta `path:"/show_menu" tags:"权限信息修改" method:"get" summary:"权限信息修改"`
+}
+type ListMenuRes struct{}

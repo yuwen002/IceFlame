@@ -119,6 +119,9 @@ var (
 						// 权限分配
 						manage.UcSystemMasterAuth.EditPermissionRelation,
 						manage.UcSystemMasterAuth.ListPermissionRelation,
+
+						// 导航菜单
+						manage.UcSystemMasterAuth.ListMenu,
 					)
 				},
 			)

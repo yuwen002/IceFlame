@@ -48,8 +48,10 @@ type (
 		ListPermission(ctx context.Context, in system_master.ListPermissionInput) (code int32, message string, output []*system_master.ListPermissionOutput, err error)
 		ModifyPermissionRelation(ctx context.Context, in system_master.ModifyPermissionRelationInput) (code int32, message string, err error)
 		GetPermissionAll(ctx context.Context) (code int32, message string, output []*system_master.GetPermissionAllOutput, err error)
-		GetPermissionByRoleId(ctx context.Context, in system_master.GetPermissionByRoleIdInput) (code int32, message string, output []*system_master.GetPermissionAllOutput, err error)
-		GetMenuAll(ctx context.Context)
+		GetPermissionByRoleId(ctx context.Context, roleId uint16) (code int32, message string, output []*system_master.GetPermissionAllOutput, err error)
+		GetMenuAll(ctx context.Context) (code int32, message string, output []*system_master.GetMenuAllOutput, err error)
+		GetMasterMenu(ctx context.Context, accountId uint64) (code int32, message string, output []*system_master.GetMenuAllOutput, err error)
+		GetRolePermissionByAccountId(ctx context.Context, accountId uint64) (code int32, message string, output []uint32, err error)
 	}
 	IUcSystemMasterVisitor interface {
 		CreateVisitCategory(ctx context.Context, in system_master.CreateVisitCategoryInput) (code int32, message string, err error)

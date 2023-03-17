@@ -612,7 +612,7 @@ func (c *cUcSystemMasterAuth) EditPermissionRelation(ctx context.Context, req *m
 // @return res
 // @return err
 func (c *cUcSystemMasterAuth) ListPermissionRelation(ctx context.Context, req *manage.ListPermissionRelationReq) (res *manage.ListPermissionRelationRes, err error) {
-	code, message, output, err := service.UcSystemMasterAuth().GetPermissionByRoleId(ctx, system_master.GetPermissionByRoleIdInput{RoleId: req.RoleId})
+	code, message, output, err := service.UcSystemMasterAuth().GetPermissionByRoleId(ctx, req.RoleId)
 
 	// 访问日志写入
 	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
@@ -620,6 +620,37 @@ func (c *cUcSystemMasterAuth) ListPermissionRelation(ctx context.Context, req *m
 		VisitCategory: 4,
 		Description:   "查看分配权限信息",
 	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    g.Map{"list": output},
+	})
+
+	return
+}
+
+// ListMenu
+//
+// @Title
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-17 15:19:22
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMasterAuth) ListMenu(ctx context.Context, req *manage.ListMenuReq) (res *manage.ListMenuRes, err error) {
+	code, message, output, err := service.UcSystemMasterAuth().GetMasterMenu(ctx, 2)
 
 	var json = g.RequestFromCtx(ctx).Response
 	if err != nil {

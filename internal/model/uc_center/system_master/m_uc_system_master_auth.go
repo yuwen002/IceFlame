@@ -193,10 +193,19 @@ type GetPermissionAllOutput struct {
 	Id       uint32                    `json:"id"`
 	Fid      uint32                    `json:"fid"`
 	Name     string                    `json:"name"`
+	Module   string                    `json:"module"`
+	Uri      string                    `json:"uri"`
 	Checked  uint8                     `json:"checked"`
 	Children []*GetPermissionAllOutput `json:"children"`
 }
 
-type GetPermissionByRoleIdInput struct {
-	RoleId uint16
+// GetMenuAllOutput
+// @Description: 获取导航列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-17 15:10:28
+type GetMenuAllOutput struct {
+	Id   uint32 `json:"id"`
+	Fid  uint32 `json:"fid"`
+	Name string `json:"name"`
+	Uri  string `json:"uri"`
 }

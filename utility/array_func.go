@@ -142,20 +142,20 @@ func ArrayCombine(keys []string, values []interface{}) map[string]interface{} {
 // @Description
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-15 16:20:33
-// @param obj
-// @param target
+// @param val
+// @param array
 // @return bool
-func InArray(obj interface{}, target interface{}) bool {
-	targetValue := reflect.ValueOf(target)
-	switch reflect.TypeOf(target).Kind() {
+func InArray(val interface{}, array interface{}) bool {
+	value := reflect.ValueOf(array)
+	switch reflect.TypeOf(array).Kind() {
 	case reflect.Slice, reflect.Array:
-		for i := 0; i < targetValue.Len(); i++ {
-			if targetValue.Index(i).Interface() == obj {
+		for i := 0; i < value.Len(); i++ {
+			if value.Index(i).Interface() == val {
 				return true
 			}
 		}
 	case reflect.Map:
-		if targetValue.MapIndex(reflect.ValueOf(obj)).IsValid() {
+		if value.MapIndex(reflect.ValueOf(val)).IsValid() {
 			return true
 		}
 	}

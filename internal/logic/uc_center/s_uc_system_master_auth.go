@@ -470,8 +470,8 @@ func (s *sUcSystemMasterAuth) ModifyPermissionRelation(ctx context.Context, in s
 // @return err
 func (s *sUcSystemMasterAuth) GetPermissionAll(ctx context.Context) (code int32, message string, output []*system_master.GetPermissionAllOutput, err error) {
 	code, message, err = utility.DBGetAllStructByWhere(dao.UcSystemPermission.Ctx(ctx), utility.DBGetAllByWhereInput{
-		Field: "id,fid,name",
-		Where: "status=0 and ",
+		Field: "id,fid,name,module,uri",
+		Where: "status=0 and type in (1,2)",
 		Order: "fid asc, sort desc",
 	}, &output)
 
@@ -495,7 +495,7 @@ func (s *sUcSystemMasterAuth) GetPermissionAll(ctx context.Context) (code int32,
 // @return message
 // @return output
 // @return err
-func (s *sUcSystemMasterAuth) GetPermissionByRoleId(ctx context.Context, in system_master.GetPermissionByRoleIdInput) (code int32, message string, output []*system_master.GetPermissionAllOutput, err error) {
+func (s *sUcSystemMasterAuth) GetPermissionByRoleId(ctx context.Context, roleId uint16) (code int32, message string, output []*system_master.GetPermissionAllOutput, err error) {
 	// 查询所有可用权限列表
 	code, message, permissionAll, err := s.GetPermissionAll(ctx)
 	if code != 0 {
@@ -506,7 +506,7 @@ func (s *sUcSystemMasterAuth) GetPermissionByRoleId(ctx context.Context, in syst
 	code, message, permissionRelation, err := utility.DBGetAllMapByWhere(dao.UcSystemPermissionRelation.Ctx(ctx), utility.DBGetAllByWhereInput{
 		Field: "permission_id",
 		Where: "role_id=?",
-		Args:  in.RoleId,
+		Args:  roleId,
 		Order: "id asc",
 	})
 	if code != 0 {
@@ -543,6 +543,114 @@ func (s *sUcSystemMasterAuth) GetPermissionByRoleId(ctx context.Context, in syst
 	return 0, "查询成功", tree, nil
 }
 
-func (s *sUcSystemMasterAuth) GetMenuAll(ctx context.Context) {
+// GetMenuAll
+//
+// @Title 后台导航列表
+// @Description 后台导航列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-17 15:10:55
+// @receiver s
+// @param ctx
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sUcSystemMasterAuth) GetMenuAll(ctx context.Context) (code int32, message string, output []*system_master.GetMenuAllOutput, err error) {
+	code, message, err = utility.DBGetAllStructByWhere(dao.UcSystemPermission.Ctx(ctx), utility.DBGetAllByWhereInput{
+		Field: "id, fid, name, uri",
+		Where: "status=0 and type=1",
+		Order: "fid asc, sort desc",
+	}, &output)
 
+	return code, message, output, err
+}
+
+// GetMasterMenu
+//
+// @Title 获取个管理员Menu信息
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-17 18:14:32
+// @receiver s
+// @param ctx
+// @param accountId
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sUcSystemMasterAuth) GetMasterMenu(ctx context.Context, accountId uint64) (code int32, message string, output []*system_master.GetMenuAllOutput, err error) {
+	// 查询所有可以用菜单
+	code, message, menu, err := s.GetMenuAll(ctx)
+	if code != 0 {
+		return code, message, output, err
+	}
+
+	// 查询已分配权限
+	code, message, permission, err := s.GetRolePermissionByAccountId(ctx, accountId)
+	if code != 0 {
+		return code, message, output, err
+	}
+
+	// 权限返回信息菜单列表
+	permissionFunc := utility.ArraySetMapKey[uint32](permission)
+	for index := range menu {
+		if menu[index].Fid == 0 || permissionFunc(menu[index].Id) {
+			output = append(output, menu[index])
+		}
+	}
+
+	return 0, "查询成功", output, nil
+}
+
+// GetRolePermissionByAccountId
+//
+// @Title 获取用户权限
+// @Description 按用户ID获取用户权限
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-17 16:07:08
+// @receiver s
+// @param ctx
+// @param accountId
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sUcSystemMasterAuth) GetRolePermissionByAccountId(ctx context.Context, accountId uint64) (code int32, message string, output []uint32, err error) {
+	// 查询管理员关联角色
+	code, _, out, err := utility.DBGetAllMapByWhere(dao.UcSystemMasterRoleRelation.Ctx(ctx), utility.DBGetAllByWhereInput{
+		Field: "role_id",
+		Where: "account_id = ?",
+		Args:  accountId,
+	})
+
+	if err != nil {
+		return code, "", nil, err
+	}
+
+	if code != 0 {
+		return code, "角色信息错误", nil, nil
+	}
+
+	// 角色信息数组
+	roleIds := utility.ArrayColumn(out, "role_id")
+	// 查询角色关联权限信息
+	code, _, out, err = utility.DBGetAllMapByWhere(dao.UcSystemPermissionRelation.Ctx(ctx), utility.DBGetAllByWhereInput{
+		Field: "permission_id",
+		Where: "role_id in (?)",
+		Args:  roleIds,
+	})
+	if err != nil {
+		return code, "", nil, err
+	}
+
+	if code != 0 {
+		return code, "权限信息错误", nil, nil
+	}
+
+	// 角色关联权限IDS
+	permissionIds := utility.ArrayColumnCast(out, "permission_id", func(v interface{}) uint32 {
+		return gconv.Uint32(v)
+	})
+
+	return code, "查询成功", permissionIds, nil
 }
