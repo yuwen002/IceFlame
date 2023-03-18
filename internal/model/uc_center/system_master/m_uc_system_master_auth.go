@@ -121,6 +121,7 @@ type CreateListPermissionInput struct {
 	Fid    uint32
 	Name   string
 	Module string
+	Uri    string
 	Type   uint8
 	Sort   uint32
 	Remark string
@@ -134,6 +135,8 @@ type GetPermissionByIdOutput struct {
 	Id     uint32
 	Fid    uint32
 	Name   string
+	Module string
+	Uri    string
 	Type   uint8
 	Status uint8
 	Sort   uint32
@@ -148,6 +151,8 @@ type ModifyPermissionByIdInput struct {
 	Id     uint32
 	Fid    uint32
 	Name   string
+	Module string
+	Uri    string
 	Status uint8
 	Sort   uint32
 	Remark string
@@ -204,8 +209,9 @@ type GetPermissionAllOutput struct {
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-17 15:10:28
 type GetMenuAllOutput struct {
-	Id   uint32 `json:"id"`
-	Fid  uint32 `json:"fid"`
-	Name string `json:"name"`
-	Uri  string `json:"uri"`
+	Id       uint32              `json:"id"`
+	Fid      uint32              `json:"fid"`
+	Name     string              `json:"name"`
+	Uri      string              `json:"uri"`
+	Children []*GetMenuAllOutput `json:"children"`
 }

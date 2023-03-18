@@ -119,6 +119,7 @@ type AddPermissionReq struct {
 	Fid    uint32 `p:"fid" v:"required|min:0|integer#父类ID不能为空|ID要大于等于0|ID只为整数"`
 	Name   string `p:"name" v:"required#权限名称不能为空"`
 	Module string `p:"module"`
+	Uri    string `p:"uri"`
 	Type   uint8  `p:"type" v:"in:1,2#请输入正确的菜单分"`
 	Sort   uint32 `p:"sort" v:"min:0|integer#ID要大于等于0|ID只为整数"`
 	Remark string `p:"remark"`
@@ -145,6 +146,7 @@ type EditPermissionReq struct {
 	Fid    uint32 `p:"fid" v:"required|min:0|integer#父类ID不能为空|ID要大于等于0|ID只为整数"`
 	Name   string `p:"name" v:"required#权限名称不能为空"`
 	Module string `p:"module"`
+	Uri    string `p:"uri"`
 	Type   uint8  `p:"type" v:"in:1,2#请输入正确的菜单分"`
 	Status uint8  `p:"status" v:"required|in:0,1#权限状态不能为空|权限状态输入不正确"`
 	Sort   uint32 `p:"fid" v:"min:0|integer#ID要大于等于0|ID只为整数"`

@@ -420,6 +420,7 @@ func (c *cUcSystemMasterAuth) AddPermission(ctx context.Context, req *manage.Add
 		Fid:    req.Fid,
 		Name:   req.Name,
 		Module: req.Module,
+		Uri:    req.Uri,
 		Type:   req.Type,
 		Sort:   req.Sort,
 		Remark: req.Remark,
@@ -502,6 +503,8 @@ func (c *cUcSystemMasterAuth) EditPermission(ctx context.Context, req *manage.Ed
 		Id:     req.ID,
 		Fid:    req.Fid,
 		Name:   req.Name,
+		Module: req.Module,
+		Uri:    req.Uri,
 		Status: req.Status,
 		Sort:   req.Sort,
 		Remark: req.Remark,
@@ -532,7 +535,7 @@ func (c *cUcSystemMasterAuth) EditPermission(ctx context.Context, req *manage.Ed
 
 // ListPermission
 //
-// @Title 权限信息列表
+// @Title 查看权限信息列表
 // @Description 权限信息列表
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-11 10:35:29
@@ -571,6 +574,17 @@ func (c *cUcSystemMasterAuth) ListPermission(ctx context.Context, req *manage.Li
 	return
 }
 
+// EditPermissionRelation
+//
+// @Title 编辑权限信息列表
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-18 14:37:29
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
 func (c *cUcSystemMasterAuth) EditPermissionRelation(ctx context.Context, req *manage.EditPermissionRelationReq) (res *manage.EditPermissionRelationRes, err error) {
 	code, message, err := service.UcSystemMasterAuth().ModifyPermissionRelation(ctx, system_master.ModifyPermissionRelationInput{
 		PermissionIds: req.PermissionIds,
@@ -650,7 +664,7 @@ func (c *cUcSystemMasterAuth) ListPermissionRelation(ctx context.Context, req *m
 // @return res
 // @return err
 func (c *cUcSystemMasterAuth) ListMenu(ctx context.Context, req *manage.ListMenuReq) (res *manage.ListMenuRes, err error) {
-	code, message, output, err := service.UcSystemMasterAuth().GetMasterMenu(ctx, 2)
+	code, message, output, err := service.UcSystemMasterAuth().GetMasterMenu(ctx, gconv.Uint64(ctx.Value("master_id")))
 
 	var json = g.RequestFromCtx(ctx).Response
 	if err != nil {

@@ -591,11 +591,18 @@ func (s *sUcSystemMasterAuth) GetMasterMenu(ctx context.Context, accountId uint6
 		return code, message, output, err
 	}
 
+	// 遍历成树形
 	// 权限返回信息菜单列表
+	m := make(map[uint32]*system_master.GetMenuAllOutput)
 	permissionFunc := utility.ArraySetMapKey[uint32](permission)
 	for index := range menu {
-		if menu[index].Fid == 0 || permissionFunc(menu[index].Id) {
+		m[menu[index].Id] = menu[index]
+		if menu[index].Fid == 0 {
 			output = append(output, menu[index])
+		}
+		if permissionFunc(menu[index].Id) {
+			parent := m[menu[index].Fid]
+			parent.Children = append(parent.Children, m[menu[index].Id])
 		}
 	}
 
