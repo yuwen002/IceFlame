@@ -11,7 +11,7 @@
  Target Server Version : 50738
  File Encoding         : 65001
 
- Date: 18/03/2023 17:04:38
+ Date: 18/03/2023 18:20:14
 */
 
 SET NAMES utf8mb4;
@@ -35,7 +35,7 @@ CREATE TABLE `uc_system_permission`  (
   `created_at` datetime NULL DEFAULT NULL,
   `updated_at` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 31 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '后台系统权限模块列表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 30 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '后台系统权限模块列表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of uc_system_permission
@@ -64,11 +64,10 @@ INSERT INTO `uc_system_permission` VALUES (21, 1, '查看管理员角色绑定',
 INSERT INTO `uc_system_permission` VALUES (22, 1, '查看编辑权限信息', 'manage.UcSystemMasterAuth.GetEditRoleRelation', 'manage/master/auth/edit_permission', 2, 0, NULL, 1, '处理程序', '2023-03-18 14:26:20', '2023-03-18 14:26:20');
 INSERT INTO `uc_system_permission` VALUES (23, 1, '编辑管理员用户', 'manage.UcSystemMaster.GetEditSystemMaster', 'manage/master/auth/edit_permission', 2, 0, NULL, 1, '二级按钮', '2023-03-18 15:28:23', '2023-03-18 15:28:23');
 INSERT INTO `uc_system_permission` VALUES (24, 1, '访问类型列表', 'manage.UcSystemMasterVisitor.ListVisitCategory', 'manage/visitor_logs/show', 1, 0, NULL, 1, '二级按钮', '2023-03-18 16:42:25', '2023-03-18 16:42:25');
-INSERT INTO `uc_system_permission` VALUES (25, 1, '添加访问类型', 'manage.UcSystemMasterVisitor.AddVisitCategory', 'manage/visit_category/add', 1, 0, NULL, 1, '二级按钮', '2023-03-18 16:44:08', '2023-03-18 16:44:08');
+INSERT INTO `uc_system_permission` VALUES (25, 1, '添加访问类型', 'manage.UcSystemMasterVisitor.AddVisitCategory', 'manage/visit_category/add', 2, 0, NULL, 1, '二级按钮', '2023-03-18 16:44:08', '2023-03-18 16:44:08');
 INSERT INTO `uc_system_permission` VALUES (26, 1, '编辑访问类型', 'manage.UcSystemMasterVisitor.GetEditVisitCategory', 'manage/visit_category/edit', 2, 0, NULL, 1, '二级按钮', '2023-03-18 16:45:49', '2023-03-18 16:45:49');
 INSERT INTO `uc_system_permission` VALUES (27, 1, '编辑访问类型', 'manage.UcSystemMasterVisitor.EditVisitCategory', 'manage/visit_category/edit', 3, 0, NULL, 1, '处理程序', '2023-03-18 16:48:29', '2023-03-18 16:48:29');
-INSERT INTO `uc_system_permission` VALUES (28, 1, '访问类型列表', 'manage.UcSystemMasterVisitor.ListVisitCategory', 'manage/visit_category/show', 1, 0, NULL, 1, '二级菜单', '2023-03-18 17:00:04', '2023-03-18 17:00:04');
-INSERT INTO `uc_system_permission` VALUES (29, 1, '删除访问类型缓存', 'manage.UcSystemMasterVisitor.DeleteCacheVisitCategory', 'manage/visit_category/delete', 2, 0, NULL, 1, '二级按钮', '2023-03-18 17:01:07', '2023-03-18 17:01:07');
-INSERT INTO `uc_system_permission` VALUES (30, 1, '访问日志列表', 'manage.UcSystemMasterVisitor.ListVisitorLogs', 'manage/visitor_logs/show', 1, 0, NULL, 0, NULL, '2023-03-18 17:03:39', '2023-03-18 17:03:39');
+INSERT INTO `uc_system_permission` VALUES (28, 1, '删除访问类型缓存', 'manage.UcSystemMasterVisitor.DeleteCacheVisitCategory', 'manage/visit_category/delete', 2, 0, NULL, 1, '二级按钮', '2023-03-18 17:01:07', '2023-03-18 17:01:07');
+INSERT INTO `uc_system_permission` VALUES (29, 1, '访问日志列表', 'manage.UcSystemMasterVisitor.ListVisitorLogs', 'manage/visitor_logs/show', 1, 0, NULL, 0, NULL, '2023-03-18 17:03:39', '2023-03-18 17:03:39');
 
 SET FOREIGN_KEY_CHECKS = 1;

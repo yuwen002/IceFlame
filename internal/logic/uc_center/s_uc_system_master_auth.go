@@ -471,7 +471,7 @@ func (s *sUcSystemMasterAuth) ModifyPermissionRelation(ctx context.Context, in s
 func (s *sUcSystemMasterAuth) GetPermissionAll(ctx context.Context) (code int32, message string, output []*system_master.GetPermissionAllOutput, err error) {
 	code, message, err = utility.DBGetAllStructByWhere(dao.UcSystemPermission.Ctx(ctx), utility.DBGetAllByWhereInput{
 		Field: "id,fid,name,module,uri",
-		Where: "status=0 and type in (1,2)",
+		Where: "status=0 and type in (1,2) and supper_master = 1",
 		Order: "fid asc, sort desc",
 	}, &output)
 
@@ -583,6 +583,22 @@ func (s *sUcSystemMasterAuth) GetMasterMenu(ctx context.Context, accountId uint6
 	code, message, menu, err := s.GetMenuAll(ctx)
 	if code != 0 {
 		return code, message, output, err
+	}
+
+	userInfo := gconv.Map(ctx.Value("user_info"))
+	// 超级管理员直接返回所有菜单
+	if gconv.Uint8(userInfo["supper_master"]) == 1 {
+		m := make(map[uint32]*system_master.GetMenuAllOutput)
+		for index := range menu {
+			m[menu[index].Id] = menu[index]
+			if menu[index].Fid == 0 {
+				output = append(output, menu[index])
+			} else {
+				parent := m[menu[index].Fid]
+				parent.Children = append(parent.Children, m[menu[index].Id])
+			}
+		}
+		return 0, "查询成功", output, nil
 	}
 
 	// 查询已分配权限

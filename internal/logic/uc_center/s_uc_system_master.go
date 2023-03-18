@@ -376,11 +376,20 @@ func (s *sUcSystemMaster) LoginTelPassword(ctx context.Context, in system_master
 		return 1, "用户名密码错误", "", nil
 	}
 
+	// 查询登入信息
+	code, message, otherData, err := utility.DBGetOneMapByWhere(dao.UcSystemMaster.Ctx(ctx), utility.DBGetOneByWhereInput{
+		Where: "account_id=?",
+		Args:  data["id"],
+	})
+
 	// 生成token
 	token, err = utility.CreateToken(utility.CustomClaimsInput{
 		Id: gconv.Uint64(data["id"]),
 		UserInfo: g.Map{
-			"username": data["username"],
+			"username":      data["username"],
+			"name":          otherData["name"],
+			"tel":           otherData["tel"],
+			"supper_master": otherData["supper_master"],
 		},
 		Expire:  60 * 60 * 24,
 		Issuer:  "系统管理员:" + gconv.String(data["name"]),
@@ -446,11 +455,20 @@ func (s *sUcSystemMaster) LoginUsernamePassword(ctx context.Context, in system_m
 		return 1, "用户名密码错误", "", nil
 	}
 
+	// 查询登入信息
+	code, message, otherData, err := utility.DBGetOneMapByWhere(dao.UcSystemMaster.Ctx(ctx), utility.DBGetOneByWhereInput{
+		Where: "account_id=?",
+		Args:  data["id"],
+	})
+
 	// 生成token
 	token, err = utility.CreateToken(utility.CustomClaimsInput{
 		Id: gconv.Uint64(data["id"]),
 		UserInfo: g.Map{
-			"username": data["username"],
+			"username":      data["username"],
+			"name":          otherData["name"],
+			"tel":           otherData["tel"],
+			"supper_master": otherData["supper_master"],
 		},
 		Expire:  60 * 60 * 24,
 		Issuer:  "系统管理员:" + gconv.String(data["name"]),
