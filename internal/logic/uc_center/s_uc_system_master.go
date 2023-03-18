@@ -394,7 +394,7 @@ func (s *sUcSystemMaster) LoginTelPassword(ctx context.Context, in system_master
 	_, _, _ = s.DelLoginCount(ctx, id)
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(data["id"]),
 		VisitCategory: 1,
 		Description:   "电话、密码登入",
@@ -646,8 +646,33 @@ func (s *sUcSystemMaster) ListSystemMaster(ctx context.Context, in system_master
 	return 0, "查询成功", out, nil
 }
 
-func (s *sUcSystemMaster) GetSystemMasterByAccountId(ctx context.Context, account uint64) (code int32, message string, output, err error) {
-	return
+// GetSystemMasterByAccountId
+//
+// @Title
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-18 15:12:38
+// @receiver s
+// @param ctx
+// @param account
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sUcSystemMaster) GetSystemMasterByAccountId(ctx context.Context, account uint64) (code int32, message string, output *system_master.UcSystemMaster, err error) {
+	err = dao.UcSystemMaster.Ctx(ctx).With(system_master.UcSystemMaster{}.UcAccount).Where(
+		"supper_master = 0 and account_id == ?",
+		ctx.Value("master_id"),
+	).Scan(&output)
+	if err != nil {
+		return -1, "", nil, err
+	}
+
+	if output == nil {
+		return 1, "查询数据不存在", nil, nil
+	}
+
+	return 0, "查询数据成功", output, nil
 }
 
 // ModifySystemMasterByAccountId

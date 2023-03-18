@@ -85,6 +85,7 @@ var (
 						manage.UcSystemMaster.CreateSystemMaster,
 						manage.UcSystemMaster.EditPassword,
 						manage.UcSystemMaster.ListSystemMaster,
+						manage.UcSystemMaster.GetEditSystemMaster,
 						manage.UcSystemMaster.EditSystemMaster,
 						manage.UcSystemMaster.ResetPassword,
 						manage.UcSystemMaster.EditStatus,

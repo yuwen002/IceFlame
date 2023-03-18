@@ -12,6 +12,13 @@ type AddVisitCategoryReq struct {
 }
 type AddVisitCategoryRes struct{}
 
+type GetEditVisitCategoryReq struct {
+	g.Meta `path:"/visit_category/edit" tags:"编辑访问类型" method:"get" summary:"编辑访问类型"`
+	Id     uint16 `p:"id" v:"required|min:1|integer#ID不能为空|ID要大于等于1|ID只为正整数"`
+	Title  string `p:"title" v:"required#访问类型标题不能为空"`
+}
+type GetEditVisitCategoryRes struct{}
+
 // EditVisitCategoryReq
 // @Description: 编辑访问类型
 // @Author liuxingyu <yuwen002@163.com>

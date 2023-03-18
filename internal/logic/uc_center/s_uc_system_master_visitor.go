@@ -69,6 +69,24 @@ func (s *sUcSystemMasterVisitor) CreateVisitCategory(ctx context.Context, in sys
 	return 0, "数据写入成功", nil
 }
 
+// GetVisitCategoryById
+//
+// @Title 查看访问类型分类
+// @Description 查看访问类型分类
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-18 15:44:49
+// @receiver s
+// @param ctx
+// @param id
+// @return code
+// @return message
+// @return out
+// @return err
+func (s *sUcSystemMasterVisitor) GetVisitCategoryById(ctx context.Context, id uint16) (code int32, message string, out *system_master.GetVisitCategoryByIdInput, err error) {
+	code, message, err = utility.DBGetStructById(dao.UcSystemMasterVisitCategory.Ctx(ctx), utility.DBGetByIdInput{Where: id}, &out)
+	return code, message, out, err
+}
+
 // ModifyVisitCategoryById
 //
 // @Title 修改访问类型分类

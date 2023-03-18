@@ -8,6 +8,15 @@ type CreateVisitCategoryInput struct {
 	Title string
 }
 
+// GetVisitCategoryByIdInput
+// @Description: 按ID显示访问标题
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-18 15:39:24
+type GetVisitCategoryByIdInput struct {
+	Id    uint16
+	Title string
+}
+
 // ModifyVisitCategoryByIdInput
 // @Description: 按ID修改访问标题
 // @Author liuxingyu <yuwen002@163.com>

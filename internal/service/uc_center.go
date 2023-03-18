@@ -11,17 +11,6 @@ import (
 )
 
 type (
-	IUcSystemMasterVisitor interface {
-		CreateVisitCategory(ctx context.Context, in system_master.CreateVisitCategoryInput) (code int32, message string, err error)
-		ModifyVisitCategoryById(ctx context.Context, in system_master.ModifyVisitCategoryByIdInput) (code int32, message string, err error)
-		ListVisitCategory(ctx context.Context, in system_master.ListVisitCategoryInput) (code int32, message string, output []*system_master.ListVisitCategoryOutput, err error)
-		GetRCacheVisitCategory(ctx context.Context) (code int32, message string, output map[string]interface{}, err error)
-		GetRCacheVisitCategoryById(id string) (code int32, message string, output map[string]interface{}, err error)
-		DelRCacheVisitCategory() (code int32, message string, err error)
-		DelRCacheVisitCategoryById(id string) (code int32, message string, err error)
-		CreateVisitorLogs(ctx context.Context, in system_master.CreateVisitorLogsInput) (code int32, message string, err error)
-		ListVisitorLogs(ctx context.Context, in system_master.ListVisitorLogsInput) (code int32, message string, output []*system_master.ListVisitorLogsOutput, err error)
-	}
 	IUcSystemMaster interface {
 		ExistsUsername(ctx context.Context, username string) (code int32, message string, err error)
 		ExistsTel(ctx context.Context, tel string) (code int32, message string, err error)
@@ -37,7 +26,7 @@ type (
 		CreateSystemMaster(ctx context.Context, in system_master.CreateSystemMasterInput) (code int32, message string, err error)
 		ModifyPasswordSelfById(ctx context.Context, in system_master.ModifyPasswordInput) (code int32, message string, err error)
 		ListSystemMaster(ctx context.Context, in system_master.ListSystemMasterInput) (code int32, message string, out []system_master.ListSystemMasterOutput, err error)
-		GetSystemMasterByAccountId(ctx context.Context, account uint64) (code int32, message string, output, err error)
+		GetSystemMasterByAccountId(ctx context.Context, account uint64) (code int32, message string, output *system_master.UcSystemMaster, err error)
 		ModifySystemMasterByAccountId(ctx context.Context, in system_master.ModifySystemMasterByAccountIdInput) (code int32, message string, err error)
 		ResetPasswordByAccountId(ctx context.Context, in system_master.ResetPasswordByAccountIdInput) (code int32, message string, err error)
 		ModifyStatusByAccountId(ctx context.Context, in system_master.ModifyStatusByAccountIdInput) (code int32, message string, err error)
@@ -63,6 +52,18 @@ type (
 		GetMenuAll(ctx context.Context) (code int32, message string, output []*system_master.GetMenuAllOutput, err error)
 		GetMasterMenu(ctx context.Context, accountId uint64) (code int32, message string, output []*system_master.GetMenuAllOutput, err error)
 		GetRolePermissionByAccountId(ctx context.Context, accountId uint64) (code int32, message string, output []uint32, err error)
+	}
+	IUcSystemMasterVisitor interface {
+		CreateVisitCategory(ctx context.Context, in system_master.CreateVisitCategoryInput) (code int32, message string, err error)
+		GetVisitCategoryById(ctx context.Context, id uint16) (code int32, message string, out *system_master.GetVisitCategoryByIdInput, err error)
+		ModifyVisitCategoryById(ctx context.Context, in system_master.ModifyVisitCategoryByIdInput) (code int32, message string, err error)
+		ListVisitCategory(ctx context.Context, in system_master.ListVisitCategoryInput) (code int32, message string, output []*system_master.ListVisitCategoryOutput, err error)
+		GetRCacheVisitCategory(ctx context.Context) (code int32, message string, output map[string]interface{}, err error)
+		GetRCacheVisitCategoryById(id string) (code int32, message string, output map[string]interface{}, err error)
+		DelRCacheVisitCategory() (code int32, message string, err error)
+		DelRCacheVisitCategoryById(id string) (code int32, message string, err error)
+		CreateVisitorLogs(ctx context.Context, in system_master.CreateVisitorLogsInput) (code int32, message string, err error)
+		ListVisitorLogs(ctx context.Context, in system_master.ListVisitorLogsInput) (code int32, message string, output []*system_master.ListVisitorLogsOutput, err error)
 	}
 )
 

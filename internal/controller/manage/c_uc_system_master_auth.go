@@ -33,7 +33,7 @@ func (c *cUcSystemMasterAuth) AddRole(ctx context.Context, req *manage.AddRoleRe
 	})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 4,
 		Description:   "添加管理员角色信息",
@@ -67,7 +67,7 @@ func (c *cUcSystemMasterAuth) AddRole(ctx context.Context, req *manage.AddRoleRe
 // @return res
 // @return err
 func (c *cUcSystemMasterAuth) GetEditRole(ctx context.Context, req *manage.GetEditRoleReq) (res *manage.GetEditRoleRes, err error) {
-	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 4,
 		Description:   "查看编辑管理员角色信息",
@@ -110,7 +110,7 @@ func (c *cUcSystemMasterAuth) EditRole(ctx context.Context, req *manage.EditRole
 	})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 4,
 		Description:   "提交编辑管理员角色信息",
@@ -150,7 +150,7 @@ func (c *cUcSystemMasterAuth) ListRole(ctx context.Context, req *manage.ListRole
 	})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 4,
 		Description:   "查看管理员角色信息列表",
@@ -178,7 +178,7 @@ func (c *cUcSystemMasterAuth) ListRole(ctx context.Context, req *manage.ListRole
 // GetListRole
 //
 // @Title 获取所有管理员角色信息
-// @Description 获取所有管理员角色信息
+// @Description 获取所有管理员角色信息 select借口
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-15 18:20:48
 // @receiver c
@@ -226,7 +226,7 @@ func (c *cUcSystemMasterAuth) AddRoleRelation(ctx context.Context, req *manage.A
 	})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 4,
 		Description:   "添加管理员角色信息绑定",
@@ -261,7 +261,7 @@ func (c *cUcSystemMasterAuth) AddRoleRelation(ctx context.Context, req *manage.A
 // @return err
 func (c *cUcSystemMasterAuth) GetEditRoleRelation(ctx context.Context, req *manage.GetEditRoleRelationReq) (res *manage.GetEditRoleRelationRes, err error) {
 	// 访问日志写入
-	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 4,
 		Description:   "查看编辑管理员角色信息绑定",
@@ -304,7 +304,7 @@ func (c *cUcSystemMasterAuth) EditRoleRelation(ctx context.Context, req *manage.
 	})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 4,
 		Description:   "提交编辑管理员角色信息绑定",
@@ -344,7 +344,7 @@ func (c *cUcSystemMasterAuth) ListRoleRelation(ctx context.Context, req *manage.
 	})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 4,
 		Description:   "查看管理员角色信息绑定列表",
@@ -382,7 +382,7 @@ func (c *cUcSystemMasterAuth) DeleteRoleRelation(ctx context.Context, req *manag
 	code, message, err := service.UcSystemMasterAuth().DeleteRoleRelationById(ctx, system_master.DeleteRoleRelationInput{Id: req.Id})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 4,
 		Description:   "删除管理员角色信息绑定",
@@ -427,7 +427,7 @@ func (c *cUcSystemMasterAuth) AddPermission(ctx context.Context, req *manage.Add
 	})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 4,
 		Description:   "添加菜单信息",
@@ -462,7 +462,7 @@ func (c *cUcSystemMasterAuth) AddPermission(ctx context.Context, req *manage.Add
 // @return err
 func (c *cUcSystemMasterAuth) GetEditPermission(ctx context.Context, req *manage.GetEditPermissionReq) (res *manage.GetEditPermissionRes, err error) {
 	// 访问日志写入
-	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 4,
 		Description:   "查看编辑菜单信息",
@@ -511,7 +511,7 @@ func (c *cUcSystemMasterAuth) EditPermission(ctx context.Context, req *manage.Ed
 	})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 4,
 		Description:   "提交编辑菜单信息",
@@ -551,7 +551,7 @@ func (c *cUcSystemMasterAuth) ListPermission(ctx context.Context, req *manage.Li
 	})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 4,
 		Description:   "编辑菜单信息",
@@ -592,7 +592,7 @@ func (c *cUcSystemMasterAuth) EditPermissionRelation(ctx context.Context, req *m
 	})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 4,
 		Description:   "编辑分配权限信息",
@@ -629,7 +629,7 @@ func (c *cUcSystemMasterAuth) ListPermissionRelation(ctx context.Context, req *m
 	code, message, output, err := service.UcSystemMasterAuth().GetPermissionByRoleId(ctx, req.RoleId)
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 4,
 		Description:   "查看分配权限信息",

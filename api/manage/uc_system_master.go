@@ -75,6 +75,16 @@ type ListSystemMasterReq struct {
 }
 type ListSystemMasterRes struct{}
 
+// GetEditSystemMasterReq
+// @Description: 编辑管理员列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-18 15:11:17
+type GetEditSystemMasterReq struct {
+	g.Meta    `path:"/master/edit_system_master" tags:"管理员用户列表" method:"get" summary:"管理员用户列表"`
+	AccountId uint64 `p:"account_id" v:"required|min:1|integer#ID不能为空|ID要大于等于1|ID只为正整数"`
+}
+type GetEditSystemMasterRes struct{}
+
 // EditSystemMasterReq
 // @Description:编辑管理员列表
 // @Author liuxingyu <yuwen002@163.com>
@@ -111,8 +121,12 @@ type EditStatusSystemMasterReq struct {
 }
 type EditStatusSystemMasterRes struct{}
 
+// UnlockSystemMasterReq
+// @Description: 解锁管理员
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-18 15:29:57
 type UnlockSystemMasterReq struct {
-	g.Meta    `path:"/master/unlock_system_master" tags:"重置管理员密码" method:"put" summary:"重置管理员密码"`
+	g.Meta    `path:"/master/unlock_system_master" tags:"解锁管理员" method:"put" summary:"解锁管理员"`
 	AccountId uint64 `p:"account_id" v:"required|min:1|integer#ID不能为空|ID要大于等于1|ID只为正整数"`
 }
 type UnlockSystemMasterRes struct{}

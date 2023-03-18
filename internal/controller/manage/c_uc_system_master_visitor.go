@@ -29,7 +29,7 @@ func (c *cUcSystemMasterVisitor) AddVisitCategory(ctx context.Context, req *mana
 	code, message, err := service.UcSystemMasterVisitor().CreateVisitCategory(ctx, system_master.CreateVisitCategoryInput{Title: req.Title})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 3,
 		Description:   "新建访问日志分类",
@@ -51,6 +51,43 @@ func (c *cUcSystemMasterVisitor) AddVisitCategory(ctx context.Context, req *mana
 	return
 }
 
+// GetEditVisitCategory
+//
+// @Title 查看编辑访问日志分类
+// @Description 查看编辑访问日志分类
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-18 15:46:49
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMasterVisitor) GetEditVisitCategory(ctx context.Context, req *manage.GetEditVisitCategoryReq) (res *manage.GetEditVisitCategoryRes, err error) {
+	// 访问日志写入
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 3,
+		Description:   "查看编辑访问日志分类",
+	})
+
+	code, message, out, err := service.UcSystemMasterVisitor().GetVisitCategoryById(ctx, req.Id)
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    g.Map{"info": out},
+	})
+	return
+}
+
 // EditVisitCategory
 //
 // @Title 编辑访问类型
@@ -69,10 +106,10 @@ func (c *cUcSystemMasterVisitor) EditVisitCategory(ctx context.Context, req *man
 	})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 3,
-		Description:   "编辑访问日志分类",
+		Description:   "提交访问日志分类",
 	})
 
 	var json = g.RequestFromCtx(ctx).Response
@@ -109,7 +146,7 @@ func (c *cUcSystemMasterVisitor) ListVisitCategory(ctx context.Context, req *man
 	})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 3,
 		Description:   "查看访问日志分类列表",
@@ -147,7 +184,7 @@ func (c *cUcSystemMasterVisitor) DeleteCacheVisitCategory(ctx context.Context, r
 	code, message, err := service.UcSystemMasterVisitor().DelRCacheVisitCategory()
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 3,
 		Description:   "清除访问日志分类缓存",
@@ -189,7 +226,7 @@ func (c *cUcSystemMasterVisitor) ListVisitorLogs(ctx context.Context, req *manag
 	})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 3,
 		Description:   "查看访问日志列表",

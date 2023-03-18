@@ -137,7 +137,7 @@ func (c *cUcSystemMaster) CreateSystemMaster(ctx context.Context, req *manage.Cr
 	})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 2,
 		Description:   "新建管理员用户",
@@ -177,7 +177,7 @@ func (c *cUcSystemMaster) EditPassword(ctx context.Context, req *manage.EditPass
 	})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 2,
 		Description:   "管理员修改自己密码",
@@ -226,7 +226,7 @@ func (c *cUcSystemMaster) ListSystemMaster(ctx context.Context, req *manage.List
 	})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 2,
 		Description:   "查看管理员列表",
@@ -244,6 +244,43 @@ func (c *cUcSystemMaster) ListSystemMaster(ctx context.Context, req *manage.List
 		"code":    code,
 		"message": message,
 		"data":    g.Map{"list": out},
+	})
+	return
+}
+
+// GetEditSystemMaster
+//
+// @Title 查看编辑管理员信息
+// @Description 查看编辑管理员信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-18 15:31:18
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMaster) GetEditSystemMaster(ctx context.Context, req *manage.GetEditSystemMasterReq) (res *manage.GetEditSystemMasterRes, err error) {
+	// 访问日志写入
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 2,
+		Description:   "查看编辑管理员信息",
+	})
+
+	code, message, out, err := service.UcSystemMaster().GetSystemMasterByAccountId(ctx, req.AccountId)
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    g.Map{"info": out},
 	})
 	return
 }
@@ -267,10 +304,10 @@ func (c *cUcSystemMaster) EditSystemMaster(ctx context.Context, req *manage.Edit
 	})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 2,
-		Description:   "编辑管理员信息",
+		Description:   "提交编辑管理员信息",
 	})
 
 	var json = g.RequestFromCtx(ctx).Response
@@ -307,7 +344,7 @@ func (c *cUcSystemMaster) ResetPassword(ctx context.Context, req *manage.ResetPa
 	})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 2,
 		Description:   "重置管理员密码",
@@ -347,7 +384,7 @@ func (c *cUcSystemMaster) EditStatus(ctx context.Context, req *manage.EditStatus
 	})
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 2,
 		Description:   "重置管理员密码",
@@ -384,7 +421,7 @@ func (c *cUcSystemMaster) UnlockSystemMaster(ctx context.Context, req *manage.Un
 	code, message, err := service.UcSystemMaster().DelLoginCount(ctx, gconv.String(req.AccountId))
 
 	// 访问日志写入
-	service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 2,
 		Description:   "解锁管理员登入限制",
