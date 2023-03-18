@@ -93,6 +93,7 @@ var (
 
 						// 操作日志
 						manage.UcSystemMasterVisitor.AddVisitCategory,
+						manage.UcSystemMasterVisitor.GetEditVisitCategory,
 						manage.UcSystemMasterVisitor.EditVisitCategory,
 						manage.UcSystemMasterVisitor.ListVisitCategory,
 						manage.UcSystemMasterVisitor.DeleteCacheVisitCategory,

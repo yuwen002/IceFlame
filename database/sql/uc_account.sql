@@ -11,7 +11,7 @@
  Target Server Version : 50738
  File Encoding         : 65001
 
- Date: 25/02/2023 16:39:35
+ Date: 18/03/2023 16:26:52
 */
 
 SET NAMES utf8mb4;
@@ -33,6 +33,13 @@ CREATE TABLE `uc_account`  (
   `updated_at` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `identity_card_id`(`identity_card_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户中心' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户中心' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of uc_account
+-- ----------------------------
+INSERT INTO `uc_account` VALUES (1, 0, 'SA_15566036902', '$2a$10$CCHP.HVTh.MK.drUV4d3hOOIzfuRYms9QG/lEAruVhxJVSn9WF/Le', 'SA_15566036902', 0, 1, '2023-02-22 23:36:37', '2023-02-28 16:27:47');
+INSERT INTO `uc_account` VALUES (2, 0, 'SA_yuwen002', '$2a$10$gWCqZgx6sEm4hHJEWQkaEuj3ukX3OFlpv1ZspqjWH9cQhDYTFT6YK', 'SA_15566006666', 0, 1, '2023-02-24 11:31:00', '2023-02-28 15:42:56');
+INSERT INTO `uc_account` VALUES (3, 0, 'SA_yuwen003', '$2a$10$UwsnYTpFIxPHPWm7ufGQr..kw0H7Q7BN3cPFb4wml./AF48fbJJ1K', 'SA_15566036904', 0, 1, '2023-02-25 23:48:15', '2023-02-25 23:48:15');
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -11,7 +11,7 @@
  Target Server Version : 50738
  File Encoding         : 65001
 
- Date: 25/02/2023 17:47:16
+ Date: 18/03/2023 16:28:23
 */
 
 SET NAMES utf8mb4;
@@ -30,6 +30,13 @@ CREATE TABLE `uc_system_master`  (
   `created_at` datetime NULL DEFAULT NULL,
   `updated_at` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理员用户表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理员用户表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of uc_system_master
+-- ----------------------------
+INSERT INTO `uc_system_master` VALUES (1, 1, '流星雨', '15566036902', 1, '2023-02-22 23:36:37', '2023-02-22 23:36:37');
+INSERT INTO `uc_system_master` VALUES (2, 2, '测试修改33', '15566006661', 0, '2023-02-24 11:31:00', '2023-02-28 13:42:11');
+INSERT INTO `uc_system_master` VALUES (3, 3, '流星雨11', '15566036904', 0, '2023-02-25 23:48:15', '2023-02-25 23:48:15');
 
 SET FOREIGN_KEY_CHECKS = 1;

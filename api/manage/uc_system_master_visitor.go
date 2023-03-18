@@ -12,10 +12,13 @@ type AddVisitCategoryReq struct {
 }
 type AddVisitCategoryRes struct{}
 
+// GetEditVisitCategoryReq
+// @Description: 编辑访问类型
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-18 16:36:00
 type GetEditVisitCategoryReq struct {
 	g.Meta `path:"/visit_category/edit" tags:"编辑访问类型" method:"get" summary:"编辑访问类型"`
 	Id     uint16 `p:"id" v:"required|min:1|integer#ID不能为空|ID要大于等于1|ID只为正整数"`
-	Title  string `p:"title" v:"required#访问类型标题不能为空"`
 }
 type GetEditVisitCategoryRes struct{}
 
@@ -35,7 +38,7 @@ type EditVisitCategoryRes struct{}
 // @Author liuxingyu <yuwen002@163.com>
 // @Data 2023-03-03 20:51:34
 type DeleteVisitCategoryReq struct {
-	g.Meta `path:"/visit_category/delete" tags:"编辑访问类型" method:"delete" summary:"编辑访问类型"`
+	g.Meta `path:"/visit_category/delete" tags:"删除访问类型缓存" method:"delete" summary:"编辑访问类型"`
 }
 type DeleteVisitCategoryRes struct{}
 

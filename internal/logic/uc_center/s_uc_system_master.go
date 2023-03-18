@@ -661,7 +661,7 @@ func (s *sUcSystemMaster) ListSystemMaster(ctx context.Context, in system_master
 // @return err
 func (s *sUcSystemMaster) GetSystemMasterByAccountId(ctx context.Context, account uint64) (code int32, message string, output *system_master.UcSystemMaster, err error) {
 	err = dao.UcSystemMaster.Ctx(ctx).With(system_master.UcSystemMaster{}.UcAccount).Where(
-		"supper_master = 0 and account_id == ?",
+		"supper_master = 0 and account_id = ?",
 		ctx.Value("master_id"),
 	).Scan(&output)
 	if err != nil {
