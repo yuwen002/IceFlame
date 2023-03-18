@@ -2,12 +2,13 @@ package middleware
 
 import (
 	"context"
-	"github.com/gogf/gf/v2/util/gconv"
 	"ice_flame/internal/consts"
 	"ice_flame/internal/service"
 	"ice_flame/utility"
 	"regexp"
 	"strings"
+
+	"github.com/gogf/gf/v2/util/gconv"
 
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
@@ -103,6 +104,11 @@ func (s *sAuthMiddleware) MiddlewareAuthMaster(r *ghttp.Request) {
 // @receiver s
 // @param r
 func (s *sAuthMiddleware) MiddlewareVerifyPermission(r *ghttp.Request) {
+	userInfo := r.GetCtxVar("user_info")
+	if gconv.Uint8(userInfo.Map()["supper_master"]) == 1 {
+		r.Middleware.Next()
+	}
+
 	// 查询管理员所分配的角色关联的权限
 	code, message, rolePermission, err := service.UcSystemMasterAuth().GetRolePermissionByAccountId(s.ctx, gconv.Uint64(r.GetCtxVar("master_id")))
 	if err != nil {
