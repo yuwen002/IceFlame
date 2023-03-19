@@ -771,3 +771,22 @@ func (s *sUcSystemMasterAuth) ListPermissionExclude(ctx context.Context, in syst
 func (s *sUcSystemMasterAuth) DeletePermissionExcludeById(ctx context.Context, id uint16) (code int32, message string, err error) {
 	return utility.DBDelById(dao.UcSystemPermissionExclude.Ctx(ctx), utility.DBDelByIdInput{Where: id})
 }
+
+// GetPermissionExcludeAll
+//
+// @Title 所有权限排除模块
+// @Description 所有权限排除模块
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-20 00:03:19
+// @receiver s
+// @param ctx
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sUcSystemMasterAuth) GetPermissionExcludeAll(ctx context.Context) (code int32, message string, output []*system_master.ListPermissionExcludeOutput, err error) {
+	code, message, err = utility.DBGetAllStructByWhere(dao.UcSystemPermissionExclude.Ctx(ctx), utility.DBGetAllByWhereInput{
+		Order: "id asc",
+	}, &output)
+	return code, message, output, err
+}

@@ -109,6 +109,33 @@ func (s *sAuthMiddleware) MiddlewareVerifyPermission(r *ghttp.Request) {
 		r.Middleware.Next()
 	}
 
+	// 访问模块
+	module := s.concatModule(s.extractHandler(r.GetServeHandler().Handler.Name))
+	// 排除权限列表
+	code, message, exclude, err := service.UcSystemMasterAuth().GetPermissionExcludeAll(s.ctx)
+	if err != nil {
+		r.Response.WriteJsonExit(g.Map{
+			"code":    -1,
+			"message": err.Error(),
+		})
+	}
+
+	if code == 0 {
+		// 查找排除模块
+		existsPermissionExclude := false
+		for index := range exclude {
+			if exclude[index].Module == module {
+				existsPermissionExclude = true
+				break
+			}
+		}
+
+		// 排除权限判断，直接跳转
+		if existsPermissionExclude {
+			r.Middleware.Next()
+		}
+	}
+
 	// 查询管理员所分配的角色关联的权限
 	code, message, rolePermission, err := service.UcSystemMasterAuth().GetRolePermissionByAccountId(s.ctx, gconv.Uint64(r.GetCtxVar("master_id")))
 	if err != nil {
@@ -142,7 +169,6 @@ func (s *sAuthMiddleware) MiddlewareVerifyPermission(r *ghttp.Request) {
 
 	// 获取访问模块信息，controller调用的方法
 	var permissionId uint32
-	module := s.concatModule(s.extractHandler(r.GetServeHandler().Handler.Name))
 	for index := range permission {
 		if permission[index].Module == module {
 			// 匹配权限ID

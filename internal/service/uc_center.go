@@ -57,6 +57,7 @@ type (
 		ModifyPermissionExcludeById(ctx context.Context, in system_master.ModifyPermissionExcludeByIdInput) (code int32, message string, err error)
 		ListPermissionExclude(ctx context.Context, in system_master.ListPermissionExcludeInput) (code int32, message string, output []*system_master.ListPermissionExcludeOutput, err error)
 		DeletePermissionExcludeById(ctx context.Context, id uint16) (code int32, message string, err error)
+		GetPermissionExcludeAll(ctx context.Context) (code int32, message string, output []*system_master.ListPermissionExcludeOutput, err error)
 	}
 	IUcSystemMasterVisitor interface {
 		CreateVisitCategory(ctx context.Context, in system_master.CreateVisitCategoryInput) (code int32, message string, err error)
@@ -73,9 +74,9 @@ type (
 )
 
 var (
-	localUcSystemMasterVisitor IUcSystemMasterVisitor
 	localUcSystemMaster        IUcSystemMaster
 	localUcSystemMasterAuth    IUcSystemMasterAuth
+	localUcSystemMasterVisitor IUcSystemMasterVisitor
 )
 
 func UcSystemMaster() IUcSystemMaster {
