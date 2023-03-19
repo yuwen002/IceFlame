@@ -142,7 +142,7 @@ type GetEditPermissionRes struct{}
 // @Date 2023-03-10 14:22:05
 type EditPermissionReq struct {
 	g.Meta `path:"/master/auth/edit_permission" tags:"修改权限" method:"put" summary:"修改权限"`
-	ID     uint32 `p:"id" v:"required|min:0|integer#ID不能为空|ID要大于等于0|ID只为整数"`
+	Id     uint32 `p:"id" v:"required|min:0|integer#ID不能为空|ID要大于等于0|ID只为整数"`
 	Fid    uint32 `p:"fid" v:"required|min:0|integer#父类ID不能为空|ID要大于等于0|ID只为整数"`
 	Name   string `p:"name" v:"required#权限名称不能为空"`
 	Module string `p:"module"`
@@ -194,3 +194,61 @@ type ListMenuReq struct {
 	g.Meta `path:"/show_menu" tags:"权限信息修改" method:"get" summary:"权限信息修改"`
 }
 type ListMenuRes struct{}
+
+// AddPermissionExcludeReq
+// @Description: 添加排除权限
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-19 00:16:12
+type AddPermissionExcludeReq struct {
+	g.Meta `path:"/master/auth/add_permission_exclude" tags:"添加排除权限" method:"post" summary:"添加排除权限"`
+	Name   string `p:"name" v:"required#菜单名称不能为空"`
+	Module string `p:"module"`
+	Uri    string `p:"uri"`
+	Remark string `p:"remark"`
+}
+type AddPermissionExcludeRes struct{}
+
+// GetEditPermissionExcludeReq
+// @Description: 编辑排除权限
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-18 23:38:08
+type GetEditPermissionExcludeReq struct {
+	g.Meta `path:"/master/auth/edit_permission_exclude" tags:"编辑排除权限" method:"get" summary:"编辑排除权限"`
+	Id     uint16 `p:"id" v:"required|min:0|integer#ID不能为空|ID要大于等于0|ID只为整数"`
+}
+type GetEditPermissionExcludeRes struct{}
+
+// EditPermissionExcludeReq
+// @Description: 编辑排除权限
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-18 23:38:47
+type EditPermissionExcludeReq struct {
+	g.Meta `path:"/master/auth/edit_permission_exclude" tags:"编辑排除权限" method:"put" summary:"编辑排除权限"`
+	Id     uint16 `p:"id" v:"required|min:0|integer#ID不能为空|ID要大于等于0|ID只为整数"`
+	Name   string `p:"name" v:"required#权限名称不能为空"`
+	Module string `p:"module"`
+	Uri    string `p:"uri"`
+	Remark string `p:"remark"`
+}
+type EditPermissionExcludeRes struct{}
+
+// ListPermissionExcludeReq
+// @Description: 排除权限列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-18 23:53:05
+type ListPermissionExcludeReq struct {
+	g.Meta `path:"/master/auth/show_permission_exclude" tags:"排除权限列表" method:"get" summary:"排除权限列表"`
+	Page   int `p:"page" v:"min:1|integer#页码要大于等于1|页码只为正整数"`
+	Size   int `p:"size" v:"min:1|integer#显示条数要大于等于1|显示条数只为正整数"`
+}
+type ListPermissionExcludeRes struct{}
+
+// DeletePermissionExcludeReq
+// @Description: 删除排除权限
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-18 23:58:02
+type DeletePermissionExcludeReq struct {
+	g.Meta `path:"/master/auth/delete_permission_exclude" tags:"删除排除权限" method:"delete" summary:"删除排除权限"`
+	Id     uint16 `p:"id" v:"required|min:0|integer#ID不能为空|ID要大于等于0|ID只为整数"`
+}
+type DeletePermissionExcludeRes struct{}

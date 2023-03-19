@@ -677,3 +677,97 @@ func (s *sUcSystemMasterAuth) GetRolePermissionByAccountId(ctx context.Context, 
 
 	return code, "查询成功", permissionIds, nil
 }
+
+// CreatePermissionExclude
+//
+// @Title 新建权限权限排除模块
+// @Description 新建权限权限排除模块
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-18 22:49:52
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sUcSystemMasterAuth) CreatePermissionExclude(ctx context.Context, in system_master.CreatePermissionExcludeInput) (code int32, message string, err error) {
+	return utility.DBInsert(dao.UcSystemPermissionExclude.Ctx(ctx), utility.DBInsertInput{Data: in})
+}
+
+// GetPermissionExcludeById
+//
+// @Title 按ID显示查询权限排除模块
+// @Description 按ID显示查询权限排除模块
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-18 22:58:31
+// @receiver s
+// @param ctx
+// @param id
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sUcSystemMasterAuth) GetPermissionExcludeById(ctx context.Context, id uint16) (code int32, message string, output *system_master.GetPermissionExcludeByIdOutput, err error) {
+	code, message, err = utility.DBGetStructById(dao.UcSystemPermissionExclude.Ctx(ctx), utility.DBGetByIdInput{Where: id}, &output)
+	return code, message, output, err
+}
+
+// ModifyPermissionExcludeById
+//
+// @Title 按ID修改权限排除模块
+// @Description 按ID修改权限排除模块
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-18 23:02:47
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sUcSystemMasterAuth) ModifyPermissionExcludeById(ctx context.Context, in system_master.ModifyPermissionExcludeByIdInput) (code int32, message string, err error) {
+	return utility.DBModifyById(dao.UcSystemPermissionExclude.Ctx(ctx), utility.DBModifyByIdInput{
+		Data:  in,
+		Where: in.Id,
+	})
+}
+
+// ListPermissionExclude
+//
+// @Title 权限排除模块列表
+// @Description 权限排除模块列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-18 23:09:56
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sUcSystemMasterAuth) ListPermissionExclude(ctx context.Context, in system_master.ListPermissionExcludeInput) (code int32, message string, output []*system_master.ListPermissionExcludeOutput, err error) {
+	code, message, err = utility.DBGetAllStructByWhere(dao.UcSystemPermissionExclude.Ctx(ctx), utility.DBGetAllByWhereInput{
+		Order:    "id asc",
+		PageType: 1,
+		DBPagination: utility.DBPagination{
+			Page: in.Page,
+			Size: in.Size,
+		},
+	}, &output)
+	return code, message, output, err
+}
+
+// DeletePermissionExcludeById
+//
+// @Title 按ID删除权限排除模块
+// @Description 按ID删除权限排除模块
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-18 23:13:37
+// @receiver s
+// @param ctx
+// @param id
+// @return code
+// @return message
+// @return err
+func (s *sUcSystemMasterAuth) DeletePermissionExcludeById(ctx context.Context, id uint16) (code int32, message string, err error) {
+	return utility.DBDelById(dao.UcSystemPermissionExclude.Ctx(ctx), utility.DBDelByIdInput{Where: id})
+}

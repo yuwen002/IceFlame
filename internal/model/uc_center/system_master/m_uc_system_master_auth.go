@@ -95,6 +95,10 @@ type ListRoleRelationInput struct {
 	Size int
 }
 
+// ListRoleRelationOutput
+// @Description: 管理员与用户角色绑定信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-18 22:43:12
 type ListRoleRelationOutput struct {
 	Id        uint32      `json:"id"`
 	AccountId uint64      `json:"account_id"`
@@ -214,4 +218,62 @@ type GetMenuAllOutput struct {
 	Name     string              `json:"name"`
 	Uri      string              `json:"uri"`
 	Children []*GetMenuAllOutput `json:"children"`
+}
+
+// CreatePermissionExcludeInput
+// @Description: 权限排除内容
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-18 22:45:59
+type CreatePermissionExcludeInput struct {
+	Name   string
+	Module string
+	Uri    string
+	Remark string
+}
+
+// GetPermissionExcludeByIdOutput
+// @Description: 按ID显示查询权限排除模块
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-18 23:01:07
+type GetPermissionExcludeByIdOutput struct {
+	Id     uint16 `json:"id"`
+	Name   string `json:"name"`
+	Module string `json:"module"`
+	Uri    string `json:"uri"`
+	Remark string `json:"remark"`
+}
+
+// ModifyPermissionExcludeByIdInput
+// @Description: 按ID修改权限排除模块
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-18 23:02:10
+type ModifyPermissionExcludeByIdInput struct {
+	Id     uint16 `json:"id"`
+	Name   string `json:"name"`
+	Module string `json:"module"`
+	Uri    string `json:"uri"`
+	Remark string `json:"remark"`
+}
+
+// ListPermissionExcludeInput
+// @Description: 权限排除模块列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-18 23:06:51
+type ListPermissionExcludeInput struct {
+	Page int
+	Size int
+}
+
+// ListPermissionExcludeOutput
+// @Description: 权限排除模块列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-18 23:08:40
+type ListPermissionExcludeOutput struct {
+	Id        uint16      `json:"id"`
+	Name      string      `json:"name"`
+	Module    string      `json:"module"`
+	Uri       string      `json:"uri"`
+	Remark    string      `json:"remark"`
+	CreatedAt *gtime.Time `json:"created_at"`
+	UpdatedAt *gtime.Time `json:"updated_at"`
 }

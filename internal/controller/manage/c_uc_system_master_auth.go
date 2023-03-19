@@ -500,7 +500,7 @@ func (c *cUcSystemMasterAuth) GetEditPermission(ctx context.Context, req *manage
 // @return err
 func (c *cUcSystemMasterAuth) EditPermission(ctx context.Context, req *manage.EditPermissionReq) (res *manage.EditPermissionRes, err error) {
 	code, message, err := service.UcSystemMasterAuth().ModifyPermissionById(ctx, system_master.ModifyPermissionByIdInput{
-		Id:     req.ID,
+		Id:     req.Id,
 		Fid:    req.Fid,
 		Name:   req.Name,
 		Module: req.Module,
@@ -678,6 +678,207 @@ func (c *cUcSystemMasterAuth) ListMenu(ctx context.Context, req *manage.ListMenu
 		"code":    code,
 		"message": message,
 		"data":    g.Map{"list": output},
+	})
+
+	return
+}
+
+// AddPermissionExclude
+//
+// @Title 添加权限排除模块
+// @Description 添加权限排除模块
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-18 23:20:09
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMasterAuth) AddPermissionExclude(ctx context.Context, req *manage.AddPermissionExcludeReq) (res *manage.AddPermissionExcludeRes, err error) {
+	// 访问日志写入
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 4,
+		Description:   "添加权限排除信息",
+	})
+
+	code, message, err := service.UcSystemMasterAuth().CreatePermissionExclude(ctx, system_master.CreatePermissionExcludeInput{
+		Name:   req.Name,
+		Module: req.Module,
+		Uri:    req.Uri,
+		Remark: req.Remark,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}
+
+// GetEditPermissionExclude
+//
+// @Title 查看编辑排除权限
+// @Description 查看编辑排除权限
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-18 23:45:33
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMasterAuth) GetEditPermissionExclude(ctx context.Context, req *manage.GetEditPermissionExcludeReq) (res *manage.GetEditPermissionExcludeRes, err error) {
+	// 访问日志写入
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 4,
+		Description:   "查看编辑排除权限信息",
+	})
+
+	code, message, out, err := service.UcSystemMasterAuth().GetPermissionExcludeById(ctx, req.Id)
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    g.Map{"info": out},
+	})
+
+	return
+}
+
+// EditPermissionExclude
+//
+// @Title 修改编辑排除权限
+// @Description 修改编辑排除权限
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-18 23:46:03
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMasterAuth) EditPermissionExclude(ctx context.Context, req *manage.EditPermissionExcludeReq) (res *manage.EditPermissionExcludeRes, err error) {
+	// 访问日志写入
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 4,
+		Description:   "修改编辑排除权限信息",
+	})
+
+	code, message, err := service.UcSystemMasterAuth().ModifyPermissionExcludeById(ctx, system_master.ModifyPermissionExcludeByIdInput{
+		Id:     req.Id,
+		Name:   req.Name,
+		Module: req.Module,
+		Uri:    req.Uri,
+		Remark: req.Remark,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}
+
+// ListPermissionExclude
+//
+// @Title 查看排除权限信息列表
+// @Description 查看排除权限信息列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-18 23:55:44
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMasterAuth) ListPermissionExclude(ctx context.Context, req *manage.ListPermissionExcludeReq) (res *manage.ListPermissionExcludeRes, err error) {
+	// 访问日志写入
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 4,
+		Description:   "查看排除权限信息列表",
+	})
+
+	code, message, out, err := service.UcSystemMasterAuth().ListPermissionExclude(ctx, system_master.ListPermissionExcludeInput{
+		Page: req.Page,
+		Size: req.Size,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    g.Map{"list": out},
+	})
+
+	return
+}
+
+// DeletePermissionExclude
+//
+// @Title 删除排除权限信息列表
+// @Description 删除排除权限信息列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-19 00:00:16
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMasterAuth) DeletePermissionExclude(ctx context.Context, req *manage.DeletePermissionExcludeReq) (res *manage.DeletePermissionExcludeRes, err error) {
+	// 访问日志写入
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 4,
+		Description:   "删除排除权限信息列表",
+	})
+
+	code, message, err := service.UcSystemMasterAuth().DeletePermissionExcludeById(ctx, req.Id)
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
 	})
 
 	return

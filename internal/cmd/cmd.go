@@ -124,6 +124,13 @@ var (
 
 						// 导航菜单
 						manage.UcSystemMasterAuth.ListMenu,
+
+						// 权限排除模块
+						manage.UcSystemMasterAuth.AddPermissionExclude,
+						manage.UcSystemMasterAuth.GetEditPermissionExclude,
+						manage.UcSystemMasterAuth.EditPermissionExclude,
+						manage.UcSystemMasterAuth.ListPermissionExclude,
+						manage.UcSystemMasterAuth.DeletePermissionExclude,
 					)
 				},
 			)
