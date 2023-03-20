@@ -7,15 +7,17 @@ package service
 
 import (
 	"context"
+	"ice_flame/internal/model/article"
 )
 
 type (
 	ISinglePage interface {
-		CreateCategory(ctx context.Context)
-		GetCategoryById(ctx context.Context)
-		ModifyCategoryById(ctx context.Context)
+		CreateCategory(ctx context.Context, in article.CreateSinglePageCategoryInput) (code int32, message string, err error)
+		GetCategoryById(ctx context.Context, id uint16) (code int32, message string, output *article.SinglePageCategoryOutput, err error)
+		ModifyCategoryById(ctx context.Context, in article.ModifySinglePageCategoryInput) (code int32, message string, err error)
 		ListCategoryById(ctx context.Context)
-		DeleteCategoryById(ctx context.Context)
+		DeleteCategoryById(ctx context.Context, id uint16)
+		GetCategoryAll(ctx context.Context)
 	}
 )
 
