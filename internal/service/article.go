@@ -12,6 +12,10 @@ import (
 type (
 	ISinglePage interface {
 		CreateCategory(ctx context.Context)
+		GetCategoryById(ctx context.Context)
+		ModifyCategoryById(ctx context.Context)
+		ListCategoryById(ctx context.Context)
+		DeleteCategoryById(ctx context.Context)
 	}
 )
 
