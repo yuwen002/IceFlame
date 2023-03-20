@@ -53,11 +53,11 @@ type CreateSystemMasterReq struct {
 type CreateSystemMasterRes struct{}
 
 // EditPasswordReq
-// @Description:修改关联
+// @Description: 管理员修改自己密码
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-02-24 16:24:25
 type EditPasswordReq struct {
-	g.Meta             `path:"/master/edit_password" tags:"管理员新建管理用户" method:"put" summary:"管理员新建管理用户"`
+	g.Meta             `path:"/master/edit_password" tags:"管理员修改自己密码" method:"put" summary:"管理员修改自己密码"`
 	OldPassword        string `p:"old_password" v:"required|length:5,32#密码不能为空|密码在5到32之间"`
 	NewPassword        string `p:"new_password" v:"required|length:5,32#密码不能为空|密码在5到32之间"`
 	ConfirmNewPassword string `p:"confirm_new_password" v:"required|same:new_password#确认密码不能为空|两次输入密码不一致"`

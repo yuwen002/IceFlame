@@ -40,7 +40,7 @@ type sAuthMiddleware struct {
 // @return structName
 // @return methodName
 func (s *sAuthMiddleware) extractHandler(str string) (packageName, structName, methodName string) {
-	re := regexp.MustCompile(`controller/(.+)\.\(\*(.+)\)\.(.+)-fm`)
+	re := regexp.MustCompile(`controller/(.+)\.\(\*c(.+)\)\.(.+)-fm`)
 	match := re.FindStringSubmatch(str)
 	if len(match) == 4 {
 		return match[1], match[2], match[3]
@@ -107,6 +107,7 @@ func (s *sAuthMiddleware) MiddlewareVerifyPermission(r *ghttp.Request) {
 	userInfo := r.GetCtxVar("user_info")
 	if gconv.Uint8(userInfo.Map()["supper_master"]) == 1 {
 		r.Middleware.Next()
+		return
 	}
 
 	// 访问模块
@@ -124,6 +125,7 @@ func (s *sAuthMiddleware) MiddlewareVerifyPermission(r *ghttp.Request) {
 		// 查找排除模块
 		existsPermissionExclude := false
 		for index := range exclude {
+
 			if exclude[index].Module == module {
 				existsPermissionExclude = true
 				break
@@ -133,6 +135,7 @@ func (s *sAuthMiddleware) MiddlewareVerifyPermission(r *ghttp.Request) {
 		// 排除权限判断，直接跳转
 		if existsPermissionExclude {
 			r.Middleware.Next()
+			return
 		}
 	}
 

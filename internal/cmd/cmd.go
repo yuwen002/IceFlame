@@ -78,6 +78,7 @@ var (
 					group.Middleware(
 						service.AuthMiddleware().MiddlewareAuthMaster,
 						service.Middleware().MiddlewareHandlerResponse,
+						service.AuthMiddleware().MiddlewareVerifyPermission,
 					)
 
 					group.Bind(
