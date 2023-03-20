@@ -1,7 +1,7 @@
 /*
  Navicat MySQL Data Transfer
 
- Source Server         : test
+ Source Server         : kd_test
  Source Server Type    : MySQL
  Source Server Version : 50738
  Source Host           : 82.157.248.230:3306
@@ -11,7 +11,7 @@
  Target Server Version : 50738
  File Encoding         : 65001
 
- Date: 19/03/2023 23:30:27
+ Date: 20/03/2023 17:59:45
 */
 
 SET NAMES utf8mb4;
@@ -35,6 +35,6 @@ CREATE TABLE `uc_system_permission_exclude`  (
 -- ----------------------------
 -- Records of uc_system_permission_exclude
 -- ----------------------------
-INSERT INTO `uc_system_permission_exclude` VALUES (1, '管理员修改密码', '', '', '修改11', '2023-03-19 00:13:53', '2023-03-19 00:19:43');
+INSERT INTO `uc_system_permission_exclude` VALUES (1, '管理员修改密码', 'manage.UcSystemMaster.EditPassword', 'manage/master/edit_password', '修改11', '2023-03-19 00:13:53', '2023-03-19 00:19:43');
 
 SET FOREIGN_KEY_CHECKS = 1;
