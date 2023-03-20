@@ -5,6 +5,7 @@
 package logic
 
 import (
+	_ "ice_flame/internal/logic/article"
 	_ "ice_flame/internal/logic/middleware"
 	_ "ice_flame/internal/logic/test"
 	_ "ice_flame/internal/logic/uc_center"

@@ -74,9 +74,9 @@ type (
 )
 
 var (
+	localUcSystemMaster        IUcSystemMaster
 	localUcSystemMasterAuth    IUcSystemMasterAuth
 	localUcSystemMasterVisitor IUcSystemMasterVisitor
-	localUcSystemMaster        IUcSystemMaster
 )
 
 func UcSystemMaster() IUcSystemMaster {
