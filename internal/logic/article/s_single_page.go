@@ -112,6 +112,6 @@ func (s *sSinglePage) List(ctx context.Context, in article.ListSinglePageInput) 
 // @return code
 // @return message
 // @return err
-func (s *sSinglePage) Delete(ctx context.Context, id uint16) (code int32, message string, err error) {
+func (s *sSinglePage) Delete(ctx context.Context, id uint32) (code int32, message string, err error) {
 	return utility.DBDelByWhere(dao.SinglePage.Ctx(ctx), utility.DBDelByWhereInput{Where: id})
 }

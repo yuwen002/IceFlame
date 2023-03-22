@@ -49,9 +49,20 @@ type EditSinglePageRes struct {
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-22 18:07:32
 type ListSinglePageReq struct {
-	g.Meta `path:"/article/single_page/show" tags:"单页信息列表" method:"put" summary:"单页信息列表"`
+	g.Meta `path:"/article/single_page/show" tags:"单页信息列表" method:"get" summary:"单页信息列表"`
 	Page   int `p:"page" v:"min:1|integer#页码要大于等于1|页码只为正整数"`
 	Size   int `p:"size" v:"min:1|integer#显示条数要大于等于1|显示条数只为正整数"`
 }
 type ListSinglePageRes struct {
+}
+
+// DeleteSinglePageReq
+// @Description: 删除单页信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-22 23:11:19
+type DeleteSinglePageReq struct {
+	g.Meta `path:"/article/single_page/delete" tags:"单页信息列表" method:"delete" summary:"单页信息列表"`
+	Id     uint32 `p:"id" v:"required|min:0|integer#父类ID不能为空|ID要大于等于0|ID只为整数"`
+}
+type DeleteSinglePageRes struct {
 }

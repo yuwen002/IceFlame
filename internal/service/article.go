@@ -11,18 +11,37 @@ import (
 )
 
 type (
+	IArticle interface {
+		CreateChannel(ctx context.Context, in article.CreateChannelInput) (code int32, message string, err error)
+		GetChannelById(ctx context.Context, id uint32) (code int32, message string, output *article.ChannelOutput, err error)
+		ModifyChannelById()
+		ListChannel()
+		DeleteChannelById()
+	}
 	ISinglePage interface {
 		Create(ctx context.Context, in article.CreateSinglePageInput) (code int32, message string, err error)
 		GetById(ctx context.Context, id uint32) (code int32, message string, output *article.SinglePageOutput, err error)
 		ModifyById(ctx context.Context, in article.ModifySinglePageInput) (code int32, message string, err error)
 		List(ctx context.Context, in article.ListSinglePageInput) (code int32, message string, output []*article.SinglePageOutput, err error)
-		Delete(ctx context.Context, id uint16) (code int32, message string, err error)
+		Delete(ctx context.Context, id uint32) (code int32, message string, err error)
 	}
 )
 
 var (
 	localSinglePage ISinglePage
+	localArticle    IArticle
 )
+
+func Article() IArticle {
+	if localArticle == nil {
+		panic("implement not found for interface IArticle, forgot register?")
+	}
+	return localArticle
+}
+
+func RegisterArticle(i IArticle) {
+	localArticle = i
+}
 
 func SinglePage() ISinglePage {
 	if localSinglePage == nil {

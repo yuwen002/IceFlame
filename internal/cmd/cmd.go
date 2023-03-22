@@ -138,6 +138,7 @@ var (
 						manage.Article.GetSinglePage,
 						manage.Article.EditSinglePage,
 						manage.Article.ListSinglePage,
+						manage.Article.DeleteSinglePage,
 					)
 				},
 			)

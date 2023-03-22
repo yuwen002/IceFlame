@@ -1,7 +1,7 @@
 /*
  Navicat MySQL Data Transfer
 
- Source Server         : kd_test
+ Source Server         : test
  Source Server Type    : MySQL
  Source Server Version : 50738
  Source Host           : 82.157.248.230:3306
@@ -11,7 +11,7 @@
  Target Server Version : 50738
  File Encoding         : 65001
 
- Date: 22/03/2023 18:15:42
+ Date: 22/03/2023 23:50:59
 */
 
 SET NAMES utf8mb4;
@@ -35,7 +35,7 @@ CREATE TABLE `uc_system_permission`  (
   `created_at` datetime NULL DEFAULT NULL,
   `updated_at` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 35 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '后台系统权限模块列表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 36 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '后台系统权限模块列表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of uc_system_permission
@@ -74,5 +74,6 @@ INSERT INTO `uc_system_permission` VALUES (31, 30, '添加单页', 'manage.Artic
 INSERT INTO `uc_system_permission` VALUES (32, 30, '编辑单页', 'manage.Article.GetSinglePage', 'manage/article/single_page/edit', 2, 0, NULL, 0, '二级按钮', '2023-03-22 17:07:56', '2023-03-22 17:07:56');
 INSERT INTO `uc_system_permission` VALUES (33, 30, '编辑单页', 'manage.Article.EditSinglePage', 'manage/article/single_page/edit', 3, 0, NULL, 0, '处理程序', '2023-03-22 18:03:57', '2023-03-22 18:03:57');
 INSERT INTO `uc_system_permission` VALUES (34, 30, '单页列表', 'manage.Article.ListSinglePage', 'manage/article/single_page/show', 1, 0, NULL, 0, '二级按钮', '2023-03-22 18:11:52', '2023-03-22 18:11:52');
+INSERT INTO `uc_system_permission` VALUES (35, 30, '编辑单页', 'manage.Article.DeleteSinglePage', 'manage/article/single_page/delete', 2, 0, NULL, 0, '二级按钮', '2023-03-22 23:29:56', '2023-03-22 23:29:56');
 
 SET FOREIGN_KEY_CHECKS = 1;

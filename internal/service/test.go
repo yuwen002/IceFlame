@@ -49,9 +49,9 @@ type (
 )
 
 var (
+	localDBTest         IDBTest
 	localRedisCacheTest IRedisCacheTest
 	localJwtTokenTest   IJwtTokenTest
-	localDBTest         IDBTest
 )
 
 func DBTest() IDBTest {
