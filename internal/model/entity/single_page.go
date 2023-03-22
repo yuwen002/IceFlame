@@ -11,13 +11,13 @@ import (
 // SinglePage is the golang structure for table single_page.
 type SinglePage struct {
 	Id          uint        `json:"id"          ` //
-	CategoryId  uint        `json:"category_id" ` // 所属分类 ID
 	Title       string      `json:"title"       ` // 页面标题
 	Description string      `json:"description" ` // 页面描述
-	Keywords    string      `json:"keywords"    ` // 页面关键字
+	Keyword     string      `json:"keyword"     ` // 页面关键字
 	Content     string      `json:"content"     ` // 页面内容
 	Thumbnail   string      `json:"thumbnail"   ` // 缩略图
 	Click       uint        `json:"click"       ` // 点击量
+	Status      uint        `json:"status"      ` // 显示状态（0=显示，1=隐藏）
 	CreatedAt   *gtime.Time `json:"created_at"  ` //
 	UpdatedAt   *gtime.Time `json:"updated_at"  ` //
 }

@@ -21,13 +21,13 @@ type SinglePageDao struct {
 // SinglePageColumns defines and stores column names for table single_page.
 type SinglePageColumns struct {
 	Id          string //
-	CategoryId  string // 所属分类 ID
 	Title       string // 页面标题
 	Description string // 页面描述
-	Keywords    string // 页面关键字
+	Keyword     string // 页面关键字
 	Content     string // 页面内容
 	Thumbnail   string // 缩略图
 	Click       string // 点击量
+	Status      string // 显示状态（0=显示，1=隐藏）
 	CreatedAt   string //
 	UpdatedAt   string //
 }
@@ -35,13 +35,13 @@ type SinglePageColumns struct {
 // singlePageColumns holds the columns for table single_page.
 var singlePageColumns = SinglePageColumns{
 	Id:          "id",
-	CategoryId:  "category_id",
 	Title:       "title",
 	Description: "description",
-	Keywords:    "keywords",
+	Keyword:     "keyword",
 	Content:     "content",
 	Thumbnail:   "thumbnail",
 	Click:       "click",
+	Status:      "status",
 	CreatedAt:   "created_at",
 	UpdatedAt:   "updated_at",
 }

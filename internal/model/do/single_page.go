@@ -13,13 +13,13 @@ import (
 type SinglePage struct {
 	g.Meta      `orm:"table:single_page, do:true"`
 	Id          interface{} //
-	CategoryId  interface{} // 所属分类 ID
 	Title       interface{} // 页面标题
 	Description interface{} // 页面描述
-	Keywords    interface{} // 页面关键字
+	Keyword     interface{} // 页面关键字
 	Content     interface{} // 页面内容
 	Thumbnail   interface{} // 缩略图
 	Click       interface{} // 点击量
+	Status      interface{} // 显示状态（0=显示，1=隐藏）
 	CreatedAt   *gtime.Time //
 	UpdatedAt   *gtime.Time //
 }

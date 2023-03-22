@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"context"
+	"fmt"
 	"ice_flame/internal/consts"
 	"ice_flame/internal/service"
 	"ice_flame/utility"
@@ -112,6 +113,7 @@ func (s *sAuthMiddleware) MiddlewareVerifyPermission(r *ghttp.Request) {
 
 	// 访问模块
 	module := s.concatModule(s.extractHandler(r.GetServeHandler().Handler.Name))
+	fmt.Println(module)
 	// 排除权限列表
 	code, message, exclude, err := service.UcSystemMasterAuth().GetPermissionExcludeAll(s.ctx)
 	if err != nil {
@@ -179,6 +181,7 @@ func (s *sAuthMiddleware) MiddlewareVerifyPermission(r *ghttp.Request) {
 			break
 		}
 	}
+	fmt.Println(permissionId)
 
 	// 权限模块不存在
 	if permissionId == 0 {

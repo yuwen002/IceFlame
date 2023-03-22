@@ -12,12 +12,11 @@ import (
 
 type (
 	ISinglePage interface {
-		CreateCategory(ctx context.Context, in article.CreateSinglePageCategoryInput) (code int32, message string, err error)
-		GetCategoryById(ctx context.Context, id uint16) (code int32, message string, output *article.SinglePageCategoryOutput, err error)
-		ModifyCategoryById(ctx context.Context, in article.ModifySinglePageCategoryInput) (code int32, message string, err error)
-		ListCategoryById(ctx context.Context)
-		DeleteCategoryById(ctx context.Context, id uint16)
-		GetCategoryAll(ctx context.Context)
+		Create(ctx context.Context, in article.CreateSinglePageInput) (code int32, message string, err error)
+		GetById(ctx context.Context, id uint32) (code int32, message string, output *article.SinglePageOutput, err error)
+		ModifyById(ctx context.Context, in article.ModifySinglePageInput) (code int32, message string, err error)
+		List(ctx context.Context, in article.ListSinglePageInput) (code int32, message string, output []*article.SinglePageOutput, err error)
+		Delete(ctx context.Context, id uint16) (code int32, message string, err error)
 	}
 )
 

@@ -24,6 +24,7 @@ type SinglePageCategoryColumns struct {
 	Name      string // 分类名称
 	Remark    string // 备注信息
 	Sort      string // 排序顺序
+	Status    string // 显示状态（0=显示，1=隐藏）
 	CreatedAt string //
 	UpdatedAt string //
 }
@@ -34,6 +35,7 @@ var singlePageCategoryColumns = SinglePageCategoryColumns{
 	Name:      "name",
 	Remark:    "remark",
 	Sort:      "sort",
+	Status:    "status",
 	CreatedAt: "created_at",
 	UpdatedAt: "updated_at",
 }

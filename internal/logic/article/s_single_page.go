@@ -21,10 +21,10 @@ func init() {
 type sSinglePage struct {
 }
 
-// CreateCategory
+// Create
 //
-// @Title 新建单页分类
-// @Description 新建单页分类
+// @Title 新建单页信息
+// @Description 新建单页信息
 // @Author liuxingyu <yuwen002@163.com>
 // @Data 2023-03-21 00:05:59
 // @receiver s
@@ -33,14 +33,14 @@ type sSinglePage struct {
 // @return code
 // @return message
 // @return err
-func (s *sSinglePage) CreateCategory(ctx context.Context, in article.CreateSinglePageCategoryInput) (code int32, message string, err error) {
-	return utility.DBInsert(dao.SinglePageCategory.Ctx(ctx), utility.DBInsertInput{Data: in})
+func (s *sSinglePage) Create(ctx context.Context, in article.CreateSinglePageInput) (code int32, message string, err error) {
+	return utility.DBInsert(dao.SinglePage.Ctx(ctx), utility.DBInsertInput{Data: in})
 }
 
-// GetCategoryById
+// GetById
 //
-// @Title 按ID获取单页分类
-// @Description 按ID获取单页分类信息
+// @Title 按ID获取单页信息
+// @Description 按ID获取单页信息
 // @Author liuxingyu <yuwen002@163.com>
 // @Data 2023-03-21 00:13:28
 // @receiver s
@@ -50,14 +50,14 @@ func (s *sSinglePage) CreateCategory(ctx context.Context, in article.CreateSingl
 // @return message
 // @return output
 // @return err
-func (s *sSinglePage) GetCategoryById(ctx context.Context, id uint16) (code int32, message string, output *article.SinglePageCategoryOutput, err error) {
-	code, message, err = utility.DBGetStructById(dao.SinglePageCategory.Ctx(ctx), utility.DBGetByIdInput{Where: id}, &output)
+func (s *sSinglePage) GetById(ctx context.Context, id uint32) (code int32, message string, output *article.SinglePageOutput, err error) {
+	code, message, err = utility.DBGetStructById(dao.SinglePage.Ctx(ctx), utility.DBGetByIdInput{Where: id}, &output)
 	return code, message, output, err
 }
 
-// ModifyCategoryById
+// ModifyById
 //
-// @Title 按ID修改单页分类
+// @Title 按ID修改单页信息
 // @Description 按ID修改单页分类信息
 // @Author liuxingyu <yuwen002@163.com>
 // @Data 2023-03-21 00:20:16
@@ -67,18 +67,51 @@ func (s *sSinglePage) GetCategoryById(ctx context.Context, id uint16) (code int3
 // @return code
 // @return message
 // @return err
-func (s *sSinglePage) ModifyCategoryById(ctx context.Context, in article.ModifySinglePageCategoryInput) (code int32, message string, err error) {
-	return utility.DBModifyById(dao.SinglePageCategory.Ctx(ctx), utility.DBModifyByIdInput{
+func (s *sSinglePage) ModifyById(ctx context.Context, in article.ModifySinglePageInput) (code int32, message string, err error) {
+	return utility.DBModifyById(dao.SinglePage.Ctx(ctx), utility.DBModifyByIdInput{
 		Data:  in,
 		Where: in.Id,
 	})
 }
 
-func (s *sSinglePage) ListCategoryById(ctx context.Context) {
+// List
+//
+// @Title 单页信息列表
+// @Description 单页信息列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-21 13:45:08
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sSinglePage) List(ctx context.Context, in article.ListSinglePageInput) (code int32, message string, output []*article.SinglePageOutput, err error) {
+	code, message, err = utility.DBGetAllStructByWhere(dao.SinglePage.Ctx(ctx), utility.DBGetAllByWhereInput{
+		Order:    "sort desc, id asc",
+		PageType: 1,
+		DBPagination: utility.DBPagination{
+			Page: in.Page,
+			Size: in.Size,
+		},
+	}, &output)
+
+	return code, message, output, err
 }
 
-func (s *sSinglePage) DeleteCategoryById(ctx context.Context, id uint16) {
-}
-
-func (s *sSinglePage) GetCategoryAll(ctx context.Context) {
+// Delete
+//
+// @Title 按ID删除单页信息
+// @Description 按ID删除单页信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-21 14:15:30
+// @receiver s
+// @param ctx
+// @param id
+// @return code
+// @return message
+// @return err
+func (s *sSinglePage) Delete(ctx context.Context, id uint16) (code int32, message string, err error) {
+	return utility.DBDelByWhere(dao.SinglePage.Ctx(ctx), utility.DBDelByWhereInput{Where: id})
 }

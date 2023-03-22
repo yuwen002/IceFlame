@@ -471,7 +471,7 @@ func (s *sUcSystemMasterAuth) ModifyPermissionRelation(ctx context.Context, in s
 func (s *sUcSystemMasterAuth) GetPermissionAll(ctx context.Context) (code int32, message string, output []*system_master.GetPermissionAllOutput, err error) {
 	code, message, err = utility.DBGetAllStructByWhere(dao.UcSystemPermission.Ctx(ctx), utility.DBGetAllByWhereInput{
 		Field: "id,fid,name,module,uri",
-		Where: "status=0 and type in (1,2) and supper_master = 1",
+		Where: "status=0 and type in (1,2)",
 		Order: "fid asc, sort desc",
 	}, &output)
 

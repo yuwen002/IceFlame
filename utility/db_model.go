@@ -92,8 +92,8 @@ type DBGetAllByWhereInput struct {
 	Args         interface{} // 查询参数
 	Order        string      // 排序
 	PageType     int8        // 分页类型
-	DBLimit                  // 分页，偏移量
 	DBPagination             // 分页，页码
+	DBLimit                  // 分页，偏移量
 }
 
 // DBModifyByIdInput

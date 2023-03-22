@@ -132,6 +132,12 @@ var (
 						manage.UcSystemMasterAuth.EditPermissionExclude,
 						manage.UcSystemMasterAuth.ListPermissionExclude,
 						manage.UcSystemMasterAuth.DeletePermissionExclude,
+
+						// 文章管理
+						manage.Article.AddSinglePage,
+						manage.Article.GetSinglePage,
+						manage.Article.EditSinglePage,
+						manage.Article.ListSinglePage,
 					)
 				},
 			)
