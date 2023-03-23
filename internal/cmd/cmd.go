@@ -134,11 +134,22 @@ var (
 						manage.UcSystemMasterAuth.DeletePermissionExclude,
 
 						// 文章管理
+						// 单页管理
 						manage.Article.AddSinglePage,
 						manage.Article.GetSinglePage,
 						manage.Article.EditSinglePage,
 						manage.Article.ListSinglePage,
 						manage.Article.DeleteSinglePage,
+
+						// 频道管理
+						manage.Article.AddArticleChannel,
+						manage.Article.GetArticleChannel,
+						manage.Article.EditArticleChannel,
+						manage.Article.ListArticleChannel,
+						manage.Article.DelArticleChannel,
+
+						// 分类管理
+
 					)
 				},
 			)

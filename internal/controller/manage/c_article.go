@@ -221,3 +221,334 @@ func (c *cArticle) DeleteSinglePage(ctx context.Context, req *manage.DeleteSingl
 
 	return
 }
+
+// AddArticleChannel
+//
+// @Title 添加频道信息
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-23 14:17:28
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cArticle) AddArticleChannel(ctx context.Context, req *manage.AddArticleChannelReq) (res *manage.AddArticleChannelReq, err error) {
+	// 访问日志写入
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 5,
+		Description:   "添加频道信息",
+	})
+
+	code, message, err := service.Article().CreateChannel(ctx, article.CreateChannelInput{
+		Name:   req.Name,
+		Remark: req.Remark,
+		Sort:   req.Sort,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}
+
+// GetArticleChannel
+//
+// @Title 获取频道信息
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-23 14:56:57
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cArticle) GetArticleChannel(ctx context.Context, req *manage.GetArticleChannelReq) (res *manage.GetArticleChannelRes, err error) {
+	// 访问日志写入
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 5,
+		Description:   "查看编辑频道信息",
+	})
+
+	code, message, out, err := service.Article().GetChannelById(ctx, req.Id)
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    g.Map{"info": out},
+	})
+
+	return
+}
+
+// EditArticleChannel
+//
+// @Title 编辑频道信息
+// @Description 编辑频道信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-23 15:44:06
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cArticle) EditArticleChannel(ctx context.Context, req *manage.EditArticleChannelReq) (res *manage.EditArticleChannelRes, err error) {
+	// 访问日志写入
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 5,
+		Description:   "提交编辑频道信息",
+	})
+
+	code, message, err := service.Article().ModifyChannelById(ctx, article.ModifyChannelInput{
+		Id:     req.Id,
+		Name:   req.Name,
+		Remark: req.Remark,
+		Sort:   req.Sort,
+		Status: req.Status,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}
+
+// ListArticleChannel
+//
+// @Title 频道信息列表
+// @Description 频道信息列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-23 16:03:07
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cArticle) ListArticleChannel(ctx context.Context, req *manage.ListArticleChannelReq) (res *manage.ListArticleChannelRes, err error) {
+	// 访问日志写入
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 5,
+		Description:   "查看频道信息列表",
+	})
+
+	code, message, out, err := service.Article().ListChannel(ctx, article.ListChannelInput{
+		Page: req.Page,
+		Size: req.Size,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    g.Map{"list": out},
+	})
+
+	return
+}
+
+// DelArticleChannel
+//
+// @Title 删除频道信息
+// @Description 删除频道信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-23 16:33:32
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+func (c *cArticle) DelArticleChannel(ctx context.Context, req *manage.DelArticleChannelReq) (res *manage.DelArticleChannelRes) {
+	// 访问日志写入
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 5,
+		Description:   "删除频道信息",
+	})
+
+	code, message, err := service.Article().DelChannelById(ctx, req.Id)
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}
+
+// AddArticleCategory
+//
+// @Title 添加文章分类
+// @Description 添加文章分类
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-23 18:05:16
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cArticle) AddArticleCategory(ctx context.Context, req *manage.AddArticleCategoryReq) (res *manage.AddArticleCategoryRes, err error) {
+	// 访问日志写入
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 5,
+		Description:   "添加分类信息",
+	})
+
+	code, message, err := service.Article().CreateCategory(ctx, article.CreateCategoryInput{
+		Fid:    req.Fid,
+		Name:   req.Name,
+		Remark: req.Name,
+		Sort:   req.Sort,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}
+
+// GetArticleCategory
+//
+// @Title 查看编辑分类信息
+// @Description 查看编辑分类信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-23 18:11:16
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cArticle) GetArticleCategory(ctx context.Context, req *manage.GetArticleCategoryReq) (res *manage.GetArticleCategoryRes, err error) {
+	// 访问日志写入
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 5,
+		Description:   "查看编辑分类信息",
+	})
+
+	code, message, out, err := service.Article().GetCategoryById(ctx, req.Id)
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    g.Map{"info": out},
+	})
+
+	return
+}
+
+// EditArticleCategory
+//
+// @Title 提交编辑分类信息
+// @Description 提交编辑分类信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-23 18:12:49
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cArticle) EditArticleCategory(ctx context.Context, req *manage.EditArticleCategoryReq) (res *manage.EditArticleCategoryRes, err error) {
+	// 访问日志写入
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 5,
+		Description:   "提交编辑分类信息",
+	})
+
+	code, message, err := service.Article().ModifyCategoryById(ctx, article.ModifyCategoryInput{
+		Id:     req.Id,
+		Fid:    req.Fid,
+		Name:   req.Name,
+		Remark: req.Remark,
+		Sort:   req.Sort,
+		Status: req.Status,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}
+
+func (c *cArticle) ListArticleCategory() {
+
+}
+
+func (c *cArticle) DelArticleCategory() {
+
+}

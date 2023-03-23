@@ -25,3 +25,72 @@ type ChannelOutput struct {
 	CreatedAt gtime.Time `json:"created_at"`
 	UpdatedAt gtime.Time `json:"updated_at"`
 }
+
+// ModifyChannelInput
+// @Description: 修改频道信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-23 11:10:52
+type ModifyChannelInput struct {
+	Id     uint32
+	Name   string
+	Remark string
+	Sort   uint32
+	Status int8
+}
+
+// ListChannelInput
+// @Description: 频道信息列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-23 14:18:02
+type ListChannelInput struct {
+	Page int
+	Size int
+}
+
+// CreateCategoryInput
+// @Description: 新建文章分类
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-23 17:22:20
+type CreateCategoryInput struct {
+	Fid    uint32
+	Name   string
+	Remark string
+	Sort   uint32
+}
+
+// CategoryOutput
+// @Description: 文章分类信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-23 17:26:51
+type CategoryOutput struct {
+	Id        uint32     `json:"id"`
+	Fid       uint32     `json:"fid"`
+	Name      string     `json:"name"`
+	Remark    string     `json:"remark"`
+	Sort      uint32     `json:"sort"`
+	Status    int8       `json:"status"`
+	CreatedAt gtime.Time `json:"created_at"`
+	UpdatedAt gtime.Time `json:"updated_at"`
+}
+
+// ModifyCategoryInput
+// @Description: 修改文章分类信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-23 17:30:45
+type ModifyCategoryInput struct {
+	Id     uint32
+	Fid    uint32
+	Name   string
+	Remark string
+	Sort   uint32
+	Status int8
+}
+
+// ListCategoryInput
+// @Description: 文章分类信息列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-23 17:33:07
+type ListCategoryInput struct {
+	Page int
+	Size int
+}

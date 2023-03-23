@@ -94,7 +94,7 @@ type EditSystemMasterReq struct {
 	AccountId uint64 `p:"account_id" v:"required|min:1|integer#ID不能为空|ID要大于等于1|ID只为正整数"`
 	Tel       string `p:"tel" v:"required|phone#用户电话不能为空|请填写正确电话"`
 	Name      string `p:"name" v:"required#姓名不能为空"`
-	Status    int8   `p:"status" v:"required#用户状态不能为空"`
+	Status    int8   `p:"status" v:"required|in:0,1#用户状态不能为空|用户状态值错误"`
 }
 type EditSystemMasterRes struct{}
 
@@ -117,7 +117,7 @@ type ResetPasswordSystemMasterRes struct{}
 type EditStatusSystemMasterReq struct {
 	g.Meta    `path:"/master/edit_status" tags:"重置管理员密码" method:"put" summary:"重置管理员密码"`
 	AccountId uint64 `p:"account_id" v:"required|min:1|integer#ID不能为空|ID要大于等于1|ID只为正整数"`
-	Status    string `p:"status" v:"in:required|0,1#用户状态不能为空|用户状态值错误"`
+	Status    string `p:"status" v:"required|in:0,1#用户状态不能为空|用户状态值错误"`
 }
 type EditStatusSystemMasterRes struct{}
 

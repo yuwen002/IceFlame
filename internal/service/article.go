@@ -14,9 +14,14 @@ type (
 	IArticle interface {
 		CreateChannel(ctx context.Context, in article.CreateChannelInput) (code int32, message string, err error)
 		GetChannelById(ctx context.Context, id uint32) (code int32, message string, output *article.ChannelOutput, err error)
-		ModifyChannelById()
-		ListChannel()
-		DeleteChannelById()
+		ModifyChannelById(ctx context.Context, in article.ModifyChannelInput) (code int32, message string, err error)
+		ListChannel(ctx context.Context, in article.ListChannelInput) (code int32, message string, output []*article.ChannelOutput, err error)
+		DelChannelById(ctx context.Context, id uint32) (code int32, message string, err error)
+		CreateCategory(ctx context.Context, in article.CreateCategoryInput) (code int32, message string, err error)
+		GetCategoryById(ctx context.Context, id uint32) (code int32, message string, output *article.ChannelOutput, err error)
+		ModifyCategoryById(ctx context.Context, in article.ModifyCategoryInput) (code int32, message string, err error)
+		ListCategory(ctx context.Context, in article.ListCategoryInput) (code int32, message string, output []*article.ChannelOutput, err error)
+		DelCategoryById(ctx context.Context, id uint32) (code int32, message string, err error)
 	}
 	ISinglePage interface {
 		Create(ctx context.Context, in article.CreateSinglePageInput) (code int32, message string, err error)
@@ -28,8 +33,8 @@ type (
 )
 
 var (
-	localSinglePage ISinglePage
 	localArticle    IArticle
+	localSinglePage ISinglePage
 )
 
 func Article() IArticle {
