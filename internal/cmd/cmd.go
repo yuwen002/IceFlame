@@ -149,7 +149,11 @@ var (
 						manage.Article.DelArticleChannel,
 
 						// 分类管理
-
+						manage.Article.AddArticleCategory,
+						manage.Article.GetArticleChannel,
+						manage.Article.EditArticleCategory,
+						manage.Article.ListArticleCategory,
+						manage.Article.DelArticleCategory,
 					)
 				},
 			)

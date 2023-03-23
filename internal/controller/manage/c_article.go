@@ -545,10 +545,80 @@ func (c *cArticle) EditArticleCategory(ctx context.Context, req *manage.EditArti
 	return
 }
 
-func (c *cArticle) ListArticleCategory() {
+// ListArticleCategory
+//
+// @Title 查看分类信息列表
+// @Description 查看分类信息列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-23 23:17:16
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cArticle) ListArticleCategory(ctx context.Context, req *manage.ListArticleCategoryReq) (res *manage.ListArticleCategoryRes, err error) {
+	// 访问日志写入
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 5,
+		Description:   "查看分类信息列表",
+	})
 
+	code, message, out, err := service.Article().ListCategory(ctx, article.ListCategoryInput{
+		Page: req.Page,
+		Size: req.Size,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    g.Map{"list": out},
+	})
+
+	return
 }
 
-func (c *cArticle) DelArticleCategory() {
+// DelArticleCategory
+//
+// @Title 删除分类信息
+// @Description 删除分类信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-24 00:07:26
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cArticle) DelArticleCategory(ctx context.Context, req *manage.DelArticleCategoryReq) (res *manage.DelArticleCategoryRes, err error) {
+	// 访问日志写入
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 5,
+		Description:   "删除分类信息",
+	})
 
+	code, message, err := service.Article().DelCategoryById(ctx, req.Id)
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
 }

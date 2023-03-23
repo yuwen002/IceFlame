@@ -139,7 +139,7 @@ type AddArticleCategoryRes struct{}
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-23 18:02:43
 type GetArticleCategoryReq struct {
-	g.Meta `path:"/article/category/edit" tags:"编辑频道信息" method:"get" summary:"编辑频道信息"`
+	g.Meta `path:"/article/category/edit" tags:"获取分类信息" method:"get" summary:"获取分类信息"`
 	Id     uint32 `p:"id" v:"required|min:0|integer#ID不能为空|ID要大于等于0|ID只为整数"`
 }
 type GetArticleCategoryRes struct{}
@@ -149,7 +149,7 @@ type GetArticleCategoryRes struct{}
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-23 18:04:15
 type EditArticleCategoryReq struct {
-	g.Meta `path:"/article/channel/edit" tags:"编辑频道信息" method:"put" summary:"编辑频道信息"`
+	g.Meta `path:"/article/category/edit" tags:"修改分类信息" method:"put" summary:"编辑频道信息"`
 	Id     uint32 `p:"id" v:"required|min:0|integer#ID不能为空|ID要大于等于0|ID只为整数"`
 	Fid    uint32 `p:"id" v:"required|min:0|integer#父类ID不能为空|ID要大于等于0|ID只为整数"`
 	Name   string `p:"title" v:"required#频道名称不能为空"`
@@ -158,3 +158,24 @@ type EditArticleCategoryReq struct {
 	Status int8   `p:"status" v:"required|in:0,1#频道状态不能为空|频道状态值错误"`
 }
 type EditArticleCategoryRes struct{}
+
+// ListArticleCategoryReq
+// @Description: 分类列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-23 23:14:28
+type ListArticleCategoryReq struct {
+	g.Meta `path:"/article/category/show" tags:"分类列表" method:"get" summary:"分类列表"`
+	Page   int `p:"page" v:"min:1|integer#页码要大于等于1|页码只为正整数"`
+	Size   int `p:"size" v:"min:1|integer#显示条数要大于等于1|显示条数只为正整数"`
+}
+type ListArticleCategoryRes struct{}
+
+// DelArticleCategoryReq
+// @Description: 删除分类信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-24 00:03:54
+type DelArticleCategoryReq struct {
+	g.Meta `path:"/article/category/edit" tags:"删除分类信息" method:"delete" summary:"删除分类信息"`
+	Id     uint32 `p:"id" v:"required|min:0|integer#ID不能为空|ID要大于等于0|ID只为整数"`
+}
+type DelArticleCategoryRes struct{}
