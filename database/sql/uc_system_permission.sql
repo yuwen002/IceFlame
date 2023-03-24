@@ -1,7 +1,7 @@
 /*
  Navicat MySQL Data Transfer
 
- Source Server         : test
+ Source Server         : kd_test
  Source Server Type    : MySQL
  Source Server Version : 50738
  Source Host           : 82.157.248.230:3306
@@ -11,7 +11,7 @@
  Target Server Version : 50738
  File Encoding         : 65001
 
- Date: 22/03/2023 23:50:59
+ Date: 24/03/2023 17:43:38
 */
 
 SET NAMES utf8mb4;
@@ -35,7 +35,7 @@ CREATE TABLE `uc_system_permission`  (
   `created_at` datetime NULL DEFAULT NULL,
   `updated_at` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 36 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '后台系统权限模块列表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 45 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '后台系统权限模块列表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of uc_system_permission
@@ -75,5 +75,14 @@ INSERT INTO `uc_system_permission` VALUES (32, 30, '编辑单页', 'manage.Artic
 INSERT INTO `uc_system_permission` VALUES (33, 30, '编辑单页', 'manage.Article.EditSinglePage', 'manage/article/single_page/edit', 3, 0, NULL, 0, '处理程序', '2023-03-22 18:03:57', '2023-03-22 18:03:57');
 INSERT INTO `uc_system_permission` VALUES (34, 30, '单页列表', 'manage.Article.ListSinglePage', 'manage/article/single_page/show', 1, 0, NULL, 0, '二级按钮', '2023-03-22 18:11:52', '2023-03-22 18:11:52');
 INSERT INTO `uc_system_permission` VALUES (35, 30, '编辑单页', 'manage.Article.DeleteSinglePage', 'manage/article/single_page/delete', 2, 0, NULL, 0, '二级按钮', '2023-03-22 23:29:56', '2023-03-22 23:29:56');
+INSERT INTO `uc_system_permission` VALUES (36, 30, '添加频道', 'manage.Article.AddArticleChannel', 'manage/article/channel/add', 2, 0, NULL, 0, '二级按钮', '2023-03-23 14:38:40', '2023-03-23 14:38:40');
+INSERT INTO `uc_system_permission` VALUES (37, 30, '编辑频道', 'manage.Article.GetArticleChannel', 'manage/article/channel/edit', 2, 0, NULL, 0, '二级按钮', '2023-03-23 15:57:17', '2023-03-23 15:57:17');
+INSERT INTO `uc_system_permission` VALUES (38, 30, '编辑频道', 'manage.Article.EditArticleChannel', 'manage/article/channel/edit', 3, 0, NULL, 0, '二级按钮', '2023-03-23 15:59:29', '2023-03-23 15:59:29');
+INSERT INTO `uc_system_permission` VALUES (39, 30, '频道列表', 'manage.Article.ListArticleChannel', 'manage/article/channel/show', 1, 0, NULL, 0, '二级导航', '2023-03-23 16:25:00', '2023-03-23 16:25:00');
+INSERT INTO `uc_system_permission` VALUES (40, 30, '删除频道', 'manage.Article.DelArticleChannel', 'manage/article/channel/delete', 2, 0, NULL, 0, '二级导航', '2023-03-23 16:35:02', '2023-03-23 16:35:02');
+INSERT INTO `uc_system_permission` VALUES (41, 30, '添加分类', 'manage.Article.AddArticleCategory', 'manage/article/category/add', 2, 0, NULL, 0, '二级按钮', '2023-03-24 16:34:06', '2023-03-24 16:34:06');
+INSERT INTO `uc_system_permission` VALUES (42, 30, '编辑分类', 'manage.Article.GetArticleCategory', 'manage/article/category/edit', 2, 0, NULL, 0, '二级按钮', '2023-03-24 16:36:16', '2023-03-24 16:36:16');
+INSERT INTO `uc_system_permission` VALUES (43, 30, '编辑分类', 'manage.Article.EditArticleCategory', 'manage/article/category/edit', 3, 0, NULL, 0, '处理程序', '2023-03-24 16:36:46', '2023-03-24 16:36:46');
+INSERT INTO `uc_system_permission` VALUES (44, 30, '分类列表', 'manage.Article.ListArticleCategory', 'manage/article/category/show', 1, 0, NULL, 0, '二级菜单', '2023-03-24 16:39:01', '2023-03-24 16:39:01');
 
 SET FOREIGN_KEY_CHECKS = 1;

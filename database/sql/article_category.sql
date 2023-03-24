@@ -1,7 +1,7 @@
 /*
  Navicat MySQL Data Transfer
 
- Source Server         : test
+ Source Server         : kd_test
  Source Server Type    : MySQL
  Source Server Version : 50738
  Source Host           : 82.157.248.230:3306
@@ -11,7 +11,7 @@
  Target Server Version : 50738
  File Encoding         : 65001
 
- Date: 22/03/2023 23:53:49
+ Date: 24/03/2023 17:44:26
 */
 
 SET NAMES utf8mb4;
@@ -31,6 +31,11 @@ CREATE TABLE `article_category`  (
   `created_at` datetime NULL DEFAULT NULL,
   `updated_at` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of article_category
+-- ----------------------------
+INSERT INTO `article_category` VALUES (1, 0, '测试分类', '测试分类修改11', 1, 0, '2023-03-24 16:44:09', '2023-03-24 16:54:41');
 
 SET FOREIGN_KEY_CHECKS = 1;
