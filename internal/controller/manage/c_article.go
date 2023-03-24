@@ -233,7 +233,7 @@ func (c *cArticle) DeleteSinglePage(ctx context.Context, req *manage.DeleteSingl
 // @param req
 // @return res
 // @return err
-func (c *cArticle) AddArticleChannel(ctx context.Context, req *manage.AddArticleChannelReq) (res *manage.AddArticleChannelReq, err error) {
+func (c *cArticle) AddArticleChannel(ctx context.Context, req *manage.AddArticleChannelReq) (res *manage.AddArticleChannelRes, err error) {
 	// 访问日志写入
 	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
@@ -395,7 +395,7 @@ func (c *cArticle) ListArticleChannel(ctx context.Context, req *manage.ListArtic
 // @param ctx
 // @param req
 // @return res
-func (c *cArticle) DelArticleChannel(ctx context.Context, req *manage.DelArticleChannelReq) (res *manage.DelArticleChannelRes) {
+func (c *cArticle) DelArticleChannel(ctx context.Context, req *manage.DelArticleChannelReq) (res *manage.DelArticleChannelRes, err error) {
 	// 访问日志写入
 	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
@@ -443,7 +443,7 @@ func (c *cArticle) AddArticleCategory(ctx context.Context, req *manage.AddArticl
 	code, message, err := service.Article().CreateCategory(ctx, article.CreateCategoryInput{
 		Fid:    req.Fid,
 		Name:   req.Name,
-		Remark: req.Name,
+		Remark: req.Remark,
 		Sort:   req.Sort,
 	})
 

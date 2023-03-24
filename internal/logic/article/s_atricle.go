@@ -146,7 +146,7 @@ func (s *sArticle) CreateCategory(ctx context.Context, in article.CreateCategory
 // @return message
 // @return err
 func (s *sArticle) GetCategoryById(ctx context.Context, id uint32) (code int32, message string, output *article.ChannelOutput, err error) {
-	code, message, err = utility.DBGetOneStructByWhere(dao.ArticleCategory.Ctx(ctx), utility.DBGetOneByWhereInput{Where: id}, output)
+	code, message, err = utility.DBGetOneStructByWhere(dao.ArticleCategory.Ctx(ctx), utility.DBGetOneByWhereInput{Where: id}, &output)
 	return code, message, output, err
 }
 

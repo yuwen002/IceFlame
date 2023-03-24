@@ -73,7 +73,7 @@ type DeleteSinglePageRes struct {
 // @Date 2023-03-23 14:17:34
 type AddArticleChannelReq struct {
 	g.Meta `path:"/article/channel/add" tags:"添加频道信息" method:"post" summary:"添加频道信息"`
-	Name   string `p:"title" v:"required#冰岛名称不能为空"`
+	Name   string `p:"name" v:"required#频道名称不能为空"`
 	Remark string `p:"remark"`
 	Sort   uint32 `p:"sort" v:"min:0|integer#排序要大于等于0|排序只为整数"`
 }
@@ -96,7 +96,7 @@ type GetArticleChannelRes struct{}
 type EditArticleChannelReq struct {
 	g.Meta `path:"/article/channel/edit" tags:"编辑频道信息" method:"put" summary:"编辑频道信息"`
 	Id     uint32 `p:"id" v:"required|min:0|integer#ID不能为空|ID要大于等于0|ID只为整数"`
-	Name   string `p:"title" v:"required#频道名称不能为空"`
+	Name   string `p:"name" v:"required#频道名称不能为空"`
 	Remark string `p:"remark"`
 	Sort   uint32 `p:"sort" v:"min:0|integer#排序要大于等于0|排序只为整数"`
 	Status int8   `p:"status" v:"required|in:0,1#频道状态不能为空|频道状态值错误"`
@@ -151,7 +151,7 @@ type GetArticleCategoryRes struct{}
 type EditArticleCategoryReq struct {
 	g.Meta `path:"/article/category/edit" tags:"修改分类信息" method:"put" summary:"编辑频道信息"`
 	Id     uint32 `p:"id" v:"required|min:0|integer#ID不能为空|ID要大于等于0|ID只为整数"`
-	Fid    uint32 `p:"id" v:"required|min:0|integer#父类ID不能为空|ID要大于等于0|ID只为整数"`
+	Fid    uint32 `p:"fid" v:"required|min:0|integer#父类ID不能为空|ID要大于等于0|ID只为整数"`
 	Name   string `p:"title" v:"required#频道名称不能为空"`
 	Remark string `p:"remark"`
 	Sort   uint32 `p:"sort" v:"min:0|integer#排序要大于等于0|排序只为整数"`

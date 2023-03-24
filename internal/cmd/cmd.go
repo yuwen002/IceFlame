@@ -150,7 +150,7 @@ var (
 
 						// 分类管理
 						manage.Article.AddArticleCategory,
-						manage.Article.GetArticleChannel,
+						manage.Article.GetArticleCategory,
 						manage.Article.EditArticleCategory,
 						manage.Article.ListArticleCategory,
 						manage.Article.DelArticleCategory,

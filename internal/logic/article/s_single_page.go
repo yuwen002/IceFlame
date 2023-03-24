@@ -89,7 +89,7 @@ func (s *sSinglePage) ModifyById(ctx context.Context, in article.ModifySinglePag
 // @return err
 func (s *sSinglePage) List(ctx context.Context, in article.ListSinglePageInput) (code int32, message string, output []*article.SinglePageOutput, err error) {
 	code, message, err = utility.DBGetAllStructByWhere(dao.SinglePage.Ctx(ctx), utility.DBGetAllByWhereInput{
-		Order:    "sort desc, id asc",
+		Order:    "id asc",
 		PageType: 1,
 		DBPagination: utility.DBPagination{
 			Page: in.Page,
