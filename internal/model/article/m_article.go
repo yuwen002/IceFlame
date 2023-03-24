@@ -95,7 +95,32 @@ type ListCategoryInput struct {
 	Size int
 }
 
+// CreateArticleInput
+// @Description: 新建文章
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-25 00:37:55
 type CreateArticleInput struct {
+	CategoryId  uint32
+	ChannelId   uint32
+	Title       string
+	Keyword     string
+	Description string
+	Link        string
+	Author      string
+	Tags        string
+	PubDate     string
+	Summary     string
+	Content     string
+	Thumbnail   string
+	Click       string
+}
+
+// GetArticleOutput
+// @Description: 获取文章
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-25 00:39:13
+type GetArticleOutput struct {
+	Id          uint32
 	CategoryId  uint32
 	ChannelId   uint32
 	Title       string
@@ -112,4 +137,35 @@ type CreateArticleInput struct {
 	Status      string
 	CreatedAt   gtime.Time `json:"created_at"`
 	UpdatedAt   gtime.Time `json:"updated_at"`
+}
+
+// ModifyArticleInput
+// @Description: 修改文章
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-25 00:39:25
+type ModifyArticleInput struct {
+	Id          uint32
+	CategoryId  uint32
+	ChannelId   uint32
+	Title       string
+	Keyword     string
+	Description string
+	Link        string
+	Author      string
+	Tags        string
+	PubDate     string
+	Summary     string
+	Content     string
+	Thumbnail   string
+	Click       string
+	Status      string
+}
+
+// ListArticleInput
+// @Description: 文章列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-25 00:39:37
+type ListArticleInput struct {
+	Page int
+	Size int
 }
