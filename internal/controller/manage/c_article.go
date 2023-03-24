@@ -421,6 +421,37 @@ func (c *cArticle) DelArticleChannel(ctx context.Context, req *manage.DelArticle
 	return
 }
 
+// GetArticleChannelAll
+//
+// @Title 获取所有频道信息列表
+// @Description 获取所有频道信息列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-24 17:15:56
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cArticle) GetArticleChannelAll(ctx context.Context, req *manage.GetArticleChannelAllReq) (res *manage.GetArticleChannelAllRes, err error) {
+	code, message, out, err := service.Article().GetChannelAll(ctx)
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    g.Map{"list": out},
+	})
+
+	return
+}
+
 // AddArticleCategory
 //
 // @Title 添加文章分类
@@ -618,6 +649,37 @@ func (c *cArticle) DelArticleCategory(ctx context.Context, req *manage.DelArticl
 	json.WriteJsonExit(g.Map{
 		"code":    code,
 		"message": message,
+	})
+
+	return
+}
+
+// GetArticleCategoryAll
+//
+// @Title 所有分类信息列表
+// @Description 所有分类信息列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-24 17:39:58
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cArticle) GetArticleCategoryAll(ctx context.Context, req *manage.GetArticleCategoryAllReq) (res *manage.GetArticleCategoryAllRes, err error) {
+	code, message, out, err := service.Article().GetCategoryAll(ctx)
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    g.Map{"list": out},
 	})
 
 	return

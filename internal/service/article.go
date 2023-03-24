@@ -17,11 +17,13 @@ type (
 		ModifyChannelById(ctx context.Context, in article.ModifyChannelInput) (code int32, message string, err error)
 		ListChannel(ctx context.Context, in article.ListChannelInput) (code int32, message string, output []*article.ChannelOutput, err error)
 		DelChannelById(ctx context.Context, id uint32) (code int32, message string, err error)
+		GetChannelAll(ctx context.Context) (code int32, message string, output []*article.ChannelOutput, err error)
 		CreateCategory(ctx context.Context, in article.CreateCategoryInput) (code int32, message string, err error)
 		GetCategoryById(ctx context.Context, id uint32) (code int32, message string, output *article.ChannelOutput, err error)
 		ModifyCategoryById(ctx context.Context, in article.ModifyCategoryInput) (code int32, message string, err error)
-		ListCategory(ctx context.Context, in article.ListCategoryInput) (code int32, message string, output []*article.ChannelOutput, err error)
+		ListCategory(ctx context.Context, in article.ListCategoryInput) (code int32, message string, output []*article.CategoryOutput, err error)
 		DelCategoryById(ctx context.Context, id uint32) (code int32, message string, err error)
+		GetCategoryAll(ctx context.Context) (code int32, message string, output []*article.CategoryOutput, err error)
 	}
 	ISinglePage interface {
 		Create(ctx context.Context, in article.CreateSinglePageInput) (code int32, message string, err error)

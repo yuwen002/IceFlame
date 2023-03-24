@@ -121,6 +121,15 @@ type DelArticleChannelReq struct {
 }
 type DelArticleChannelRes struct{}
 
+// GetArticleChannelAllReq
+// @Description: 获取所有频道信息列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-24 17:12:37
+type GetArticleChannelAllReq struct {
+	g.Meta `path:"/article/channel/get_all" tags:"所有频道信息列表" method:"get" summary:"所有频道信息列表"`
+}
+type GetArticleChannelAllRes struct{}
+
 // AddArticleCategoryReq
 // @Description: 添加分类信息
 // @Author liuxingyu <yuwen002@163.com>
@@ -179,3 +188,12 @@ type DelArticleCategoryReq struct {
 	Id     uint32 `p:"id" v:"required|min:0|integer#ID不能为空|ID要大于等于0|ID只为整数"`
 }
 type DelArticleCategoryRes struct{}
+
+// GetArticleCategoryAllReq
+// @Description: 所有分类信息列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-24 17:38:51
+type GetArticleCategoryAllReq struct {
+	g.Meta `path:"/article/category/get_all" tags:"所有分类信息列表" method:"get" summary:"所有分类信息列表"`
+}
+type GetArticleCategoryAllRes struct{}

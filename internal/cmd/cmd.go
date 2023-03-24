@@ -147,6 +147,7 @@ var (
 						manage.Article.EditArticleChannel,
 						manage.Article.ListArticleChannel,
 						manage.Article.DelArticleChannel,
+						manage.Article.GetArticleChannelAll,
 
 						// 分类管理
 						manage.Article.AddArticleCategory,
@@ -154,6 +155,7 @@ var (
 						manage.Article.EditArticleCategory,
 						manage.Article.ListArticleCategory,
 						manage.Article.DelArticleCategory,
+						manage.Article.GetArticleCategoryAll,
 					)
 				},
 			)

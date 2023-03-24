@@ -117,6 +117,27 @@ func (s *sArticle) DelChannelById(ctx context.Context, id uint32) (code int32, m
 	return utility.DBDelById(dao.ArticleChannel.Ctx(ctx), utility.DBDelByIdInput{Where: id})
 }
 
+// GetChannelAll
+//
+// @Title 获取所有频道信息
+// @Description 获取所有频道信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-24 17:10:06
+// @receiver s
+// @param ctx
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sArticle) GetChannelAll(ctx context.Context) (code int32, message string, output []*article.ChannelOutput, err error) {
+	code, message, err = utility.DBGetAllStructByWhere(dao.ArticleChannel.Ctx(ctx), utility.DBGetAllByWhereInput{
+		Where: "status=0",
+		Order: "sort desc, id asc",
+	}, &output)
+
+	return code, message, output, err
+}
+
 // CreateCategory
 //
 // @Title 新建文章分类
@@ -182,7 +203,7 @@ func (s *sArticle) ModifyCategoryById(ctx context.Context, in article.ModifyCate
 // @return message
 // @return output
 // @return err
-func (s *sArticle) ListCategory(ctx context.Context, in article.ListCategoryInput) (code int32, message string, output []*article.ChannelOutput, err error) {
+func (s *sArticle) ListCategory(ctx context.Context, in article.ListCategoryInput) (code int32, message string, output []*article.CategoryOutput, err error) {
 	code, message, err = utility.DBGetAllStructByWhere(dao.ArticleCategory.Ctx(ctx), utility.DBGetAllByWhereInput{
 		Order:    "fid asc, sort desc",
 		PageType: 1,
@@ -210,4 +231,25 @@ func (s *sArticle) ListCategory(ctx context.Context, in article.ListCategoryInpu
 func (s *sArticle) DelCategoryById(ctx context.Context, id uint32) (code int32, message string, err error) {
 
 	return utility.DBDelById(dao.ArticleCategory.Ctx(ctx), utility.DBDelByIdInput{Where: id})
+}
+
+// GetCategoryAll
+//
+// @Title 获取所有分类
+// @Description 获取所有分类
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-24 17:32:21
+// @receiver s
+// @param ctx
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sArticle) GetCategoryAll(ctx context.Context) (code int32, message string, output []*article.CategoryOutput, err error) {
+	code, message, err = utility.DBGetAllStructByWhere(dao.ArticleCategory.Ctx(ctx), utility.DBGetAllByWhereInput{
+		Where: "status=0",
+		Order: "sort desc, id asc",
+	}, &output)
+
+	return code, message, output, err
 }
