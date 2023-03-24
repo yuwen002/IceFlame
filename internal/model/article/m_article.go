@@ -104,7 +104,7 @@ type CreateArticleInput struct {
 	Link        string
 	Author      string
 	Tags        string
-	Pubdate     string
+	PubDate     string
 	Summary     string
 	Content     string
 	Thumbnail   string

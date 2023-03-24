@@ -21,7 +21,7 @@ type Article struct {
 	Link        interface{} // 文章链接
 	Author      interface{} // 作者
 	Tags        interface{} // Tag标签
-	Pubdate     *gtime.Time // 发布时间
+	PubDate     *gtime.Time // 发布时间
 	Summary     interface{} // 摘要
 	Content     interface{} // 内容
 	Thumbnail   interface{} // 缩略图
