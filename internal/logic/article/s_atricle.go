@@ -253,3 +253,14 @@ func (s *sArticle) GetCategoryAll(ctx context.Context) (code int32, message stri
 
 	return code, message, output, err
 }
+
+func (s *sArticle) CreateArticle() {
+}
+func (s *sArticle) GetArticleById() {
+}
+func (s *sArticle) ModifyArticleById() {
+}
+func (s *sArticle) ListArticleById() {
+}
+func (s *sArticle) DelArticleById() {
+}

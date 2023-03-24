@@ -94,3 +94,22 @@ type ListCategoryInput struct {
 	Page int
 	Size int
 }
+
+type CreateArticleInput struct {
+	CategoryId  uint32
+	ChannelId   uint32
+	Title       string
+	Keyword     string
+	Description string
+	Link        string
+	Author      string
+	Tags        string
+	Pubdate     string
+	Summary     string
+	Content     string
+	Thumbnail   string
+	Click       string
+	Status      string
+	CreatedAt   gtime.Time `json:"created_at"`
+	UpdatedAt   gtime.Time `json:"updated_at"`
+}

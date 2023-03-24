@@ -19,6 +19,7 @@ type Article struct {
 	Link        string      `json:"link"        ` // 文章链接
 	Author      string      `json:"author"      ` // 作者
 	Tags        string      `json:"tags"        ` // Tag标签
+	Pubdate     *gtime.Time `json:"pubdate"     ` // 发布时间
 	Summary     string      `json:"summary"     ` // 摘要
 	Content     string      `json:"content"     ` // 内容
 	Thumbnail   string      `json:"thumbnail"   ` // 缩略图

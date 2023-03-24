@@ -29,6 +29,7 @@ type ArticleColumns struct {
 	Link        string // 文章链接
 	Author      string // 作者
 	Tags        string // Tag标签
+	Pubdate     string // 发布时间
 	Summary     string // 摘要
 	Content     string // 内容
 	Thumbnail   string // 缩略图
@@ -49,6 +50,7 @@ var articleColumns = ArticleColumns{
 	Link:        "link",
 	Author:      "author",
 	Tags:        "tags",
+	Pubdate:     "pubdate",
 	Summary:     "summary",
 	Content:     "content",
 	Thumbnail:   "thumbnail",
