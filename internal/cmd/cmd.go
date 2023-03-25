@@ -156,6 +156,13 @@ var (
 						manage.Article.ListArticleCategory,
 						manage.Article.DelArticleCategory,
 						manage.Article.GetArticleCategoryAll,
+
+						// 文章管理
+						manage.Article.AddArticle,
+						manage.Article.GetArticle,
+						manage.Article.EditArticle,
+						manage.Article.ListArticle,
+						manage.Article.DelArticle,
 					)
 				},
 			)

@@ -11,7 +11,7 @@
  Target Server Version : 50738
  File Encoding         : 65001
 
- Date: 24/03/2023 17:43:38
+ Date: 25/03/2023 18:10:13
 */
 
 SET NAMES utf8mb4;
@@ -35,7 +35,7 @@ CREATE TABLE `uc_system_permission`  (
   `created_at` datetime NULL DEFAULT NULL,
   `updated_at` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 45 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '后台系统权限模块列表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 50 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '后台系统权限模块列表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of uc_system_permission
@@ -84,5 +84,10 @@ INSERT INTO `uc_system_permission` VALUES (41, 30, '添加分类', 'manage.Artic
 INSERT INTO `uc_system_permission` VALUES (42, 30, '编辑分类', 'manage.Article.GetArticleCategory', 'manage/article/category/edit', 2, 0, NULL, 0, '二级按钮', '2023-03-24 16:36:16', '2023-03-24 16:36:16');
 INSERT INTO `uc_system_permission` VALUES (43, 30, '编辑分类', 'manage.Article.EditArticleCategory', 'manage/article/category/edit', 3, 0, NULL, 0, '处理程序', '2023-03-24 16:36:46', '2023-03-24 16:36:46');
 INSERT INTO `uc_system_permission` VALUES (44, 30, '分类列表', 'manage.Article.ListArticleCategory', 'manage/article/category/show', 1, 0, NULL, 0, '二级菜单', '2023-03-24 16:39:01', '2023-03-24 16:39:01');
+INSERT INTO `uc_system_permission` VALUES (45, 30, '添加文章', 'manage.Article.AddArticle', 'manage/article/add', 2, 0, NULL, 0, '二级按钮', '2023-03-25 14:22:18', '2023-03-25 14:22:18');
+INSERT INTO `uc_system_permission` VALUES (46, 30, '编辑文章', 'manage.Article.GetArticle', 'manage/article/edit', 2, 0, NULL, 0, '二级按钮', '2023-03-25 16:02:14', '2023-03-25 16:02:14');
+INSERT INTO `uc_system_permission` VALUES (47, 30, '编辑文章', 'manage.Article.EditArticle', 'manage/article/edit', 3, 0, NULL, 0, '提交程序', '2023-03-25 16:45:19', '2023-03-25 16:45:19');
+INSERT INTO `uc_system_permission` VALUES (48, 30, '文章列表', 'manage.Article.ListArticle', 'manage/article/show', 1, 0, NULL, 0, '提交程序', '2023-03-25 16:54:09', '2023-03-25 16:54:09');
+INSERT INTO `uc_system_permission` VALUES (49, 30, '删除文章', 'manage.Article.DelArticle', 'manage/article/delete', 2, 0, NULL, 0, '二级按钮', '2023-03-25 17:31:41', '2023-03-25 17:31:41');
 
 SET FOREIGN_KEY_CHECKS = 1;

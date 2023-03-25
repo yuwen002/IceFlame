@@ -254,13 +254,97 @@ func (s *sArticle) GetCategoryAll(ctx context.Context) (code int32, message stri
 	return code, message, output, err
 }
 
-func (s *sArticle) CreateArticle() {
+// CreateArticle
+//
+// @Title 新建文章
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-25 10:40:09
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sArticle) CreateArticle(ctx context.Context, in article.CreateArticleInput) (code int32, message string, err error) {
+	return utility.DBInsert(dao.Article.Ctx(ctx), utility.DBInsertInput{Data: in})
 }
-func (s *sArticle) GetArticleById() {
+
+// GetArticleById
+//
+// @Title 按ID获取文章信息
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-25 10:49:59
+// @receiver s
+// @param ctx
+// @param id
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sArticle) GetArticleById(ctx context.Context, id uint32) (code int32, message string, output *article.GetArticleOutput, err error) {
+	code, message, err = utility.DBGetStructById(dao.Article.Ctx(ctx), utility.DBGetByIdInput{Where: id}, &output)
+	return code, message, output, err
 }
-func (s *sArticle) ModifyArticleById() {
+
+// ModifyArticleById
+//
+// @Title
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-25 11:05:45
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sArticle) ModifyArticleById(ctx context.Context, in article.ModifyArticleInput) (code int32, message string, err error) {
+	return utility.DBModifyById(dao.Article.Ctx(ctx), utility.DBModifyByIdInput{
+		Data:  in,
+		Where: in.Id,
+	})
 }
-func (s *sArticle) ListArticleById() {
+
+// ListArticle
+//
+// @Title 文章列表
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-25 11:19:24
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sArticle) ListArticle(ctx context.Context, in article.ListArticleInput) (code int32, message string, output []*article.GetArticleOutput, err error) {
+	code, message, err = utility.DBGetAllStructByWhere(dao.Article.Ctx(ctx), utility.DBGetAllByWhereInput{
+		Order:    "id",
+		PageType: 1,
+		DBPagination: utility.DBPagination{
+			Page: in.Page,
+			Size: in.Size,
+		},
+	}, &output)
+
+	return code, message, output, err
 }
-func (s *sArticle) DelArticleById() {
+
+// DelArticleById
+//
+// @Title 按ID删除文章
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-25 11:19:36
+// @receiver s
+// @param ctx
+// @param id
+// @return code
+// @return message
+// @return err
+func (s *sArticle) DelArticleById(ctx context.Context, id uint32) (code int32, message string, err error) {
+	return utility.DBDelById(dao.Article.Ctx(ctx), utility.DBDelByIdInput{Where: id})
 }

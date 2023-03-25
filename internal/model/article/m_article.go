@@ -112,7 +112,7 @@ type CreateArticleInput struct {
 	Summary     string
 	Content     string
 	Thumbnail   string
-	Click       string
+	Click       uint32
 }
 
 // GetArticleOutput
@@ -120,21 +120,21 @@ type CreateArticleInput struct {
 // @Author liuxingyu <yuwen002@163.com>
 // @Data 2023-03-25 00:39:13
 type GetArticleOutput struct {
-	Id          uint32
-	CategoryId  uint32
-	ChannelId   uint32
-	Title       string
-	Keyword     string
-	Description string
-	Link        string
-	Author      string
-	Tags        string
-	PubDate     string
-	Summary     string
-	Content     string
-	Thumbnail   string
-	Click       string
-	Status      string
+	Id          uint32     `json:"id"`
+	CategoryId  uint32     `json:"category_id"`
+	ChannelId   uint32     `json:"channel_id"`
+	Title       string     `json:"title"`
+	Keyword     string     `json:"keyword"`
+	Description string     `json:"description"`
+	Link        string     `json:"link"`
+	Author      string     `json:"author"`
+	Tags        string     `json:"tags"`
+	PubDate     string     `json:"pub_date"`
+	Summary     string     `json:"summary"`
+	Content     string     `json:"content"`
+	Thumbnail   string     `json:"thumbnail"`
+	Click       uint32     `json:"click"`
+	Status      int8       `json:"status"`
 	CreatedAt   gtime.Time `json:"created_at"`
 	UpdatedAt   gtime.Time `json:"updated_at"`
 }
@@ -157,8 +157,8 @@ type ModifyArticleInput struct {
 	Summary     string
 	Content     string
 	Thumbnail   string
-	Click       string
-	Status      string
+	Click       uint32
+	Status      int8
 }
 
 // ListArticleInput

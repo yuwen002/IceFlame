@@ -197,3 +197,80 @@ type GetArticleCategoryAllReq struct {
 	g.Meta `path:"/article/category/get_all" tags:"所有分类信息列表" method:"get" summary:"所有分类信息列表"`
 }
 type GetArticleCategoryAllRes struct{}
+
+// AddArticleReq
+// @Description: 添加文章
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-25 13:48:43
+type AddArticleReq struct {
+	g.Meta      `path:"/article/add" tags:"添加文章" method:"post" summary:"添加文章"`
+	CategoryId  uint32 `p:"category_id" v:"required|min:0|integer#分类ID不能为空|分类ID要大于等于0|分类ID只为整数"`
+	ChannelId   uint32 `p:"channel_id" v:"required|min:0|integer#频道ID不能为空|频道ID要大于等于0|频道ID只为整数"`
+	Title       string `p:"title" v:"required#标题不能为空"`
+	Keyword     string `p:"keyword"`
+	Description string `p:"description"`
+	Link        string `p:"link"`
+	Author      string `p:"author"`
+	Tags        string `p:"tags"`
+	PubDate     string `p:"pub_date"`
+	Summary     string `p:"summary"`
+	Content     string `p:"content"`
+	Thumbnail   string `p:"thumbnail"`
+	Click       uint32 `p:"click"`
+}
+type AddArticleRes struct{}
+
+// GetArticleReq
+// @Description:
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-25 14:36:27
+type GetArticleReq struct {
+	g.Meta `path:"/article/edit" tags:"编辑文章" method:"get" summary:"编辑文章"`
+	Id     uint32 `p:"id" v:"required|min:0|integer#ID不能为空|ID要大于等于0|ID只为整数"`
+}
+type GetArticleRes struct{}
+
+// EditArticleReq
+// @Description: 提交编辑文章
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-25 16:05:09
+type EditArticleReq struct {
+	g.Meta      `path:"/article/edit" tags:"编辑文章" method:"put" summary:"编辑文章"`
+	Id          uint32 `p:"id" v:"required|min:0|integer#ID不能为空|ID要大于等于0|ID只为整数"`
+	CategoryId  uint32 `p:"category_id" v:"required|min:0|integer#分类ID不能为空|分类ID要大于等于0|分类ID只为整数"`
+	ChannelId   uint32 `p:"channel_id" v:"required|min:0|integer#频道ID不能为空|频道ID要大于等于0|频道ID只为整数"`
+	Title       string `p:"title" v:"required#标题不能为空"`
+	Keyword     string `p:"keyword"`
+	Description string `p:"description"`
+	Link        string `p:"link"`
+	Author      string `p:"author"`
+	Tags        string `p:"tags"`
+	PubDate     string `p:"pub_date"`
+	Summary     string `p:"summary"`
+	Content     string `p:"content"`
+	Thumbnail   string `p:"thumbnail"`
+	Click       uint32 `p:"click"`
+	Status      int8   `p:"status"`
+}
+type EditArticleRes struct{}
+
+// ListArticleReq
+// @Description: 文章信息列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-25 16:49:32
+type ListArticleReq struct {
+	g.Meta `path:"/article/show" tags:"文章信息列表" method:"get" summary:"文章信息列表"`
+	Page   int `p:"page" v:"min:1|integer#页码要大于等于1|页码只为正整数"`
+	Size   int `p:"size" v:"min:1|integer#显示条数要大于等于1|显示条数只为正整数"`
+}
+type ListArticleRes struct{}
+
+// DelArticleReq
+// @Description: 删除文章
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-25 17:26:15
+type DelArticleReq struct {
+	g.Meta `path:"/article/delete" tags:"删除文章" method:"delete" summary:"删除文章"`
+	Id     uint32 `p:"id" v:"required|min:0|integer#ID不能为空|ID要大于等于0|ID只为整数"`
+}
+type DelArticleRes struct{}

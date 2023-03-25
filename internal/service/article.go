@@ -24,11 +24,11 @@ type (
 		ListCategory(ctx context.Context, in article.ListCategoryInput) (code int32, message string, output []*article.CategoryOutput, err error)
 		DelCategoryById(ctx context.Context, id uint32) (code int32, message string, err error)
 		GetCategoryAll(ctx context.Context) (code int32, message string, output []*article.CategoryOutput, err error)
-		CreateArticle()
-		GetArticleById()
-		ModifyArticleById()
-		ListArticleById()
-		DelArticleById()
+		CreateArticle(ctx context.Context, in article.CreateArticleInput) (code int32, message string, err error)
+		GetArticleById(ctx context.Context, id uint32) (code int32, message string, output *article.GetArticleOutput, err error)
+		ModifyArticleById(ctx context.Context, in article.ModifyArticleInput) (code int32, message string, err error)
+		ListArticle(ctx context.Context, in article.ListArticleInput) (code int32, message string, output []*article.GetArticleOutput, err error)
+		DelArticleById(ctx context.Context, id uint32) (code int32, message string, err error)
 	}
 	ISinglePage interface {
 		Create(ctx context.Context, in article.CreateSinglePageInput) (code int32, message string, err error)
@@ -44,17 +44,6 @@ var (
 	localSinglePage ISinglePage
 )
 
-func SinglePage() ISinglePage {
-	if localSinglePage == nil {
-		panic("implement not found for interface ISinglePage, forgot register?")
-	}
-	return localSinglePage
-}
-
-func RegisterSinglePage(i ISinglePage) {
-	localSinglePage = i
-}
-
 func Article() IArticle {
 	if localArticle == nil {
 		panic("implement not found for interface IArticle, forgot register?")
@@ -64,4 +53,15 @@ func Article() IArticle {
 
 func RegisterArticle(i IArticle) {
 	localArticle = i
+}
+
+func SinglePage() ISinglePage {
+	if localSinglePage == nil {
+		panic("implement not found for interface ISinglePage, forgot register?")
+	}
+	return localSinglePage
+}
+
+func RegisterSinglePage(i ISinglePage) {
+	localSinglePage = i
 }
