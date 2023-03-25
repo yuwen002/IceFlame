@@ -113,7 +113,14 @@ func (s *sArticle) ListChannel(ctx context.Context, in article.ListChannelInput)
 // @return message
 // @return err
 func (s *sArticle) DelChannelById(ctx context.Context, id uint32) (code int32, message string, err error) {
-
+	// 查找是否关联文章信息
+	code, message, _, err = utility.DBGetMapById(dao.Article.Ctx(ctx), utility.DBGetByIdInput{Where: id})
+	if err != nil {
+		return -1, "", err
+	}
+	if code != 1 {
+		return 1, "频道关联文章，不能删除相关频道", nil
+	}
 	return utility.DBDelById(dao.ArticleChannel.Ctx(ctx), utility.DBDelByIdInput{Where: id})
 }
 
@@ -229,6 +236,14 @@ func (s *sArticle) ListCategory(ctx context.Context, in article.ListCategoryInpu
 // @return message
 // @return err
 func (s *sArticle) DelCategoryById(ctx context.Context, id uint32) (code int32, message string, err error) {
+	// 查找是否关联文章信息
+	code, message, _, err = utility.DBGetMapById(dao.Article.Ctx(ctx), utility.DBGetByIdInput{Where: id})
+	if err != nil {
+		return -1, "", err
+	}
+	if code != 1 {
+		return 1, "分类关联文章，不能删除相关分类", nil
+	}
 
 	return utility.DBDelById(dao.ArticleCategory.Ctx(ctx), utility.DBDelByIdInput{Where: id})
 }
@@ -252,6 +267,117 @@ func (s *sArticle) GetCategoryAll(ctx context.Context) (code int32, message stri
 	}, &output)
 
 	return code, message, output, err
+}
+
+// CreateTag
+//
+// @Title 新建标签
+// @Description 新建标签
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-26 00:18:53
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sArticle) CreateTag(ctx context.Context, in article.CreateTagInput) (code int32, message string, err error) {
+	return utility.DBInsert(dao.ArticleTag.Ctx(ctx), utility.DBInsertInput{Data: in})
+}
+
+// GetTagById
+//
+// @Title 显示标签
+// @Description 显示标签
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-26 00:33:52
+// @receiver s
+// @param ctx
+// @param id
+// @return code
+// @return message
+// @return out
+// @return err
+func (s *sArticle) GetTagById(ctx context.Context, id uint32) (code int32, message string, out *article.TagOutput, err error) {
+	code, message, err = utility.DBGetStructById(dao.ArticleTag.Ctx(ctx), utility.DBGetByIdInput{Where: id}, &out)
+	return code, message, out, err
+}
+
+// ModifyTagById
+//
+// @Title 按ID修改标签
+// @Description 按ID修改标签
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-26 00:56:56
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sArticle) ModifyTagById(ctx context.Context, in article.ModifyTagInput) (code int32, message string, err error) {
+	return utility.DBModifyById(dao.ArticleTag.Ctx(ctx), utility.DBModifyByIdInput{Where: in.Id})
+}
+func (s *sArticle) ListTag(ctx context.Context, in article.ListTagInput) (code int32, message string, out []*article.TagOutput, err error) {
+	code, message, err = utility.DBGetAllStructByWhere(dao.ArticleTag.Ctx(ctx), utility.DBGetAllByWhereInput{
+		Order:    "sort desc, id desc",
+		PageType: 1,
+		DBPagination: utility.DBPagination{
+			Page: in.Page,
+			Size: in.Size,
+		},
+	}, &out)
+
+	return code, message, out, err
+}
+
+// DelTagById
+//
+// @Title 按ID删除标签
+// @Description 按ID删除标签
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-26 01:05:22
+// @receiver s
+// @param ctx
+// @param id
+// @return code
+// @return message
+// @return err
+func (s *sArticle) DelTagById(ctx context.Context, id uint32) (code int32, message string, err error) {
+	// 查找是否关联文章信息
+	code, message, _, err = utility.DBGetMapById(dao.Article.Ctx(ctx), utility.DBGetByIdInput{
+		Where: "tag_id=?",
+		Args:  id,
+	})
+	if err != nil {
+		return -1, "", err
+	}
+	if code != 1 {
+		return 1, "标签关联文章，不能删除相关标签", nil
+	}
+
+	return utility.DBDelById(dao.ArticleCategory.Ctx(ctx), utility.DBDelByIdInput{Where: id})
+}
+
+// GetTagAll
+//
+// @Title 所有显示标签
+// @Description 所有显示标签
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-26 01:04:30
+// @receiver s
+// @param ctx
+// @return code
+// @return message
+// @return out
+// @return err
+func (s *sArticle) GetTagAll(ctx context.Context) (code int32, message string, out []*article.TagOutput, err error) {
+	code, message, err = utility.DBGetAllStructByWhere(dao.ArticleTag.Ctx(ctx), utility.DBGetAllByWhereInput{
+		Where: "status=0",
+		Order: "sort desc, id desc",
+	}, &out)
+
+	return code, message, out, err
 }
 
 // CreateArticle

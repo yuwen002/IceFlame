@@ -95,6 +95,51 @@ type ListCategoryInput struct {
 	Size int
 }
 
+// CreateTagInput
+// @Description: 新建标签
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-26 00:16:25
+type CreateTagInput struct {
+	Name   string
+	Remark string
+	Sort   uint32
+}
+
+// TagOutput
+// @Description: 标签显示
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-26 00:30:34
+type TagOutput struct {
+	Id        uint32     `json:"id"`
+	Name      string     `json:"name"`
+	Remark    string     `json:"remark"`
+	Sort      uint32     `json:"sort"`
+	Status    int8       `json:"status"`
+	CreatedAt gtime.Time `json:"created_at"`
+	UpdatedAt gtime.Time `json:"updated_at"`
+}
+
+// ModifyTagInput
+// @Description: 修改标签
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-26 00:38:57
+type ModifyTagInput struct {
+	Id     uint32
+	Name   string
+	Remark string
+	Sort   uint32
+	Status int8
+}
+
+// ListTagInput
+// @Description: 标签列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-26 00:49:20
+type ListTagInput struct {
+	Page int
+	Size int
+}
+
 // CreateArticleInput
 // @Description: 新建文章
 // @Author liuxingyu <yuwen002@163.com>

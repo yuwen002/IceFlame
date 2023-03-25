@@ -685,6 +685,223 @@ func (c *cArticle) GetArticleCategoryAll(ctx context.Context, req *manage.GetArt
 	return
 }
 
+// AddArticleTag
+//
+// @Title 添加标签
+// @Description 添加标签
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-26 01:27:42
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cArticle) AddArticleTag(ctx context.Context, req *manage.AddArticleTagReq) (res *manage.AddArticleTagRes, err error) {
+	// 访问日志写入
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 5,
+		Description:   "添加标签信息",
+	})
+
+	code, message, err := service.Article().CreateTag(ctx, article.CreateTagInput{
+		Name:   req.Name,
+		Remark: req.Remark,
+		Sort:   req.Sort,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}
+
+// GetArticleTag
+//
+// @Title 查看标签
+// @Description 查看标签
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-26 01:27:34
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cArticle) GetArticleTag(ctx context.Context, req *manage.GetArticleTagReq) (res *manage.GetArticleTagRes, err error) {
+	// 访问日志写入
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 5,
+		Description:   "查看编辑标签信息",
+	})
+
+	code, message, out, err := service.Article().GetArticleById(ctx, req.Id)
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    g.Map{"info": out},
+	})
+
+	return
+}
+
+func (c *cArticle) EditArticleTag(ctx context.Context, req *manage.EditArticleTagReq) (res *manage.EditArticleTagRes, err error) {
+	// 访问日志写入
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 5,
+		Description:   "提交编辑标签信息",
+	})
+
+	code, message, err := service.Article().ModifyTagById(ctx, article.ModifyTagInput{
+		Id:     req.Id,
+		Name:   req.Name,
+		Remark: req.Remark,
+		Sort:   req.Sort,
+		Status: req.Status,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}
+
+// ListArticleTag
+//
+// @Title 查看标签列表
+// @Description 查看标签列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-26 01:38:23
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+func (c *cArticle) ListArticleTag(ctx context.Context, req *manage.ListArticleTagReq) (res *manage.ListArticleTagRes) {
+	// 访问日志写入
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 5,
+		Description:   "查看标签列表",
+	})
+
+	code, message, out, err := service.Article().ListTag(ctx, article.ListTagInput{
+		Page: req.Page,
+		Size: req.Size,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    g.Map{"list": out},
+	})
+
+	return
+}
+
+// DelArticleTag
+//
+// @Title 删除标签
+// @Description 删除标签
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-26 01:40:40
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cArticle) DelArticleTag(ctx context.Context, req *manage.DelArticleTagReq) (res *manage.DelArticleTagRes, err error) {
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 5,
+		Description:   "删除标签",
+	})
+
+	code, message, err := service.Article().DelTagById(ctx, req.Id)
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}
+
+// GetArticleTagAll
+//
+// @Title 所有标签信息
+// @Description 所有标签信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-26 01:43:20
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cArticle) GetArticleTagAll(ctx context.Context, req *manage.GetArticleTagAllReq) (res *manage.GetArticleTagAllRes, err error) {
+	code, message, out, err := service.Article().GetTagAll(ctx)
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    g.Map{"list": out},
+	})
+
+	return
+}
+
 // AddArticle
 //
 // @Title 添加文章
