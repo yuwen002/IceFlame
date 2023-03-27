@@ -11,18 +11,6 @@ import (
 )
 
 type (
-	IUcSystemMasterVisitor interface {
-		CreateVisitCategory(ctx context.Context, in system_master.CreateVisitCategoryInput) (code int32, message string, err error)
-		GetVisitCategoryById(ctx context.Context, id uint16) (code int32, message string, out *system_master.GetVisitCategoryByIdInput, err error)
-		ModifyVisitCategoryById(ctx context.Context, in system_master.ModifyVisitCategoryByIdInput) (code int32, message string, err error)
-		ListVisitCategory(ctx context.Context, in system_master.ListVisitCategoryInput) (code int32, message string, output []*system_master.ListVisitCategoryOutput, err error)
-		GetRCacheVisitCategory(ctx context.Context) (code int32, message string, output map[string]interface{}, err error)
-		GetRCacheVisitCategoryById(id string) (code int32, message string, output map[string]interface{}, err error)
-		DelRCacheVisitCategory() (code int32, message string, err error)
-		DelRCacheVisitCategoryById(id string) (code int32, message string, err error)
-		CreateVisitorLogs(ctx context.Context, in system_master.CreateVisitorLogsInput) (code int32, message string, err error)
-		ListVisitorLogs(ctx context.Context, in system_master.ListVisitorLogsInput) (code int32, message string, output []*system_master.ListVisitorLogsOutput, err error)
-	}
 	IUcSystemMaster interface {
 		ExistsUsername(ctx context.Context, username string) (code int32, message string, err error)
 		ExistsTel(ctx context.Context, tel string) (code int32, message string, err error)
@@ -71,13 +59,36 @@ type (
 		DeletePermissionExcludeById(ctx context.Context, id uint16) (code int32, message string, err error)
 		GetPermissionExcludeAll(ctx context.Context) (code int32, message string, output []*system_master.ListPermissionExcludeOutput, err error)
 	}
+	IUcSystemMasterVisitor interface {
+		CreateVisitCategory(ctx context.Context, in system_master.CreateVisitCategoryInput) (code int32, message string, err error)
+		GetVisitCategoryById(ctx context.Context, id uint16) (code int32, message string, out *system_master.GetVisitCategoryByIdInput, err error)
+		ModifyVisitCategoryById(ctx context.Context, in system_master.ModifyVisitCategoryByIdInput) (code int32, message string, err error)
+		ListVisitCategory(ctx context.Context, in system_master.ListVisitCategoryInput) (code int32, message string, output []*system_master.ListVisitCategoryOutput, err error)
+		GetRCacheVisitCategory(ctx context.Context) (code int32, message string, output map[string]interface{}, err error)
+		GetRCacheVisitCategoryById(id string) (code int32, message string, output map[string]interface{}, err error)
+		DelRCacheVisitCategory() (code int32, message string, err error)
+		DelRCacheVisitCategoryById(id string) (code int32, message string, err error)
+		CreateVisitorLogs(ctx context.Context, in system_master.CreateVisitorLogsInput) (code int32, message string, err error)
+		ListVisitorLogs(ctx context.Context, in system_master.ListVisitorLogsInput) (code int32, message string, output []*system_master.ListVisitorLogsOutput, err error)
+	}
 )
 
 var (
+	localUcSystemMaster        IUcSystemMaster
 	localUcSystemMasterAuth    IUcSystemMasterAuth
 	localUcSystemMasterVisitor IUcSystemMasterVisitor
-	localUcSystemMaster        IUcSystemMaster
 )
+
+func UcSystemMaster() IUcSystemMaster {
+	if localUcSystemMaster == nil {
+		panic("implement not found for interface IUcSystemMaster, forgot register?")
+	}
+	return localUcSystemMaster
+}
+
+func RegisterUcSystemMaster(i IUcSystemMaster) {
+	localUcSystemMaster = i
+}
 
 func UcSystemMasterAuth() IUcSystemMasterAuth {
 	if localUcSystemMasterAuth == nil {
@@ -99,15 +110,4 @@ func UcSystemMasterVisitor() IUcSystemMasterVisitor {
 
 func RegisterUcSystemMasterVisitor(i IUcSystemMasterVisitor) {
 	localUcSystemMasterVisitor = i
-}
-
-func UcSystemMaster() IUcSystemMaster {
-	if localUcSystemMaster == nil {
-		panic("implement not found for interface IUcSystemMaster, forgot register?")
-	}
-	return localUcSystemMaster
-}
-
-func RegisterUcSystemMaster(i IUcSystemMaster) {
-	localUcSystemMaster = i
 }

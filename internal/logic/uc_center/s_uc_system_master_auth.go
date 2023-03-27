@@ -439,7 +439,7 @@ func (s *sUcSystemMasterAuth) ModifyPermissionRelation(ctx context.Context, in s
 	deletePermissionIds := utility.ArrayDiff[string](oldPermissionIds, newPermissionIds)
 	if len(deletePermissionIds) != 0 {
 		code, message, err = utility.DBDelByWhere(dao.UcSystemPermissionRelation.Ctx(ctx), utility.DBDelByWhereInput{
-			Where: "in (?) and role_id=?",
+			Where: "permission_id in (?) and role_id=?",
 			Args:  g.Slice{deletePermissionIds, in.RoleId},
 		})
 		if code != 0 {

@@ -2,12 +2,15 @@ package article
 
 import (
 	"context"
-	"github.com/gogf/gf/v2/frame/g"
 	"ice_flame/internal/dao"
 	"ice_flame/internal/model/article"
 	"ice_flame/internal/service"
 	"ice_flame/utility"
 	"strings"
+
+	"github.com/gogf/gf/v2/util/gconv"
+
+	"github.com/gogf/gf/v2/frame/g"
 )
 
 var insArticle = sArticle{}
@@ -412,10 +415,8 @@ func (s *sArticle) GetTagAll(ctx context.Context) (code int32, message string, o
 // @return message
 // @return err
 func (s *sArticle) CreateArticle(ctx context.Context, in article.CreateArticleInput) (code int32, message string, err error) {
-	// 提取标签Id
-	tagIds := strings.Split(in.Tags, ",")
 	// 给标签加标记
-	if len(tagIds) > 0 {
+	if in.Tags != "" {
 		in.Tags = "," + in.Tags + ","
 	}
 	code, message, id, err := utility.DBInsertAndGetId(dao.Article.Ctx(ctx), utility.DBInsertInput{Data: in})
@@ -424,13 +425,18 @@ func (s *sArticle) CreateArticle(ctx context.Context, in article.CreateArticleIn
 	}
 
 	// 添加ORM标签关联表
-	for _, v := range tagIds {
-		_, _, _ = utility.DBInsert(dao.ArticleTagOrm.Ctx(ctx), utility.DBInsertInput{
-			Data: g.Map{
-				"tag_id":     v,
+	if in.Tags != "" {
+		// 提取标签Id
+		tagIds := strings.Split(in.Tags, ",")
+		insertData := make([]map[string]interface{}, len(tagIds))
+		// 写入数据
+		for index := range tagIds {
+			insertData[index] = g.Map{
+				"tag_id":     tagIds[index],
 				"article_id": id,
-			},
-		})
+			}
+		}
+		_, _, _ = utility.DBInsert(dao.ArticleTagOrm.Ctx(ctx), utility.DBInsertInput{Data: insertData})
 	}
 
 	return utility.DBInsert(dao.Article.Ctx(ctx), utility.DBInsertInput{Data: in})
@@ -467,6 +473,68 @@ func (s *sArticle) GetArticleById(ctx context.Context, id uint32) (code int32, m
 // @return message
 // @return err
 func (s *sArticle) ModifyArticleById(ctx context.Context, in article.ModifyArticleInput) (code int32, message string, err error) {
+	if in.Tags != "" {
+		// 提取标签Id
+		tagIds := strings.Split(in.Tags, ",")
+		length := len(tagIds)
+		// 给标签加标记
+		if length > 0 {
+			in.Tags = "," + in.Tags + ","
+		}
+
+		code, _, tagOrm, err := utility.DBGetAllMapByWhere(dao.ArticleTag.Ctx(ctx), utility.DBGetAllByWhereInput{
+			Where: "article_id=? and tag_id in (?)",
+			Args:  g.Slice{in.Id, tagIds},
+		})
+		if err != nil {
+			return -1, "", err
+		}
+
+		if code == 1 {
+			insertData := make([]map[string]interface{}, length)
+			// 添加ORM标签关联表
+			for index := range tagIds {
+				insertData[index] = g.Map{
+					"tag_id":     tagIds[index],
+					"article_id": in.Id,
+				}
+			}
+			// 数据写入
+			_, _, _ = utility.DBInsert(dao.ArticleTagOrm.Ctx(ctx), utility.DBInsertInput{Data: insertData})
+		}
+
+		// 数据转换成sting数组
+		oldTagIds := utility.ArrayColumnCast[interface{}, string](tagOrm, "tag_id", func(v interface{}) string {
+			return gconv.String(v)
+		})
+
+		// 需要删除的数据
+		delTagIds := utility.ArrayDiff[string](oldTagIds, tagIds)
+		if len(delTagIds) > 0 {
+			code, message, err = utility.DBDelByWhere(dao.ArticleTagOrm.Ctx(ctx), utility.DBDelByWhereInput{
+				Where: "tag_id in (?) and article_id =?",
+				Args:  g.Slice{delTagIds, in.Id},
+			})
+			if code != 0 {
+				return code, message, err
+			}
+		}
+
+		// 需要添加的数据
+		insertTagIds := utility.ArrayDiff[string](tagIds, oldTagIds)
+		if len(insertTagIds) != 0 {
+			insertData := make([]map[string]interface{}, len(insertTagIds))
+			// 添加ORM标签关联表
+			for index := range tagIds {
+				insertData[index] = g.Map{
+					"tag_id":     tagIds[index],
+					"article_id": in.Id,
+				}
+			}
+			_, _, _ = utility.DBInsert(dao.ArticleTagOrm.Ctx(ctx), utility.DBInsertInput{Data: insertData})
+		}
+	}
+
 	return utility.DBModifyById(dao.Article.Ctx(ctx), utility.DBModifyByIdInput{
 		Data:  in,
 		Where: in.Id,
