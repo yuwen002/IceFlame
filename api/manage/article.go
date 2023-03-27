@@ -203,7 +203,7 @@ type GetArticleCategoryAllRes struct{}
 // @Author liuxingyu <yuwen002@163.com>
 // @Data 2023-03-26 01:11:25
 type AddArticleTagReq struct {
-	g.Meta `path:"/article/tag/edit" tags:"添加标签" method:"post" summary:"添加标签"`
+	g.Meta `path:"/article/tag/add" tags:"添加标签" method:"post" summary:"添加标签"`
 	Name   string `p:"title" v:"required#标签名称不能为空"`
 	Remark string `p:"remark"`
 	Sort   uint32 `p:"sort" v:"min:0|integer#排序要大于等于0|排序只为整数"`
@@ -239,7 +239,7 @@ type EditArticleTagRes struct{}
 // @Author liuxingyu <yuwen002@163.com>
 // @Data 2023-03-26 01:14:45
 type ListArticleTagReq struct {
-	g.Meta `path:"/article/tag/delete" tags:"标签列表" method:"get" summary:"标签列表"`
+	g.Meta `path:"/article/tag/show" tags:"标签列表" method:"get" summary:"标签列表"`
 	Page   int `p:"page" v:"min:1|integer#页码要大于等于1|页码只为正整数"`
 	Size   int `p:"size" v:"min:1|integer#显示条数要大于等于1|显示条数只为正整数"`
 }
@@ -261,7 +261,7 @@ type DelArticleTagRes struct {
 // @Author liuxingyu <yuwen002@163.com>
 // @Data 2023-03-26 01:41:49
 type GetArticleTagAllReq struct {
-	g.Meta `path:"/article/tag/delete" tags:"所有标签信息" method:"get" summary:"所有标签信息"`
+	g.Meta `path:"/article/tag/get_all" tags:"所有标签信息" method:"get" summary:"所有标签信息"`
 }
 type GetArticleTagAllRes struct {
 }

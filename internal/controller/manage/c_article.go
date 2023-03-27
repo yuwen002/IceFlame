@@ -745,7 +745,7 @@ func (c *cArticle) GetArticleTag(ctx context.Context, req *manage.GetArticleTagR
 		Description:   "查看编辑标签信息",
 	})
 
-	code, message, out, err := service.Article().GetArticleById(ctx, req.Id)
+	code, message, out, err := service.Article().GetTagById(ctx, req.Id)
 
 	var json = g.RequestFromCtx(ctx).Response
 	if err != nil {
@@ -806,7 +806,7 @@ func (c *cArticle) EditArticleTag(ctx context.Context, req *manage.EditArticleTa
 // @param ctx
 // @param req
 // @return res
-func (c *cArticle) ListArticleTag(ctx context.Context, req *manage.ListArticleTagReq) (res *manage.ListArticleTagRes) {
+func (c *cArticle) ListArticleTag(ctx context.Context, req *manage.ListArticleTagReq) (res *manage.ListArticleTagRes, err error) {
 	// 访问日志写入
 	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
@@ -1054,7 +1054,7 @@ func (c *cArticle) EditArticle(ctx context.Context, req *manage.EditArticleReq) 
 // @param ctx
 // @param req
 // @return res
-func (c *cArticle) ListArticle(ctx context.Context, req *manage.ListArticleReq) (res *manage.ListArticleRes) {
+func (c *cArticle) ListArticle(ctx context.Context, req *manage.ListArticleReq) (res *manage.ListArticleRes, err error) {
 	// 访问日志写入
 	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),

@@ -2,10 +2,12 @@ package article
 
 import (
 	"context"
+	"github.com/gogf/gf/v2/frame/g"
 	"ice_flame/internal/dao"
 	"ice_flame/internal/model/article"
 	"ice_flame/internal/service"
 	"ice_flame/utility"
+	"strings"
 )
 
 var insArticle = sArticle{}
@@ -316,8 +318,25 @@ func (s *sArticle) GetTagById(ctx context.Context, id uint32) (code int32, messa
 // @return message
 // @return err
 func (s *sArticle) ModifyTagById(ctx context.Context, in article.ModifyTagInput) (code int32, message string, err error) {
-	return utility.DBModifyById(dao.ArticleTag.Ctx(ctx), utility.DBModifyByIdInput{Where: in.Id})
+	return utility.DBModifyById(dao.ArticleTag.Ctx(ctx), utility.DBModifyByIdInput{
+		Data:  in,
+		Where: in.Id,
+	})
 }
+
+// ListTag
+//
+// @Title 标签列表
+// @Description 标签列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-27 16:49:22
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return out
+// @return err
 func (s *sArticle) ListTag(ctx context.Context, in article.ListTagInput) (code int32, message string, out []*article.TagOutput, err error) {
 	code, message, err = utility.DBGetAllStructByWhere(dao.ArticleTag.Ctx(ctx), utility.DBGetAllByWhereInput{
 		Order:    "sort desc, id desc",
@@ -345,7 +364,7 @@ func (s *sArticle) ListTag(ctx context.Context, in article.ListTagInput) (code i
 // @return err
 func (s *sArticle) DelTagById(ctx context.Context, id uint32) (code int32, message string, err error) {
 	// 查找是否关联文章信息
-	code, message, _, err = utility.DBGetMapById(dao.Article.Ctx(ctx), utility.DBGetByIdInput{
+	code, message, _, err = utility.DBGetMapById(dao.ArticleTagOrm.Ctx(ctx), utility.DBGetByIdInput{
 		Where: "tag_id=?",
 		Args:  id,
 	})
@@ -356,7 +375,7 @@ func (s *sArticle) DelTagById(ctx context.Context, id uint32) (code int32, messa
 		return 1, "标签关联文章，不能删除相关标签", nil
 	}
 
-	return utility.DBDelById(dao.ArticleCategory.Ctx(ctx), utility.DBDelByIdInput{Where: id})
+	return utility.DBDelById(dao.ArticleTag.Ctx(ctx), utility.DBDelByIdInput{Where: id})
 }
 
 // GetTagAll
@@ -393,6 +412,27 @@ func (s *sArticle) GetTagAll(ctx context.Context) (code int32, message string, o
 // @return message
 // @return err
 func (s *sArticle) CreateArticle(ctx context.Context, in article.CreateArticleInput) (code int32, message string, err error) {
+	// 提取标签Id
+	tagIds := strings.Split(in.Tags, ",")
+	// 给标签加标记
+	if len(tagIds) > 0 {
+		in.Tags = "," + in.Tags + ","
+	}
+	code, message, id, err := utility.DBInsertAndGetId(dao.Article.Ctx(ctx), utility.DBInsertInput{Data: in})
+	if code != 0 {
+		return code, message, err
+	}
+
+	// 添加ORM标签关联表
+	for _, v := range tagIds {
+		_, _, _ = utility.DBInsert(dao.ArticleTagOrm.Ctx(ctx), utility.DBInsertInput{
+			Data: g.Map{
+				"tag_id":     v,
+				"article_id": id,
+			},
+		})
+	}
+
 	return utility.DBInsert(dao.Article.Ctx(ctx), utility.DBInsertInput{Data: in})
 }
 
