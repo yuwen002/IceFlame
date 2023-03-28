@@ -2,6 +2,7 @@ package article
 
 import (
 	"context"
+	"fmt"
 	"ice_flame/internal/dao"
 	"ice_flame/internal/model/article"
 	"ice_flame/internal/service"
@@ -415,8 +416,11 @@ func (s *sArticle) GetTagAll(ctx context.Context) (code int32, message string, o
 // @return message
 // @return err
 func (s *sArticle) CreateArticle(ctx context.Context, in article.CreateArticleInput) (code int32, message string, err error) {
+	var tagIds []string
 	// 给标签加标记
 	if in.Tags != "" {
+		// 提取标签Id
+		tagIds = strings.Split(in.Tags, ",")
 		in.Tags = "," + in.Tags + ","
 	}
 	code, message, id, err := utility.DBInsertAndGetId(dao.Article.Ctx(ctx), utility.DBInsertInput{Data: in})
@@ -425,9 +429,7 @@ func (s *sArticle) CreateArticle(ctx context.Context, in article.CreateArticleIn
 	}
 
 	// 添加ORM标签关联表
-	if in.Tags != "" {
-		// 提取标签Id
-		tagIds := strings.Split(in.Tags, ",")
+	if len(tagIds) > 0 {
 		insertData := make([]map[string]interface{}, len(tagIds))
 		// 写入数据
 		for index := range tagIds {
@@ -439,7 +441,7 @@ func (s *sArticle) CreateArticle(ctx context.Context, in article.CreateArticleIn
 		_, _, _ = utility.DBInsert(dao.ArticleTagOrm.Ctx(ctx), utility.DBInsertInput{Data: insertData})
 	}
 
-	return utility.DBInsert(dao.Article.Ctx(ctx), utility.DBInsertInput{Data: in})
+	return 1, "发布成功", nil
 }
 
 // GetArticleById
@@ -482,9 +484,9 @@ func (s *sArticle) ModifyArticleById(ctx context.Context, in article.ModifyArtic
 			in.Tags = "," + in.Tags + ","
 		}
 
-		code, _, tagOrm, err := utility.DBGetAllMapByWhere(dao.ArticleTag.Ctx(ctx), utility.DBGetAllByWhereInput{
-			Where: "article_id=? and tag_id in (?)",
-			Args:  g.Slice{in.Id, tagIds},
+		code, _, tagOrm, err := utility.DBGetAllMapByWhere(dao.ArticleTagOrm.Ctx(ctx), utility.DBGetAllByWhereInput{
+			Where: "article_id=?",
+			Args:  in.Id,
 		})
 		if err != nil {
 			return -1, "", err
@@ -504,6 +506,7 @@ func (s *sArticle) ModifyArticleById(ctx context.Context, in article.ModifyArtic
 		}
 
 		// 数据转换成sting数组
+		fmt.Println(tagOrm)
 		oldTagIds := utility.ArrayColumnCast[interface{}, string](tagOrm, "tag_id", func(v interface{}) string {
 			return gconv.String(v)
 		})
@@ -525,9 +528,9 @@ func (s *sArticle) ModifyArticleById(ctx context.Context, in article.ModifyArtic
 		if len(insertTagIds) != 0 {
 			insertData := make([]map[string]interface{}, len(insertTagIds))
 			// 添加ORM标签关联表
-			for index := range tagIds {
+			for index := range insertTagIds {
 				insertData[index] = g.Map{
-					"tag_id":     tagIds[index],
+					"tag_id":     insertTagIds[index],
 					"article_id": in.Id,
 				}
 			}
