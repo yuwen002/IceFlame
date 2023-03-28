@@ -30,6 +30,7 @@ type (
 		ListTag(ctx context.Context, in article.ListTagInput) (code int32, message string, out []*article.TagOutput, err error)
 		DelTagById(ctx context.Context, id uint32) (code int32, message string, err error)
 		GetTagAll(ctx context.Context) (code int32, message string, out []*article.TagOutput, err error)
+		GetMapTags(ctx context.Context, ids []uint32) (code int32, message string, out map[string]string, err error)
 		CreateArticle(ctx context.Context, in article.CreateArticleInput) (code int32, message string, err error)
 		GetArticleById(ctx context.Context, id uint32) (code int32, message string, output *article.GetArticleOutput, err error)
 		ModifyArticleById(ctx context.Context, in article.ModifyArticleInput) (code int32, message string, err error)
@@ -46,8 +47,8 @@ type (
 )
 
 var (
-	localArticle    IArticle
 	localSinglePage ISinglePage
+	localArticle    IArticle
 )
 
 func Article() IArticle {

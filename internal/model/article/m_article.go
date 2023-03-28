@@ -153,6 +153,7 @@ type CreateArticleInput struct {
 	Link        string
 	Author      string
 	Tags        string
+	TagNames    string
 	PubDate     string
 	Summary     string
 	Content     string

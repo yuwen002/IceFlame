@@ -403,6 +403,30 @@ func (s *sArticle) GetTagAll(ctx context.Context) (code int32, message string, o
 	return code, message, out, err
 }
 
+// GetMapTags
+//
+// @Title 获取所有标签map
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-28 23:57:28
+// @receiver s
+// @param ctx
+// @param ids
+// @return code
+// @return message
+// @return out
+// @return err
+func (s *sArticle) GetMapTags(ctx context.Context, ids []uint32) (code int32, message string, out map[string]string, err error) {
+	code, message, output, err := utility.DBGetAllMapByWhere(dao.ArticleTag.Ctx(ctx), utility.DBGetAllByWhereInput{Where: "status = 0"})
+	if code != 0 {
+		return code, message, nil, err
+	}
+
+	tagMap := utility.MapStrStr(utility.MapsFromColumns(output, "id", "name"))
+
+	return 0, "转换成功", tagMap, nil
+}
+
 // CreateArticle
 //
 // @Title 新建文章
@@ -459,6 +483,12 @@ func (s *sArticle) CreateArticle(ctx context.Context, in article.CreateArticleIn
 // @return err
 func (s *sArticle) GetArticleById(ctx context.Context, id uint32) (code int32, message string, output *article.GetArticleOutput, err error) {
 	code, message, err = utility.DBGetStructById(dao.Article.Ctx(ctx), utility.DBGetByIdInput{Where: id}, &output)
+	// 处理标签ID
+	if output.Tags != "" {
+		output.Tags = strings.Trim(output.Tags, ",")
+
+	}
+
 	return code, message, output, err
 }
 
@@ -583,5 +613,13 @@ func (s *sArticle) ListArticle(ctx context.Context, in article.ListArticleInput)
 // @return message
 // @return err
 func (s *sArticle) DelArticleById(ctx context.Context, id uint32) (code int32, message string, err error) {
+	_, _, err = utility.DBDelByWhere(dao.ArticleTagOrm.Ctx(ctx), utility.DBDelByWhereInput{
+		Where: "article_id = ?",
+		Args:  id,
+	})
+	if err != nil {
+		return -1, "", err
+	}
+
 	return utility.DBDelById(dao.Article.Ctx(ctx), utility.DBDelByIdInput{Where: id})
 }

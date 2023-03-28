@@ -249,6 +249,22 @@ func MapsStrStr(maps []map[string]interface{}) []map[string]string {
 	return result
 }
 
+// MapStrStr
+//
+// @Title Map类型转换
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-29 00:07:09
+// @param data
+// @return map[string]string
+func MapStrStr(data map[string]interface{}) map[string]string {
+	result := make(map[string]string, len(data))
+	for k, v := range data {
+		result[k] = fmt.Sprintf("%v", v)
+	}
+	return result
+}
+
 // MapsCast
 //
 // @Title Map类型转换
