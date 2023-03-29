@@ -2,7 +2,6 @@ package article
 
 import (
 	"context"
-	"fmt"
 	"ice_flame/internal/dao"
 	"ice_flame/internal/model/article"
 	"ice_flame/internal/service"
@@ -403,7 +402,7 @@ func (s *sArticle) GetTagAll(ctx context.Context) (code int32, message string, o
 	return code, message, out, err
 }
 
-// GetMapTags
+// GetMapTag
 //
 // @Title 获取所有标签map
 // @Description
@@ -416,7 +415,7 @@ func (s *sArticle) GetTagAll(ctx context.Context) (code int32, message string, o
 // @return message
 // @return out
 // @return err
-func (s *sArticle) GetMapTags(ctx context.Context, ids []uint32) (code int32, message string, out map[string]string, err error) {
+func (s *sArticle) GetMapTag(ctx context.Context) (code int32, message string, out map[string]string, err error) {
 	code, message, output, err := utility.DBGetAllMapByWhere(dao.ArticleTag.Ctx(ctx), utility.DBGetAllByWhereInput{Where: "status = 0"})
 	if code != 0 {
 		return code, message, nil, err
@@ -486,7 +485,21 @@ func (s *sArticle) GetArticleById(ctx context.Context, id uint32) (code int32, m
 	// 处理标签ID
 	if output.Tags != "" {
 		output.Tags = strings.Trim(output.Tags, ",")
+		// 获取标签ID数组
+		tagIds := strings.Split(output.Tags, ",")
+		codeTag, messageTag, tagMap, errTag := s.GetMapTag(ctx)
+		if codeTag != 0 {
+			return codeTag, messageTag, nil, errTag
+		}
 
+		// 拼接标签
+		length := len(tagIds)
+		for i := 0; i < length; i++ {
+			output.TagNames += tagMap[tagIds[i]]
+			if i != length-1 {
+				output.TagNames += ","
+			}
+		}
 	}
 
 	return code, message, output, err
@@ -536,7 +549,6 @@ func (s *sArticle) ModifyArticleById(ctx context.Context, in article.ModifyArtic
 		}
 
 		// 数据转换成sting数组
-		fmt.Println(tagOrm)
 		oldTagIds := utility.ArrayColumnCast[interface{}, string](tagOrm, "tag_id", func(v interface{}) string {
 			return gconv.String(v)
 		})
@@ -596,6 +608,21 @@ func (s *sArticle) ListArticle(ctx context.Context, in article.ListArticleInput)
 			Size: in.Size,
 		},
 	}, &output)
+
+	// 拼接标签名称
+	_, _, tags, _ := s.GetMapTag(ctx)
+	for index := range output {
+		if output[index].Tags != "" {
+			tagIds := strings.Split(strings.Trim(output[index].Tags, ","), ",")
+			length := len(tagIds)
+			for i := 0; i < length; i++ {
+				output[index].TagNames += tags[tagIds[i]]
+				if i != length-1 {
+					output[index].TagNames += ","
+				}
+			}
+		}
+	}
 
 	return code, message, output, err
 }

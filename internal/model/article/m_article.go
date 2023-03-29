@@ -153,7 +153,6 @@ type CreateArticleInput struct {
 	Link        string
 	Author      string
 	Tags        string
-	TagNames    string
 	PubDate     string
 	Summary     string
 	Content     string
@@ -175,6 +174,7 @@ type GetArticleOutput struct {
 	Link        string     `json:"link"`
 	Author      string     `json:"author"`
 	Tags        string     `json:"tags"`
+	TagNames    string     `json:"tag_names"`
 	PubDate     string     `json:"pub_date"`
 	Summary     string     `json:"summary"`
 	Content     string     `json:"content"`
