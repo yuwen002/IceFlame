@@ -2,10 +2,15 @@ package uc_center
 
 import (
 	"context"
+	"errors"
 	"ice_flame/internal/dao"
 	"ice_flame/internal/model/uc_center/system_master"
 	"ice_flame/internal/service"
 	"ice_flame/utility"
+
+	"github.com/gogf/gf/v2/frame/g"
+
+	"github.com/gogf/gf/v2/database/gdb"
 )
 
 var insUcEmployee = sUcEmployee{
@@ -59,6 +64,18 @@ func (s *sUcEmployee) ExistsTel(ctx context.Context, tel string) (code int32, me
 	return code, message, err
 }
 
+// CreateEmployee
+//
+// @Title 新建员工
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-30 00:11:48
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
 func (s *sUcEmployee) CreateEmployee(ctx context.Context, in system_master.CreateEmployeeInput) (code int32, message string, err error) {
 	// 验证用户手机号是否存在
 	code, message, err = s.ExistsTel(ctx, in.Tel)
@@ -68,4 +85,67 @@ func (s *sUcEmployee) CreateEmployee(ctx context.Context, in system_master.Creat
 	if code == 0 {
 		return 1, "用户名手机号已存在", err
 	}
+
+	// 密码hash
+	if in.Password == "" {
+		in.Password = "123456"
+	}
+	in.Password, err = utility.PasswordHash(in.Password)
+	if err != nil {
+		return code, message, err
+	}
+
+	err = dao.UcAccount.Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
+		// 写入主表数据uc_account
+		code, message, lastInsertId, err := utility.DBInsertAndGetId(dao.UcAccount.Ctx(ctx), utility.DBInsertInput{Data: g.Map{
+			"username":      s.prefix + in.Tel,
+			"password_hash": in.Password,
+			"tel":           s.prefix + in.Tel,
+		}})
+
+		if err != nil {
+			return err
+		}
+
+		if code == 1 {
+			err = errors.New(message)
+			return err
+		}
+
+		// 写入员工数据
+		code, message, err = utility.DBInsert(dao.UcEmployee.Ctx(ctx), utility.DBInsertInput{Data: g.Map{
+			"account_id": lastInsertId,
+			"name":       in.Name,
+			"tel":        in.Tel,
+		}})
+		if err != nil {
+			return err
+		}
+
+		if code == 1 {
+			err = errors.New(message)
+			return err
+		}
+
+		// 钱包数据写入
+		code, message, err = utility.DBInsert(dao.UcEmployeeEwallet.Ctx(ctx), utility.DBInsertInput{Data: g.Map{
+			"account_id": lastInsertId,
+		}})
+		if err != nil {
+			return err
+		}
+
+		if code == 1 {
+			err = errors.New(message)
+			return err
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return -1, "", err
+	}
+
+	return 0, "数据写入成功", nil
 }

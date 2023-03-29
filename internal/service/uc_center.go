@@ -78,22 +78,11 @@ type (
 )
 
 var (
+	localUcEmployee            IUcEmployee
 	localUcSystemMaster        IUcSystemMaster
 	localUcSystemMasterAuth    IUcSystemMasterAuth
 	localUcSystemMasterVisitor IUcSystemMasterVisitor
-	localUcEmployee            IUcEmployee
 )
-
-func UcEmployee() IUcEmployee {
-	if localUcEmployee == nil {
-		panic("implement not found for interface IUcEmployee, forgot register?")
-	}
-	return localUcEmployee
-}
-
-func RegisterUcEmployee(i IUcEmployee) {
-	localUcEmployee = i
-}
 
 func UcSystemMaster() IUcSystemMaster {
 	if localUcSystemMaster == nil {
@@ -126,4 +115,15 @@ func UcSystemMasterVisitor() IUcSystemMasterVisitor {
 
 func RegisterUcSystemMasterVisitor(i IUcSystemMasterVisitor) {
 	localUcSystemMasterVisitor = i
+}
+
+func UcEmployee() IUcEmployee {
+	if localUcEmployee == nil {
+		panic("implement not found for interface IUcEmployee, forgot register?")
+	}
+	return localUcEmployee
+}
+
+func RegisterUcEmployee(i IUcEmployee) {
+	localUcEmployee = i
 }

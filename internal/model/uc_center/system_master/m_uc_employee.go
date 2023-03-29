@@ -1,6 +1,7 @@
 package system_master
 
 type CreateEmployeeInput struct {
+	Password     string
 	Name         string
 	Tel          string
 	WxUnionId    string
