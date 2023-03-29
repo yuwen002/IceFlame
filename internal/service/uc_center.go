@@ -11,6 +11,10 @@ import (
 )
 
 type (
+	IUcEmployee interface {
+		ExistsTel(ctx context.Context, tel string) (code int32, message string, err error)
+		CreateEmployee(ctx context.Context, in system_master.CreateEmployeeInput) (code int32, message string, err error)
+	}
 	IUcSystemMaster interface {
 		ExistsUsername(ctx context.Context, username string) (code int32, message string, err error)
 		ExistsTel(ctx context.Context, tel string) (code int32, message string, err error)
@@ -77,7 +81,19 @@ var (
 	localUcSystemMaster        IUcSystemMaster
 	localUcSystemMasterAuth    IUcSystemMasterAuth
 	localUcSystemMasterVisitor IUcSystemMasterVisitor
+	localUcEmployee            IUcEmployee
 )
+
+func UcEmployee() IUcEmployee {
+	if localUcEmployee == nil {
+		panic("implement not found for interface IUcEmployee, forgot register?")
+	}
+	return localUcEmployee
+}
+
+func RegisterUcEmployee(i IUcEmployee) {
+	localUcEmployee = i
+}
 
 func UcSystemMaster() IUcSystemMaster {
 	if localUcSystemMaster == nil {
