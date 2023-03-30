@@ -1,0 +1,38 @@
+package manage
+
+import "github.com/gogf/gf/v2/frame/g"
+
+// AddPartnerLevelReq
+// @Description: 添加合伙人级别
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-30 17:33:47
+type AddPartnerLevelReq struct {
+	g.Meta `path:"/partner/level/add" tags:"添加合伙人级别" method:"post" summary:"添加合伙人级别"`
+	Name   string `p:"name" v:"required#级别名称不能为空"`
+	Sort   uint16 `p:"sort" v:"min:0|integer#ID要大于等于0|ID只为整数"`
+	Remark string `p:"remark"`
+}
+type AddPartnerLevelRes struct{}
+
+// GetPartnerLevelReq
+// @Description: 编辑合伙人级别
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-30 17:55:55
+type GetPartnerLevelReq struct {
+	g.Meta `path:"/partner/level/edit" tags:"编辑合伙人级别" method:"get" summary:"编辑合伙人级别"`
+	Id     uint16 `p:"id" v:"required|min:0|integer#ID不能为空|ID要大于等于0|ID只为整数"`
+}
+type GetPartnerLevelRes struct{}
+
+// EditPartnerLevelReq
+// @Description: 编辑合伙人级别
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-30 18:16:33
+type EditPartnerLevelReq struct {
+	g.Meta `path:"/partner/level/edit" tags:"编辑合伙人级别" method:"put" summary:"编辑合伙人级别"`
+	Id     uint16 `p:"id" v:"required|min:0|integer#ID不能为空|ID要大于等于0|ID只为整数"`
+	Name   string `p:"name" v:"required#级别名称不能为空"`
+	Sort   uint16 `p:"sort" v:"min:0|integer#ID要大于等于0|ID只为整数"`
+	Remark string `p:"remark"`
+}
+type EditPartnerLevelRes struct{}

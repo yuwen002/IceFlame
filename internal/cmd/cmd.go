@@ -170,6 +170,12 @@ var (
 						manage.Article.EditArticle,
 						manage.Article.ListArticle,
 						manage.Article.DelArticle,
+
+						// 合伙人管理
+						// 添加合伙人级别
+						manage.UcPartner.AddPartnerLevel,
+						manage.UcPartner.GetPartnerLevel,
+						manage.UcPartner.EditPartnerLevel,
 					)
 				},
 			)
