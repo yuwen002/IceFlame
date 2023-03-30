@@ -36,3 +36,14 @@ type EditPartnerLevelReq struct {
 	Remark string `p:"remark"`
 }
 type EditPartnerLevelRes struct{}
+
+// ListPartnerLevelReq
+// @Description: 合伙人级别列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-31 00:03:09
+type ListPartnerLevelReq struct {
+	g.Meta `path:"/partner/level/show" tags:"合伙人级别列表" method:"get" summary:"合伙人级别列表"`
+	Page   int `p:"page" v:"min:1|integer#页码要大于等于1|页码只为正整数"`
+	Size   int `p:"size" v:"min:1|integer#显示条数要大于等于1|显示条数只为正整数"`
+}
+type ListPartnerLevelRes struct{}

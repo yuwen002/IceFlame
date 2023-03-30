@@ -2,11 +2,12 @@ package manage
 
 import (
 	"context"
-	"github.com/gogf/gf/v2/frame/g"
-	"github.com/gogf/gf/v2/util/gconv"
 	"ice_flame/api/manage"
 	"ice_flame/internal/model/uc_center/system_master"
 	"ice_flame/internal/service"
+
+	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/util/gconv"
 )
 
 var UcPartner = cUcPartner{}
@@ -130,6 +131,47 @@ func (c *cUcPartner) EditPartnerLevel(ctx context.Context, req *manage.EditPartn
 	json.WriteJsonExit(g.Map{
 		"code":    code,
 		"message": message,
+	})
+
+	return
+}
+
+// ListPartnerLevel
+//
+// @Title 查看合伙人级别列表
+// @Description 查看合伙人级别列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-03-31 00:06:51
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcPartner) ListPartnerLevel(ctx context.Context, req *manage.ListPartnerLevelReq) (res *manage.ListPartnerLevelRes, err error) {
+	// 访问日志写入
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 6,
+		Description:   "查看合伙人级别列表",
+	})
+
+	code, message, out, err := service.UcPartner().ListPartnerLevel(ctx, system_master.ListPartnerLevelInput{
+		Page: req.Page,
+		Size: req.Size,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    g.Map{"list": out},
 	})
 
 	return
