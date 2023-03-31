@@ -2,13 +2,19 @@ package uc_center
 
 import (
 	"context"
+	"errors"
+	"github.com/gogf/gf/v2/database/gdb"
+	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/util/gconv"
 	"ice_flame/internal/dao"
 	"ice_flame/internal/model/uc_center/system_master"
 	"ice_flame/internal/service"
 	"ice_flame/utility"
 )
 
-var insUcPartner = sUcPartner{}
+var insUcPartner = sUcPartner{
+	redisConfig: "uc_center",
+}
 
 func UcPartner() *sUcPartner {
 	return &insUcPartner
@@ -19,6 +25,39 @@ func init() {
 }
 
 type sUcPartner struct {
+	redisConfig string
+}
+
+// ExistsAccountId
+//
+// @Title 验证合伙人是否存在
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-31 11:22:56
+// @receiver s
+// @param ctx
+// @param accountId
+// @return code
+// @return message
+// @return err
+func (s *sUcPartner) ExistsAccountId(ctx context.Context, accountId uint64) (code int32, message string, err error) {
+	data := utility.RedisExistsData{
+		Config: s.redisConfig,
+		Key:    dao.UcPartner.Table() + ":exists_account_id",
+		Value:  accountId,
+	}
+
+	code, message, err = utility.RCExistsSetData(data, func(condition interface{}) (code int32, message string, err error) {
+		code, message, _, err = utility.DBGetOneMapByWhere(dao.UcPartner.Ctx(ctx), utility.DBGetOneByWhereInput{
+			Field: "account_id",
+			Where: "account_id = ?",
+			Args:  accountId,
+		})
+
+		return code, message, err
+	})
+
+	return code, message, err
 }
 
 // CreatePartnerLevel
@@ -92,4 +131,64 @@ func (s *sUcPartner) ListPartnerLevel(ctx context.Context, in system_master.List
 	}, &output)
 
 	return code, message, output, err
+}
+
+// CreatePartner
+//
+// @Title 新建合伙人
+// @Description 新建合伙人
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-03-31 11:33:18
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sUcPartner) CreatePartner(ctx context.Context, in system_master.CreatePartnerInput) (code int32, message string, err error) {
+	// 路径初始化
+	path := "0"
+	fullPath := "0"
+
+	// 如果不是顶级ID，验证传入父ID是否存在
+	if in.Fid != 0 {
+		code, message, out, err := utility.DBGetOneMapByWhere(dao.UcPartner.Ctx(ctx), utility.DBGetOneByWhereInput{
+			Field: "account_id",
+			Where: "account_id = ?",
+			Args:  in.Fid,
+		})
+		if code != 0 {
+			return code, message, err
+		}
+
+		path = gconv.String(out["path"])
+		fullPath = gconv.String(out["full_path"])
+	}
+
+	err = g.DB().Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
+		code, message, id, err := service.UcEmployee().CreateEmployee(ctx, system_master.CreateEmployeeInput{
+			Password: in.Password,
+			Name:     in.Name,
+			Tel:      in.Tel,
+		})
+
+		if err != nil {
+			return err
+		}
+
+		if code != 0 {
+			err = errors.New(message)
+			return err
+		}
+
+		code, message, err = utility.DBInsert(dao.UcPartner.Ctx(ctx), utility.DBInsertInput{
+			Data: g.Map{
+				"account_id": id,
+				"fid":        in.Fid,
+				"level_id":   in.LevelId,
+				"path":
+			},
+		})
+	})
+
 }

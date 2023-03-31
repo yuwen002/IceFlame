@@ -176,6 +176,7 @@ var (
 						manage.UcPartner.AddPartnerLevel,
 						manage.UcPartner.GetPartnerLevel,
 						manage.UcPartner.EditPartnerLevel,
+						manage.UcPartner.ListPartnerLevel,
 					)
 				},
 			)

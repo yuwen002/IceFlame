@@ -1,6 +1,12 @@
 package system_master
 
 type CreateEmployeeInput struct {
+	Password string
+	Name     string
+	Tel      string
+}
+
+type EmployeeOutput struct {
 	Password     string
 	Name         string
 	Tel          string

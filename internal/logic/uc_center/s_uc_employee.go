@@ -76,14 +76,14 @@ func (s *sUcEmployee) ExistsTel(ctx context.Context, tel string) (code int32, me
 // @return code
 // @return message
 // @return err
-func (s *sUcEmployee) CreateEmployee(ctx context.Context, in system_master.CreateEmployeeInput) (code int32, message string, err error) {
+func (s *sUcEmployee) CreateEmployee(ctx context.Context, in system_master.CreateEmployeeInput) (code int32, message string, lastInsertId int64, err error) {
 	// 验证用户手机号是否存在
 	code, message, err = s.ExistsTel(ctx, in.Tel)
 	if err != nil {
-		return code, message, err
+		return code, message, 0, err
 	}
 	if code == 0 {
-		return 1, "用户名手机号已存在", err
+		return 1, "用户名手机号已存在", 0, err
 	}
 
 	// 密码hash
@@ -92,7 +92,7 @@ func (s *sUcEmployee) CreateEmployee(ctx context.Context, in system_master.Creat
 	}
 	in.Password, err = utility.PasswordHash(in.Password)
 	if err != nil {
-		return code, message, err
+		return code, message, 0, err
 	}
 
 	err = dao.UcAccount.Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
@@ -144,8 +144,8 @@ func (s *sUcEmployee) CreateEmployee(ctx context.Context, in system_master.Creat
 	})
 
 	if err != nil {
-		return -1, "", err
+		return -1, "", 0, err
 	}
 
-	return 0, "数据写入成功", nil
+	return 0, "数据写入成功", lastInsertId, nil
 }

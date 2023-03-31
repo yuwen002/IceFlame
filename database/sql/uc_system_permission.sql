@@ -11,7 +11,7 @@
  Target Server Version : 50738
  File Encoding         : 65001
 
- Date: 25/03/2023 18:10:13
+ Date: 31/03/2023 10:53:00
 */
 
 SET NAMES utf8mb4;
@@ -35,7 +35,7 @@ CREATE TABLE `uc_system_permission`  (
   `created_at` datetime NULL DEFAULT NULL,
   `updated_at` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 50 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '后台系统权限模块列表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 60 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '后台系统权限模块列表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of uc_system_permission
@@ -89,5 +89,15 @@ INSERT INTO `uc_system_permission` VALUES (46, 30, '编辑文章', 'manage.Artic
 INSERT INTO `uc_system_permission` VALUES (47, 30, '编辑文章', 'manage.Article.EditArticle', 'manage/article/edit', 3, 0, NULL, 0, '提交程序', '2023-03-25 16:45:19', '2023-03-25 16:45:19');
 INSERT INTO `uc_system_permission` VALUES (48, 30, '文章列表', 'manage.Article.ListArticle', 'manage/article/show', 1, 0, NULL, 0, '提交程序', '2023-03-25 16:54:09', '2023-03-25 16:54:09');
 INSERT INTO `uc_system_permission` VALUES (49, 30, '删除文章', 'manage.Article.DelArticle', 'manage/article/delete', 2, 0, NULL, 0, '二级按钮', '2023-03-25 17:31:41', '2023-03-25 17:31:41');
+INSERT INTO `uc_system_permission` VALUES (50, 30, '添加标签', 'manage.Article.AddArticleTag', 'manage/article/tag/add', 2, 0, NULL, 0, '二级按钮', '2023-03-27 16:09:47', '2023-03-27 16:09:47');
+INSERT INTO `uc_system_permission` VALUES (51, 30, '编辑标签', 'manage.Article.GetArticleTag', 'manage/article/tag/edit', 2, 0, NULL, 0, '二级按钮', '2023-03-27 16:11:43', '2023-03-27 16:11:43');
+INSERT INTO `uc_system_permission` VALUES (52, 30, '编辑标签', 'manage.Article.EditArticleTag', 'manage/article/tag/edit', 2, 0, NULL, 0, '提交程序', '2023-03-27 16:29:42', '2023-03-27 16:29:42');
+INSERT INTO `uc_system_permission` VALUES (53, 30, '删除标签', 'manage.Article.DelArticleTag', 'manage/article/tag/delete', 2, 0, NULL, 0, '提交程序', '2023-03-27 17:09:00', '2023-03-27 17:09:00');
+INSERT INTO `uc_system_permission` VALUES (54, 30, '标签列表', 'manage.Article.ListArticleTag', 'manage/article/tag/show', 1, 0, NULL, 0, '二级菜单', '2023-03-31 10:46:29', '2023-03-31 10:46:29');
+INSERT INTO `uc_system_permission` VALUES (55, 0, '员工管理', NULL, NULL, 1, 0, NULL, 0, '一级菜单', '2023-03-30 14:31:26', '2023-03-30 14:31:26');
+INSERT INTO `uc_system_permission` VALUES (56, 55, '添加合伙人级别', 'manage.UcPartner.AddPartnerLevel', 'manage/partner/level/add', 2, 0, NULL, 0, '二级按钮', '2023-03-30 17:40:15', '2023-03-30 17:40:15');
+INSERT INTO `uc_system_permission` VALUES (57, 55, '编辑合伙人级别', 'manage.UcPartner.GetPartnerLevel', 'manage/partner/level/edit', 2, 0, NULL, 0, '二级按钮', '2023-03-30 18:07:21', '2023-03-30 18:07:21');
+INSERT INTO `uc_system_permission` VALUES (58, 55, '编辑合伙人级别', 'manage.UcPartner.EditPartnerLevel', 'manage/partner/level/edit', 3, 0, NULL, 0, '提交程序', '2023-03-30 18:18:52', '2023-03-30 18:18:52');
+INSERT INTO `uc_system_permission` VALUES (59, 55, '合伙人级别列表', 'manage.UcPartner.ListPartnerLevel', 'manage/partner/level/show', 1, 0, NULL, 0, '二级菜单', '2023-03-31 10:46:17', '2023-03-31 10:46:17');
 
 SET FOREIGN_KEY_CHECKS = 1;

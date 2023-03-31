@@ -40,3 +40,11 @@ type ListPartnerLevelInput struct {
 	Page int
 	Size int
 }
+
+type CreatePartnerInput struct {
+	Fid      uint64
+	LevelId  uint16
+	Password string
+	Name     string
+	Tel      string
+}
