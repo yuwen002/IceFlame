@@ -3,13 +3,14 @@ package uc_center
 import (
 	"context"
 	"errors"
-	"github.com/gogf/gf/v2/database/gdb"
-	"github.com/gogf/gf/v2/frame/g"
-	"github.com/gogf/gf/v2/util/gconv"
 	"ice_flame/internal/dao"
 	"ice_flame/internal/model/uc_center/system_master"
 	"ice_flame/internal/service"
 	"ice_flame/utility"
+
+	"github.com/gogf/gf/v2/database/gdb"
+	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/util/gconv"
 )
 
 var insUcPartner = sUcPartner{
@@ -147,25 +148,29 @@ func (s *sUcPartner) ListPartnerLevel(ctx context.Context, in system_master.List
 // @return err
 func (s *sUcPartner) CreatePartner(ctx context.Context, in system_master.CreatePartnerInput) (code int32, message string, err error) {
 	// 路径初始化
-	path := "0"
-	fullPath := "0"
-
+	path := ""
 	// 如果不是顶级ID，验证传入父ID是否存在
 	if in.Fid != 0 {
-		code, message, out, err := utility.DBGetOneMapByWhere(dao.UcPartner.Ctx(ctx), utility.DBGetOneByWhereInput{
+		code, _, out, err := utility.DBGetOneMapByWhere(dao.UcPartner.Ctx(ctx), utility.DBGetOneByWhereInput{
 			Field: "account_id",
 			Where: "account_id = ?",
 			Args:  in.Fid,
 		})
-		if code != 0 {
-			return code, message, err
+		if err != nil {
+			return -1, "", err
 		}
 
-		path = gconv.String(out["path"])
-		fullPath = gconv.String(out["full_path"])
+		if code == 1 {
+			return code, "合伙人上级信息错误", err
+		}
+
+		if gconv.Uint64(out["fid"]) > 0 {
+			path = gconv.String(out["path"]) + "," + gconv.String(out["id"])
+		}
 	}
 
 	err = g.DB().Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
+		// 注册员工信息
 		code, message, id, err := service.UcEmployee().CreateEmployee(ctx, system_master.CreateEmployeeInput{
 			Password: in.Password,
 			Name:     in.Name,
@@ -181,14 +186,31 @@ func (s *sUcPartner) CreatePartner(ctx context.Context, in system_master.CreateP
 			return err
 		}
 
+		// 合伙人关系写入
 		code, message, err = utility.DBInsert(dao.UcPartner.Ctx(ctx), utility.DBInsertInput{
 			Data: g.Map{
 				"account_id": id,
 				"fid":        in.Fid,
 				"level_id":   in.LevelId,
-				"path":
+				"path":       path,
 			},
 		})
+
+		if err != nil {
+			return err
+		}
+
+		if code != 0 {
+			err = errors.New(message)
+			return err
+		}
+
+		return nil
 	})
 
+	if err != nil {
+		return -1, "", err
+	}
+
+	return 0, "添加合伙人成功", nil
 }

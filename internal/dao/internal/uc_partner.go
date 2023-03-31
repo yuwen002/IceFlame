@@ -28,7 +28,6 @@ type UcPartnerColumns struct {
 	Depth         string // 层级深度
 	IsAgent       string // 是否是代理商:1=是,0=否
 	Path          string // 层级路径
-	FullPath      string // 完整层级路径
 	JoinStoreNum  string // 入驻商家数
 	TeamNum       string // 团队人数
 	PromotionType string // 晋级方式:1系统自动,0手动
@@ -46,7 +45,6 @@ var ucPartnerColumns = UcPartnerColumns{
 	Depth:         "depth",
 	IsAgent:       "is_agent",
 	Path:          "path",
-	FullPath:      "full_path",
 	JoinStoreNum:  "join_store_num",
 	TeamNum:       "team_num",
 	PromotionType: "promotion_type",

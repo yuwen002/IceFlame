@@ -18,7 +18,6 @@ type UcPartner struct {
 	Depth         uint        `json:"depth"          ` // 层级深度
 	IsAgent       uint        `json:"is_agent"       ` // 是否是代理商:1=是,0=否
 	Path          string      `json:"path"           ` // 层级路径
-	FullPath      string      `json:"full_path"      ` // 完整层级路径
 	JoinStoreNum  uint        `json:"join_store_num" ` // 入驻商家数
 	TeamNum       uint        `json:"team_num"       ` // 团队人数
 	PromotionType uint        `json:"promotion_type" ` // 晋级方式:1系统自动,0手动
