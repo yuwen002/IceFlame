@@ -64,9 +64,104 @@ func (s *sUcEmployee) ExistsTel(ctx context.Context, tel string) (code int32, me
 	return code, message, err
 }
 
+// CreateEmployeeRole
+//
+// @Title 新建员工角色
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-04-01 23:51:42
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sUcEmployee) CreateEmployeeRole(ctx context.Context, in system_master.CreateEmployeeRoleInput) (code int32, message string, err error) {
+	return utility.DBInsert(dao.UcEmployeeRole.Ctx(ctx), utility.DBInsertInput{Data: in})
+}
+
+// GetEmployeeRoleById
+//
+// @Title 按ID获取员工角色
+// @Description 按ID获取员工角色
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-04-01 23:58:55
+// @receiver s
+// @param ctx
+// @param id
+// @return code
+// @return message
+// @return out
+// @return err
+func (s *sUcEmployee) GetEmployeeRoleById(ctx context.Context, id uint16) (code int32, message string, out *system_master.GetEmployeeRoleOutput, err error) {
+	code, message, err = utility.DBGetStructById(dao.UcEmployeeRole.Ctx(ctx), utility.DBGetByIdInput{Where: id}, &out)
+	return code, message, out, err
+}
+
+// ModifyEmployeeRoleById
+//
+// @Title 按ID修改员工角色
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-04-02 00:05:28
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sUcEmployee) ModifyEmployeeRoleById(ctx context.Context, in system_master.ModifyRoleByIdInput) (code int32, message string, err error) {
+	return utility.DBModifyById(dao.UcEmployeeRole.Ctx(ctx), utility.DBModifyByIdInput{
+		Data:  in,
+		Where: in.Id,
+	})
+}
+
+// ListEmployeeRole
+//
+// @Title 员工角色列表
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-04-02 00:12:14
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return out
+// @return err
+func (s *sUcEmployee) ListEmployeeRole(ctx context.Context, in system_master.ListEmployeeRoleInput) (code int32, message string, out []*system_master.GetEmployeeRoleOutput, err error) {
+	code, message, err = utility.DBGetAllStructByWhere(dao.UcEmployeeRole.Ctx(ctx), utility.DBGetAllByWhereInput{
+		Order:    "id asc",
+		PageType: 1,
+		DBPagination: utility.DBPagination{
+			Page: in.Page,
+			Size: in.Size,
+		},
+	}, &out)
+
+	return code, message, out, err
+}
+
+// CreateEmployeeRoleRelation
+//
+// @Title
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-04-02 01:18:56
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sUcEmployee) CreateEmployeeRoleRelation(ctx context.Context, in system_master.CreateEmployeeRoleRelationInput) (code int32, message string, err error) {
+	return utility.DBInsert(dao.UcEmployeeRoleRelation.Ctx(ctx), utility.DBInsertInput{Data: in})
+}
+
 // CreateEmployee
 //
-// @Title 新建员工
+// @Title 新建员工角色绑定员工ID
 // @Description
 // @Author liuxingyu <yuwen002@163.com>
 // @Data 2023-03-30 00:11:48

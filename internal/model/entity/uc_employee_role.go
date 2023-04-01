@@ -10,9 +10,10 @@ import (
 
 // UcEmployeeRole is the golang structure for table uc_employee_role.
 type UcEmployeeRole struct {
-	Id        uint        `json:"id"         ` //
-	AccountId uint        `json:"account_id" ` //
-	RoleId    int         `json:"role_id"    ` //
-	CreatedAt *gtime.Time `json:"created_at" ` //
-	UpdatedAt *gtime.Time `json:"updated_at" ` //
+	Id           uint        `json:"id"            ` // 自增ID
+	Name         string      `json:"name"          ` // 角色名称
+	Remark       string      `json:"remark"        ` // 备注
+	SupperMaster int         `json:"supper_master" ` // 1为超级管理员模块
+	CreatedAt    *gtime.Time `json:"created_at"    ` //
+	UpdatedAt    *gtime.Time `json:"updated_at"    ` //
 }

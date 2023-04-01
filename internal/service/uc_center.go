@@ -13,6 +13,11 @@ import (
 type (
 	IUcEmployee interface {
 		ExistsTel(ctx context.Context, tel string) (code int32, message string, err error)
+		CreateEmployeeRole(ctx context.Context, in system_master.CreateEmployeeRoleInput) (code int32, message string, err error)
+		GetEmployeeRoleById(ctx context.Context, id uint16) (code int32, message string, out *system_master.GetEmployeeRoleOutput, err error)
+		ModifyEmployeeRoleById(ctx context.Context, in system_master.ModifyRoleByIdInput) (code int32, message string, err error)
+		ListEmployeeRole(ctx context.Context, in system_master.ListEmployeeRoleInput) (code int32, message string, out []*system_master.GetEmployeeRoleOutput, err error)
+		CreateEmployeeRoleRelation(ctx context.Context, in system_master.CreateEmployeeRoleRelationInput) (code int32, message string, err error)
 		CreateEmployee(ctx context.Context, in system_master.CreateEmployeeInput) (code int32, message string, lastInsertId int64, err error)
 	}
 	IUcPartner interface {
@@ -93,17 +98,6 @@ var (
 	localUcSystemMaster        IUcSystemMaster
 )
 
-func UcPartner() IUcPartner {
-	if localUcPartner == nil {
-		panic("implement not found for interface IUcPartner, forgot register?")
-	}
-	return localUcPartner
-}
-
-func RegisterUcPartner(i IUcPartner) {
-	localUcPartner = i
-}
-
 func UcSystemMaster() IUcSystemMaster {
 	if localUcSystemMaster == nil {
 		panic("implement not found for interface IUcSystemMaster, forgot register?")
@@ -146,4 +140,15 @@ func UcEmployee() IUcEmployee {
 
 func RegisterUcEmployee(i IUcEmployee) {
 	localUcEmployee = i
+}
+
+func UcPartner() IUcPartner {
+	if localUcPartner == nil {
+		panic("implement not found for interface IUcPartner, forgot register?")
+	}
+	return localUcPartner
+}
+
+func RegisterUcPartner(i IUcPartner) {
+	localUcPartner = i
 }

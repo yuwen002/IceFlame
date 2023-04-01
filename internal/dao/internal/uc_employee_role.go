@@ -20,20 +20,22 @@ type UcEmployeeRoleDao struct {
 
 // UcEmployeeRoleColumns defines and stores column names for table uc_employee_role.
 type UcEmployeeRoleColumns struct {
-	Id        string //
-	AccountId string //
-	RoleId    string //
-	CreatedAt string //
-	UpdatedAt string //
+	Id           string // 自增ID
+	Name         string // 角色名称
+	Remark       string // 备注
+	SupperMaster string // 1为超级管理员模块
+	CreatedAt    string //
+	UpdatedAt    string //
 }
 
 // ucEmployeeRoleColumns holds the columns for table uc_employee_role.
 var ucEmployeeRoleColumns = UcEmployeeRoleColumns{
-	Id:        "id",
-	AccountId: "account_id",
-	RoleId:    "role_id",
-	CreatedAt: "created_at",
-	UpdatedAt: "updated_at",
+	Id:           "id",
+	Name:         "name",
+	Remark:       "remark",
+	SupperMaster: "supper_master",
+	CreatedAt:    "created_at",
+	UpdatedAt:    "updated_at",
 }
 
 // NewUcEmployeeRoleDao creates and returns a new DAO object for table data access.

@@ -11,10 +11,11 @@ import (
 
 // UcEmployeeRole is the golang structure of table uc_employee_role for DAO operations like Where/Data.
 type UcEmployeeRole struct {
-	g.Meta    `orm:"table:uc_employee_role, do:true"`
-	Id        interface{} //
-	AccountId interface{} //
-	RoleId    interface{} //
-	CreatedAt *gtime.Time //
-	UpdatedAt *gtime.Time //
+	g.Meta       `orm:"table:uc_employee_role, do:true"`
+	Id           interface{} // 自增ID
+	Name         interface{} // 角色名称
+	Remark       interface{} // 备注
+	SupperMaster interface{} // 1为超级管理员模块
+	CreatedAt    *gtime.Time //
+	UpdatedAt    *gtime.Time //
 }

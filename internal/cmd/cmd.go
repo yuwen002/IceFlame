@@ -177,6 +177,12 @@ var (
 						manage.UcPartner.GetPartnerLevel,
 						manage.UcPartner.EditPartnerLevel,
 						manage.UcPartner.ListPartnerLevel,
+
+						// 合伙人角色
+						manage.UcEmployee.AddEmployeeRole,
+						manage.UcEmployee.GetEmployeeRole,
+						manage.UcEmployee.EditEmployeeRole,
+						manage.UcEmployee.ListEmployeeRole,
 					)
 				},
 			)

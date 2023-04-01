@@ -197,6 +197,21 @@ func (s *sUcPartner) CreatePartner(ctx context.Context, in system_master.CreateP
 			return err
 		}
 
+		// 员工身份绑定合伙人
+		code, message, err = service.UcEmployee().CreateEmployeeRoleRelation(ctx, system_master.CreateEmployeeRoleRelationInput{
+			AccountId: gconv.Uint64(id),
+			RoleId:    in.RoleId,
+		})
+
+		if err != nil {
+			return err
+		}
+
+		if code != 0 {
+			err = errors.New(message)
+			return err
+		}
+
 		// 合伙人关系写入
 		code, message, err = utility.DBInsert(dao.UcPartner.Ctx(ctx), utility.DBInsertInput{
 			Data: g.Map{

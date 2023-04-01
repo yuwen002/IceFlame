@@ -44,7 +44,7 @@ type ListRoleReq struct {
 	Page   int `p:"page" v:"min:1|integer#页码要大于等于1|页码只为正整数"`
 	Size   int `p:"size" v:"min:1|integer#显示条数要大于等于1|显示条数只为正整数"`
 }
-type GetListRoleRes struct{}
+type ListRoleRes struct{}
 
 // GetListRoleReq
 // @Description: 所有管理员角色列表
@@ -53,7 +53,7 @@ type GetListRoleRes struct{}
 type GetListRoleReq struct {
 	g.Meta `path:"/master/auth/get_role" tags:"管理员角色列表" method:"get" summary:"管理员角色列表"`
 }
-type ListRoleRes struct{}
+type GetListRoleRes struct{}
 
 // AddRoleRelationReq
 // @Description: 添加管理员绑定角色信息

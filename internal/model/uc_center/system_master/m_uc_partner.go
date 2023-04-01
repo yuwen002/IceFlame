@@ -36,14 +36,23 @@ type ModifyPartnerLevelInput struct {
 	Remark string
 }
 
+// ListPartnerLevelInput
+// @Description: 合伙人等级列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-04-02 01:23:48
 type ListPartnerLevelInput struct {
 	Page int
 	Size int
 }
 
+// CreatePartnerInput
+// @Description: 新建合伙人
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-04-02 01:24:04
 type CreatePartnerInput struct {
 	Fid           uint64
 	LevelId       uint16
+	RoleId        uint16
 	Password      string
 	Name          string
 	Tel           string
