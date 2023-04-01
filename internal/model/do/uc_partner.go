@@ -20,6 +20,7 @@ type UcPartner struct {
 	Depth         interface{} // 层级深度
 	IsAgent       interface{} // 是否是代理商:1=是,0=否
 	Path          interface{} // 层级路径
+	FullPath      interface{} //
 	JoinStoreNum  interface{} // 入驻商家数
 	TeamNum       interface{} // 团队人数
 	PromotionType interface{} // 晋级方式:1系统自动,0手动

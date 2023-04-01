@@ -42,9 +42,10 @@ type ListPartnerLevelInput struct {
 }
 
 type CreatePartnerInput struct {
-	Fid      uint64
-	LevelId  uint16
-	Password string
-	Name     string
-	Tel      string
+	Fid           uint64
+	LevelId       uint16
+	Password      string
+	Name          string
+	Tel           string
+	PromotionType uint8
 }

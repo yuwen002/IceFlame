@@ -127,19 +127,6 @@ func (s *sUcEmployee) CreateEmployee(ctx context.Context, in system_master.Creat
 			return err
 		}
 
-		// 钱包数据写入
-		code, message, err = utility.DBInsert(dao.UcEmployeeEwallet.Ctx(ctx), utility.DBInsertInput{Data: g.Map{
-			"account_id": lastInsertId,
-		}})
-		if err != nil {
-			return err
-		}
-
-		if code == 1 {
-			err = errors.New(message)
-			return err
-		}
-
 		return nil
 	})
 
