@@ -3,7 +3,6 @@ package uc_center
 import (
 	"context"
 	"errors"
-	"fmt"
 	"ice_flame/internal/consts"
 	"ice_flame/internal/dao"
 	"ice_flame/internal/model/uc_center/system_master"
@@ -55,7 +54,7 @@ func (s *sUcSystemMaster) ExistsUsername(ctx context.Context, username string) (
 	username = s.prefix + username
 	data := utility.RedisExistsData{
 		Config: s.redisConfig,
-		Key:    dao.UcAccount.Table() + ":exists_username",
+		Key:    dao.UcAccount.Table() + ":exists_master_username",
 		Value:  username,
 	}
 
@@ -88,7 +87,7 @@ func (s *sUcSystemMaster) ExistsTel(ctx context.Context, tel string) (code int32
 	tel = s.prefix + tel
 	data := utility.RedisExistsData{
 		Config: s.redisConfig,
-		Key:    dao.UcAccount.Table() + ":exists_tel",
+		Key:    dao.UcAccount.Table() + ":exists_master_tel",
 		Value:  tel,
 	}
 
@@ -268,7 +267,7 @@ func (s *sUcSystemMaster) Register(ctx context.Context, in system_master.Registe
 	if err != nil {
 		return code, message, err
 	}
-	if code == 0 {
+	if code == 0 || code >= 2 {
 		return 1, "用户名已存在", err
 	}
 
@@ -277,7 +276,7 @@ func (s *sUcSystemMaster) Register(ctx context.Context, in system_master.Registe
 	if err != nil {
 		return code, message, err
 	}
-	if code == 0 {
+	if code == 0 || code >= 2 {
 		return 1, "用户名手机号已存在", err
 	}
 
@@ -508,7 +507,7 @@ func (s *sUcSystemMaster) CreateSystemMaster(ctx context.Context, in system_mast
 	if err != nil {
 		return code, message, err
 	}
-	if code == 0 {
+	if code == 0 || code >= 2 {
 		return 1, "用户名已存在", err
 	}
 
@@ -517,7 +516,7 @@ func (s *sUcSystemMaster) CreateSystemMaster(ctx context.Context, in system_mast
 	if err != nil {
 		return code, message, err
 	}
-	if code == 0 {
+	if code == 0 || code >= 2 {
 		return 1, "用户名手机号已存在", err
 	}
 
@@ -716,7 +715,6 @@ func (s *sUcSystemMaster) ModifySystemMasterByAccountId(ctx context.Context, in 
 	// 判断电话号信息是否变更，变更需要验证新电话号是否存在
 	if outputTel != in.Tel {
 		code, message, err = s.ExistsTel(ctx, in.Tel)
-		fmt.Println(code)
 		if code != 1 {
 			return code, message, err
 		}

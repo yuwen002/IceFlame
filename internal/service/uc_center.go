@@ -11,43 +11,6 @@ import (
 )
 
 type (
-	IUcEmployee interface {
-		ExistsTel(ctx context.Context, tel string) (code int32, message string, err error)
-		CreateEmployeeRole(ctx context.Context, in system_master.CreateEmployeeRoleInput) (code int32, message string, err error)
-		GetEmployeeRoleById(ctx context.Context, id uint16) (code int32, message string, out *system_master.GetEmployeeRoleOutput, err error)
-		ModifyEmployeeRoleById(ctx context.Context, in system_master.ModifyRoleByIdInput) (code int32, message string, err error)
-		ListEmployeeRole(ctx context.Context, in system_master.ListEmployeeRoleInput) (code int32, message string, out []*system_master.GetEmployeeRoleOutput, err error)
-		CreateEmployeeRoleRelation(ctx context.Context, in system_master.CreateEmployeeRoleRelationInput) (code int32, message string, err error)
-		CreateEmployee(ctx context.Context, in system_master.CreateEmployeeInput) (code int32, message string, lastInsertId int64, err error)
-	}
-	IUcPartner interface {
-		ExistsAccountId(ctx context.Context, accountId uint64) (code int32, message string, err error)
-		CreatePartnerLevel(ctx context.Context, in system_master.CreatePartnerLevelInput) (code int32, message string, err error)
-		GetPartnerLevelById(ctx context.Context, id uint16) (code int32, message string, output *system_master.PartnerLevelOutput, err error)
-		ModifyPartnerLevelById(ctx context.Context, in system_master.ModifyPartnerLevelInput) (code int32, message string, err error)
-		ListPartnerLevel(ctx context.Context, in system_master.ListPartnerLevelInput) (code int32, message string, output []*system_master.PartnerLevelOutput, err error)
-		CreatePartner(ctx context.Context, in system_master.CreatePartnerInput) (code int32, message string, err error)
-	}
-	IUcSystemMaster interface {
-		ExistsUsername(ctx context.Context, username string) (code int32, message string, err error)
-		ExistsTel(ctx context.Context, tel string) (code int32, message string, err error)
-		AccountIdCastTel(ctx context.Context, accountId uint64) (code int32, message string, output interface{}, err error)
-		UpdateAccountIdCastTel(ctx context.Context, accountId uint64, tel string) (code int32, message string, err error)
-		GetLoginCountRKey(accountId string) string
-		IncLoginCount(ctx context.Context, accountId string) (code int32, message string, err error)
-		GetLoginCount(ctx context.Context, accountId string) (code int32, message string, err error)
-		DelLoginCount(ctx context.Context, accountId string) (code int32, message string, err error)
-		Register(ctx context.Context, in system_master.RegisterInput) (code int32, message string, err error)
-		LoginTelPassword(ctx context.Context, in system_master.LoginTelPasswordInput) (code int32, message string, token string, err error)
-		LoginUsernamePassword(ctx context.Context, in system_master.LoginUsernamePasswordInput) (code int32, message string, token string, err error)
-		CreateSystemMaster(ctx context.Context, in system_master.CreateSystemMasterInput) (code int32, message string, err error)
-		ModifyPasswordSelfById(ctx context.Context, in system_master.ModifyPasswordInput) (code int32, message string, err error)
-		ListSystemMaster(ctx context.Context, in system_master.ListSystemMasterInput) (code int32, message string, out []system_master.ListSystemMasterOutput, err error)
-		GetSystemMasterByAccountId(ctx context.Context, account uint64) (code int32, message string, output *system_master.UcSystemMaster, err error)
-		ModifySystemMasterByAccountId(ctx context.Context, in system_master.ModifySystemMasterByAccountIdInput) (code int32, message string, err error)
-		ResetPasswordByAccountId(ctx context.Context, in system_master.ResetPasswordByAccountIdInput) (code int32, message string, err error)
-		ModifyStatusByAccountId(ctx context.Context, in system_master.ModifyStatusByAccountIdInput) (code int32, message string, err error)
-	}
 	IUcSystemMasterAuth interface {
 		CreateRole(ctx context.Context, in system_master.CreateRoleInput) (code int32, message string, err error)
 		GetRoleById(ctx context.Context, id uint16) (code int32, message string, output system_master.GetRoleByIdOutput, err error)
@@ -88,15 +51,92 @@ type (
 		CreateVisitorLogs(ctx context.Context, in system_master.CreateVisitorLogsInput) (code int32, message string, err error)
 		ListVisitorLogs(ctx context.Context, in system_master.ListVisitorLogsInput) (code int32, message string, output []*system_master.ListVisitorLogsOutput, err error)
 	}
+	IUcEmployee interface {
+		ExistsTel(ctx context.Context, tel string) (code int32, message string, err error)
+		ExistsInviteCode(ctx context.Context, inviteCode string) (code int32, message string, err error)
+		CreateEmployeeRole(ctx context.Context, in system_master.CreateEmployeeRoleInput) (code int32, message string, err error)
+		GetEmployeeRoleById(ctx context.Context, id uint16) (code int32, message string, out *system_master.GetEmployeeRoleOutput, err error)
+		ModifyEmployeeRoleById(ctx context.Context, in system_master.ModifyRoleByIdInput) (code int32, message string, err error)
+		ListEmployeeRole(ctx context.Context, in system_master.ListEmployeeRoleInput) (code int32, message string, out []*system_master.GetEmployeeRoleOutput, err error)
+		CreateEmployeeRoleRelation(ctx context.Context, in system_master.CreateEmployeeRoleRelationInput) (code int32, message string, err error)
+		CreateEmployee(ctx context.Context, in system_master.CreateEmployeeInput) (code int32, message string, lastInsertId int64, err error)
+	}
+	IUcEmployeeEwallet interface {
+		ExistsEwallet(ctx context.Context, accountId uint64) (code int32, message string, err error)
+		SetHash(in system_master.EmployeeEwalletHash) (code int32, message string, hash string, err error)
+		CreateEmployeeEwallet(ctx context.Context, accountId uint64) (code int32, message string, err error)
+	}
+	IUcPartner interface {
+		ExistsAccountId(ctx context.Context, accountId uint64) (code int32, message string, err error)
+		CreatePartnerLevel(ctx context.Context, in system_master.CreatePartnerLevelInput) (code int32, message string, err error)
+		GetPartnerLevelById(ctx context.Context, id uint16) (code int32, message string, output *system_master.PartnerLevelOutput, err error)
+		ModifyPartnerLevelById(ctx context.Context, in system_master.ModifyPartnerLevelInput) (code int32, message string, err error)
+		ListPartnerLevel(ctx context.Context, in system_master.ListPartnerLevelInput) (code int32, message string, output []*system_master.PartnerLevelOutput, err error)
+		CreatePartner(ctx context.Context, in system_master.CreatePartnerInput) (code int32, message string, err error)
+	}
+	IUcSystemMaster interface {
+		ExistsUsername(ctx context.Context, username string) (code int32, message string, err error)
+		ExistsTel(ctx context.Context, tel string) (code int32, message string, err error)
+		AccountIdCastTel(ctx context.Context, accountId uint64) (code int32, message string, output interface{}, err error)
+		UpdateAccountIdCastTel(ctx context.Context, accountId uint64, tel string) (code int32, message string, err error)
+		GetLoginCountRKey(accountId string) string
+		IncLoginCount(ctx context.Context, accountId string) (code int32, message string, err error)
+		GetLoginCount(ctx context.Context, accountId string) (code int32, message string, err error)
+		DelLoginCount(ctx context.Context, accountId string) (code int32, message string, err error)
+		Register(ctx context.Context, in system_master.RegisterInput) (code int32, message string, err error)
+		LoginTelPassword(ctx context.Context, in system_master.LoginTelPasswordInput) (code int32, message string, token string, err error)
+		LoginUsernamePassword(ctx context.Context, in system_master.LoginUsernamePasswordInput) (code int32, message string, token string, err error)
+		CreateSystemMaster(ctx context.Context, in system_master.CreateSystemMasterInput) (code int32, message string, err error)
+		ModifyPasswordSelfById(ctx context.Context, in system_master.ModifyPasswordInput) (code int32, message string, err error)
+		ListSystemMaster(ctx context.Context, in system_master.ListSystemMasterInput) (code int32, message string, out []system_master.ListSystemMasterOutput, err error)
+		GetSystemMasterByAccountId(ctx context.Context, account uint64) (code int32, message string, output *system_master.UcSystemMaster, err error)
+		ModifySystemMasterByAccountId(ctx context.Context, in system_master.ModifySystemMasterByAccountIdInput) (code int32, message string, err error)
+		ResetPasswordByAccountId(ctx context.Context, in system_master.ResetPasswordByAccountIdInput) (code int32, message string, err error)
+		ModifyStatusByAccountId(ctx context.Context, in system_master.ModifyStatusByAccountIdInput) (code int32, message string, err error)
+	}
 )
 
 var (
+	localUcPartner             IUcPartner
+	localUcSystemMaster        IUcSystemMaster
 	localUcSystemMasterAuth    IUcSystemMasterAuth
 	localUcSystemMasterVisitor IUcSystemMasterVisitor
 	localUcEmployee            IUcEmployee
-	localUcPartner             IUcPartner
-	localUcSystemMaster        IUcSystemMaster
+	localUcEmployeeEwallet     IUcEmployeeEwallet
 )
+
+func UcEmployee() IUcEmployee {
+	if localUcEmployee == nil {
+		panic("implement not found for interface IUcEmployee, forgot register?")
+	}
+	return localUcEmployee
+}
+
+func RegisterUcEmployee(i IUcEmployee) {
+	localUcEmployee = i
+}
+
+func UcEmployeeEwallet() IUcEmployeeEwallet {
+	if localUcEmployeeEwallet == nil {
+		panic("implement not found for interface IUcEmployeeEwallet, forgot register?")
+	}
+	return localUcEmployeeEwallet
+}
+
+func RegisterUcEmployeeEwallet(i IUcEmployeeEwallet) {
+	localUcEmployeeEwallet = i
+}
+
+func UcPartner() IUcPartner {
+	if localUcPartner == nil {
+		panic("implement not found for interface IUcPartner, forgot register?")
+	}
+	return localUcPartner
+}
+
+func RegisterUcPartner(i IUcPartner) {
+	localUcPartner = i
+}
 
 func UcSystemMaster() IUcSystemMaster {
 	if localUcSystemMaster == nil {
@@ -129,26 +169,4 @@ func UcSystemMasterVisitor() IUcSystemMasterVisitor {
 
 func RegisterUcSystemMasterVisitor(i IUcSystemMasterVisitor) {
 	localUcSystemMasterVisitor = i
-}
-
-func UcEmployee() IUcEmployee {
-	if localUcEmployee == nil {
-		panic("implement not found for interface IUcEmployee, forgot register?")
-	}
-	return localUcEmployee
-}
-
-func RegisterUcEmployee(i IUcEmployee) {
-	localUcEmployee = i
-}
-
-func UcPartner() IUcPartner {
-	if localUcPartner == nil {
-		panic("implement not found for interface IUcPartner, forgot register?")
-	}
-	return localUcPartner
-}
-
-func RegisterUcPartner(i IUcPartner) {
-	localUcPartner = i
 }

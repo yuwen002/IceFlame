@@ -27,8 +27,6 @@ type UcEmployeeEwalletColumns struct {
 	TotalMoney     string // 账户累计金额（单位：里）
 	UnfreezeAmount string // 解冻金额
 	HashEwallet    string // hash钱包
-	EntryId        string // 入账ID
-	WithdrawId     string // 提现ID
 	WxOpenid       string // 微信提现openid
 	CreatedAt      string //
 	UpdatedAt      string //
@@ -43,8 +41,6 @@ var ucEmployeeEwalletColumns = UcEmployeeEwalletColumns{
 	TotalMoney:     "total_money",
 	UnfreezeAmount: "unfreeze_amount",
 	HashEwallet:    "hash_ewallet",
-	EntryId:        "entry_id",
-	WithdrawId:     "withdraw_id",
 	WxOpenid:       "wx_openid",
 	CreatedAt:      "created_at",
 	UpdatedAt:      "updated_at",

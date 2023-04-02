@@ -212,6 +212,17 @@ func (s *sUcPartner) CreatePartner(ctx context.Context, in system_master.CreateP
 			return err
 		}
 
+		// 新建员工钱包
+		code, message, err = service.UcEmployeeEwallet().CreateEmployeeEwallet(ctx, gconv.Uint64(id))
+		if err != nil {
+			return err
+		}
+
+		if code != 0 {
+			err = errors.New(message)
+			return err
+		}
+
 		// 合伙人关系写入
 		code, message, err = utility.DBInsert(dao.UcPartner.Ctx(ctx), utility.DBInsertInput{
 			Data: g.Map{

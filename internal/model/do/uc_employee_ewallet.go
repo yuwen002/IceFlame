@@ -19,8 +19,6 @@ type UcEmployeeEwallet struct {
 	TotalMoney     interface{} // 账户累计金额（单位：里）
 	UnfreezeAmount interface{} // 解冻金额
 	HashEwallet    interface{} // hash钱包
-	EntryId        interface{} // 入账ID
-	WithdrawId     interface{} // 提现ID
 	WxOpenid       interface{} // 微信提现openid
 	CreatedAt      *gtime.Time //
 	UpdatedAt      *gtime.Time //

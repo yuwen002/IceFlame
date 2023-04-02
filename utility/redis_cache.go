@@ -2,6 +2,7 @@ package utility
 
 import (
 	"context"
+
 	"github.com/gogf/gf/v2/database/gredis"
 	"github.com/gogf/gf/v2/frame/g"
 )
@@ -113,8 +114,8 @@ func (rc *RedisCache) DelKey(data RedisDelKey) (code int32, message string, err 
 // @return code
 //
 //	0, "集合中数据已存在"
-//	1, "失败，添加重复元素"，"添加元素成功"
-//	2, "添加元素成功, key不存在或者不能为key设置过期时间"
+//	2, "失败，添加重复元素"，"添加元素成功"
+//	3, "添加元素成功, key不存在或者不能为key设置过期时间"
 //
 // @return message
 // @return err
@@ -145,7 +146,7 @@ func (rc *RedisCache) ExistsSetData(data RedisExistsData, f func(condition inter
 
 	// 添加元素失败
 	if res == 0 {
-		return 1, "失败，添加重复元素", nil
+		return 2, "失败，添加重复元素", nil
 	}
 
 	// 添加元素成功，验证过期时间是否开启
@@ -156,7 +157,7 @@ func (rc *RedisCache) ExistsSetData(data RedisExistsData, f func(condition inter
 		}
 
 		if res == 0 {
-			return 2, "添加元素成功, 不能为key设置过期时间", nil
+			return 3, "添加元素成功, 不能为key设置过期时间", nil
 		}
 	}
 

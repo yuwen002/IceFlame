@@ -8,6 +8,8 @@ import (
 	"ice_flame/internal/service"
 	"ice_flame/utility"
 
+	"github.com/gogf/gf/v2/util/grand"
+
 	"github.com/gogf/gf/v2/frame/g"
 
 	"github.com/gogf/gf/v2/database/gdb"
@@ -47,7 +49,7 @@ func (s *sUcEmployee) ExistsTel(ctx context.Context, tel string) (code int32, me
 	tel = s.prefix + tel
 	data := utility.RedisExistsData{
 		Config: s.redisConfig,
-		Key:    dao.UcAccount.Table() + ":exists_tel",
+		Key:    dao.UcAccount.Table() + ":exists_employee_tel",
 		Value:  tel,
 	}
 
@@ -55,6 +57,37 @@ func (s *sUcEmployee) ExistsTel(ctx context.Context, tel string) (code int32, me
 		code, message, _, err = utility.DBGetOneMapByWhere(dao.UcAccount.Ctx(ctx), utility.DBGetOneByWhereInput{
 			Field: "id",
 			Where: "tel=?",
+			Args:  condition,
+		})
+
+		return code, message, err
+	})
+
+	return code, message, err
+}
+
+// ExistsInviteCode
+//
+// @Title 验证邀请码是否存在
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-04-02 23:53:05
+// @receiver s
+// @param inviteCode
+// @return code
+// @return message
+// @return err
+func (s *sUcEmployee) ExistsInviteCode(ctx context.Context, inviteCode string) (code int32, message string, err error) {
+	data := utility.RedisExistsData{
+		Config: s.redisConfig,
+		Key:    dao.UcEmployee.Table() + ":exists_invite_code",
+		Value:  inviteCode,
+	}
+
+	code, message, err = utility.RCExistsSetData(data, func(condition interface{}) (code int32, message string, err error) {
+		code, message, _, err = utility.DBGetOneMapByWhere(dao.UcEmployee.Ctx(ctx), utility.DBGetOneByWhereInput{
+			Field: "invite_code",
+			Where: "invite_code = ?",
 			Args:  condition,
 		})
 
@@ -172,12 +205,18 @@ func (s *sUcEmployee) CreateEmployeeRoleRelation(ctx context.Context, in system_
 // @return message
 // @return err
 func (s *sUcEmployee) CreateEmployee(ctx context.Context, in system_master.CreateEmployeeInput) (code int32, message string, lastInsertId int64, err error) {
+	inviteCode := grand.Digits(6)
+	code, message, err = s.ExistsInviteCode(ctx, inviteCode)
+	if code == 0 || code >= 2 {
+		return s.CreateEmployee(ctx, in)
+	}
+
 	// 验证用户手机号是否存在
 	code, message, err = s.ExistsTel(ctx, in.Tel)
 	if err != nil {
 		return code, message, 0, err
 	}
-	if code == 0 {
+	if code == 0 || code >= 2 {
 		return 1, "用户名手机号已存在", 0, err
 	}
 
