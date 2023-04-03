@@ -58,3 +58,24 @@ type CreatePartnerInput struct {
 	Tel           string
 	PromotionType uint8
 }
+
+// PartnerOutput
+// @Description: 合伙人详细信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-04-03 17:41:24
+type PartnerOutput struct {
+	Fid           uint64 `json:"fid"`
+	FName         string `json:"f_name"`
+	FTel          string `json:"f_tel"`
+	AccountId     uint64 `json:"account_id"`
+	LevelId       uint16 `json:"level_id"`
+	LevelName     string `json:"level_name"`
+	Team1st       uint32 `json:"team_1st"`
+	Team2nd       uint32 `json:"team_2nd"`
+	RoleId        uint16 `json:"role_id"`
+	RoleName      string `json:"role_name"`
+	Name          string `json:"name"`
+	Tel           string `json:"tel"`
+	InviteCode    string `json:"invite_code"`
+	PromotionType uint8  `json:"promotion_type"`
+}

@@ -292,3 +292,79 @@ func (s *sUcPartner) CreatePartner(ctx context.Context, in system_master.CreateP
 
 	return 0, "添加合伙人成功", nil
 }
+
+// GetPartnerByAccountId
+//
+// @Title 按account id获取合伙人信息
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-04-03 17:37:02
+// @receiver s
+// @param ctx
+// @param accountId
+// @return code
+// @return message
+// @return out
+// @return err
+func (s *sUcPartner) GetPartnerByAccountId(ctx context.Context, accountId uint64) (code int32, message string, out *system_master.PartnerOutput, err error) {
+	// 查询合伙人信息
+	code, message, partner, err := utility.DBGetOneMapByWhere(dao.UcPartner.Ctx(ctx), utility.DBGetOneByWhereInput{
+		Field: "fid, level_id, team_1st, team_2nd",
+		Where: "account_id = ?",
+		Args:  accountId,
+	})
+
+	if err != nil {
+		return -1, "", nil, err
+	}
+
+	if code == 1 {
+		return code, message, nil, nil
+	}
+
+	out.AccountId = accountId
+	out.Team1st = gconv.Uint32(partner["team_1st"])
+	out.Team2nd = gconv.Uint32(partner["team_2nd"])
+	out.Fid = gconv.Uint64(partner["fid"])
+
+	// 查询上级信息
+	if out.Fid != 0 {
+		code, message, fPartner, err := utility.DBGetOneMapByWhere(dao.UcEmployee.Ctx(ctx), utility.DBGetOneByWhereInput{
+			Field: "name, tel",
+			Where: "account_id = ?",
+			Args:  out.Fid,
+		})
+
+		if err != nil {
+			return -1, "", nil, err
+		}
+
+		if code == 1 {
+			return code, message, nil, nil
+		}
+
+		out.FName = gconv.String(fPartner["name"])
+		out.FTel = gconv.String(fPartner["tel"])
+	}
+
+	// 合伙人员工表基本信息
+	code, message, employee, err := utility.DBGetOneMapByWhere(dao.UcEmployee.Ctx(ctx), utility.DBGetOneByWhereInput{
+		Field: "name, tel, invite_code, real_name_type",
+		Where: "account_id = ?",
+		Args:  out.Fid,
+	})
+
+	if err != nil {
+		return -1, "", nil, err
+	}
+
+	if code == 1 {
+		return code, message, nil, nil
+	}
+
+	out.Name = gconv.String(employee["name"])
+	out.Tel = gconv.String(employee["name"])
+	out.InviteCode = gconv.String(employee["invite_code"])
+
+	return 0, "查询成功", out, nil
+}

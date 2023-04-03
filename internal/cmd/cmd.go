@@ -183,6 +183,9 @@ var (
 						manage.UcEmployee.GetEmployeeRole,
 						manage.UcEmployee.EditEmployeeRole,
 						manage.UcEmployee.ListEmployeeRole,
+
+						// 合伙人管理
+						manage.UcPartner.AddPartner,
 					)
 				},
 			)

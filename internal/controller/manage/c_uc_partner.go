@@ -176,3 +176,41 @@ func (c *cUcPartner) ListPartnerLevel(ctx context.Context, req *manage.ListPartn
 
 	return
 }
+
+// AddPartner
+//
+// @Title 添加合伙人
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-04-03 14:34:10
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcPartner) AddPartner(ctx context.Context, req *manage.AddPartnerReq) (res *manage.AddPartnerRes, err error) {
+	code, message, err := service.UcPartner().CreatePartner(ctx, system_master.CreatePartnerInput{
+		Fid:           req.Fid,
+		LevelId:       req.LevelId,
+		RoleId:        1,
+		Password:      req.Password,
+		Name:          req.Name,
+		Tel:           req.Tel,
+		PromotionType: req.PromotionType,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}

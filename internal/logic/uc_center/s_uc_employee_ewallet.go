@@ -51,7 +51,7 @@ func (s *sUcEmployeeEwallet) ExistsEwallet(ctx context.Context, accountId uint64
 	}
 
 	code, message, err = utility.RCExistsSetData(data, func(condition interface{}) (code int32, message string, err error) {
-		code, message, _, err = utility.DBGetOneMapByWhere(dao.UcAccount.Ctx(ctx), utility.DBGetOneByWhereInput{
+		code, message, _, err = utility.DBGetOneMapByWhere(dao.UcEmployeeEwallet.Ctx(ctx), utility.DBGetOneByWhereInput{
 			Field: "id",
 			Where: "account_id = ?",
 			Args:  condition,

@@ -231,7 +231,7 @@ func (s *sUcEmployee) CreateEmployee(ctx context.Context, in system_master.Creat
 
 	err = dao.UcAccount.Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
 		// 写入主表数据uc_account
-		code, message, lastInsertId, err := utility.DBInsertAndGetId(dao.UcAccount.Ctx(ctx), utility.DBInsertInput{Data: g.Map{
+		code, message, accountId, err := utility.DBInsertAndGetId(dao.UcAccount.Ctx(ctx), utility.DBInsertInput{Data: g.Map{
 			"username":      s.prefix + in.Tel,
 			"password_hash": in.Password,
 			"tel":           s.prefix + in.Tel,
@@ -248,9 +248,10 @@ func (s *sUcEmployee) CreateEmployee(ctx context.Context, in system_master.Creat
 
 		// 写入员工数据
 		code, message, err = utility.DBInsert(dao.UcEmployee.Ctx(ctx), utility.DBInsertInput{Data: g.Map{
-			"account_id": lastInsertId,
-			"name":       in.Name,
-			"tel":        in.Tel,
+			"account_id":  accountId,
+			"name":        in.Name,
+			"tel":         in.Tel,
+			"invite_code": inviteCode,
 		}})
 		if err != nil {
 			return err
@@ -261,6 +262,7 @@ func (s *sUcEmployee) CreateEmployee(ctx context.Context, in system_master.Creat
 			return err
 		}
 
+		lastInsertId = accountId
 		return nil
 	})
 
