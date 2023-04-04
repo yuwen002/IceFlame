@@ -214,3 +214,70 @@ func (c *cUcPartner) AddPartner(ctx context.Context, req *manage.AddPartnerReq) 
 
 	return
 }
+
+// GetPartner
+//
+// @Title 查看编辑合伙人
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-04-04 14:22:00
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcPartner) GetPartner(ctx context.Context, req *manage.GetPartnerReq) (res *manage.GetPartnerRes, err error) {
+	code, message, out, err := service.UcPartner().GetPartnerByAccountId(ctx, req.AccountId)
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    g.Map{"info": out},
+	})
+
+	return
+}
+
+// EditPartner
+//
+// @Title 提交编辑合伙人
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-04-04 18:08:10
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcPartner) EditPartner(ctx context.Context, req *manage.EditPartnerReq) (res *manage.EditPartnerRes, err error) {
+	code, message, err := service.UcPartner().ModifyPartnerByAccountId(ctx, system_master.ModifyPartnerInput{
+		AccountId:     req.AccountId,
+		LevelId:       req.LevelId,
+		Name:          req.Name,
+		Tel:           req.Tel,
+		PromotionType: req.PromotionType,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}

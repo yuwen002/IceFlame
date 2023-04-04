@@ -61,5 +61,24 @@ type AddPartnerReq struct {
 	Password      string `p:"password" v:"length:5,32#密码在5到32之间"`
 	PromotionType uint8  `p:"promotion_type" v:"min:0|integer|in:0,1#晋级方式ID要大于等于0|晋级方式ID只为整数|晋级方式传入数据错误"`
 }
-type AddPartnerRes struct {
+type AddPartnerRes struct{}
+
+type GetPartnerReq struct {
+	g.Meta    `path:"/partner/edit" tags:"编辑合伙人" method:"get" summary:"编辑合伙人"`
+	AccountId uint64 `p:"account_id" v:"required|min:0|integer#ID不能为空|ID要大于等于0|ID只为整数"`
 }
+type GetPartnerRes struct{}
+
+// EditPartnerReq
+// @Description: 修改合伙人
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-04-04 18:04:27
+type EditPartnerReq struct {
+	g.Meta        `path:"/partner/edit" tags:"编辑合伙人" method:"put" summary:"编辑合伙人"`
+	AccountId     uint64 `p:"account_id" v:"required|min:0|integer#ID不能为空|ID要大于等于0|ID只为整数"`
+	Name          string `p:"name" v:"required#合伙人名称不能为空"`
+	Tel           string `p:"tel" v:"required|phone#用户电话不能为空|请填写正确电话"`
+	LevelId       uint16 `p:"level_id" v:"required|min:0|integer#级别ID不能为空|ID要大于等于0|ID只为整数"`
+	PromotionType uint8  `p:"promotion_type" v:"min:0|integer|in:0,1#晋级方式ID要大于等于0|晋级方式ID只为整数|晋级方式传入数据错误"`
+}
+type EditPartnerRes struct{}

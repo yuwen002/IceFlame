@@ -135,6 +135,32 @@ func (s *sUcPartner) ListPartnerLevel(ctx context.Context, in system_master.List
 	return code, message, output, err
 }
 
+// GetMapPartnerLevelAll
+//
+// @Title
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-04-04 16:23:48
+// @receiver s
+// @param ctx
+// @return code
+// @return message
+// @return out
+// @return err
+func (s *sUcPartner) GetMapPartnerLevelAll(ctx context.Context) (code int32, message string, out map[string]string, err error) {
+	code, message, level, err := utility.DBGetAllMapByWhere(dao.UcPartnerLevel.Ctx(ctx), utility.DBGetAllByWhereInput{
+		Field: "id, name",
+	})
+
+	if code != 0 {
+		return code, message, nil, err
+	}
+
+	out = utility.MapStrStr(utility.MapsFromColumns(level, "id", "name"))
+
+	return 0, "查询成功", out, nil
+}
+
 // CreatePartner
 //
 // @Title 新建合伙人
@@ -309,7 +335,7 @@ func (s *sUcPartner) CreatePartner(ctx context.Context, in system_master.CreateP
 func (s *sUcPartner) GetPartnerByAccountId(ctx context.Context, accountId uint64) (code int32, message string, out *system_master.PartnerOutput, err error) {
 	// 查询合伙人信息
 	code, message, partner, err := utility.DBGetOneMapByWhere(dao.UcPartner.Ctx(ctx), utility.DBGetOneByWhereInput{
-		Field: "fid, level_id, team_1st, team_2nd",
+		Field: "fid, level_id, team_1st, team_2nd, created_at, updated_at",
 		Where: "account_id = ?",
 		Args:  accountId,
 	})
@@ -322,10 +348,22 @@ func (s *sUcPartner) GetPartnerByAccountId(ctx context.Context, accountId uint64
 		return code, message, nil, nil
 	}
 
+	out = new(system_master.PartnerOutput)
 	out.AccountId = accountId
 	out.Team1st = gconv.Uint32(partner["team_1st"])
 	out.Team2nd = gconv.Uint32(partner["team_2nd"])
 	out.Fid = gconv.Uint64(partner["fid"])
+	out.LevelId = gconv.Uint16(partner["level_id"])
+	out.PromotionType = gconv.Uint8(partner["promotion_type"])
+	out.CreatedAt = gconv.GTime(partner["created_at"])
+	out.UpdatedAt = gconv.GTime(partner["updated_at"])
+
+	// 所有合伙人级别
+	code, message, level, err := s.GetMapPartnerLevelAll(ctx)
+	if code != 0 {
+		return code, message, nil, err
+	}
+	out.LevelName = level[gconv.String(partner["level_id"])]
 
 	// 查询上级信息
 	if out.Fid != 0 {
@@ -351,7 +389,7 @@ func (s *sUcPartner) GetPartnerByAccountId(ctx context.Context, accountId uint64
 	code, message, employee, err := utility.DBGetOneMapByWhere(dao.UcEmployee.Ctx(ctx), utility.DBGetOneByWhereInput{
 		Field: "name, tel, invite_code, real_name_type",
 		Where: "account_id = ?",
-		Args:  out.Fid,
+		Args:  accountId,
 	})
 
 	if err != nil {
@@ -363,8 +401,55 @@ func (s *sUcPartner) GetPartnerByAccountId(ctx context.Context, accountId uint64
 	}
 
 	out.Name = gconv.String(employee["name"])
-	out.Tel = gconv.String(employee["name"])
+	out.Tel = gconv.String(employee["tel"])
 	out.InviteCode = gconv.String(employee["invite_code"])
 
 	return 0, "查询成功", out, nil
+}
+
+// ModifyPartnerByAccountId
+//
+// @Title 按account id修改合伙人信息
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-04-04 17:33:51
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sUcPartner) ModifyPartnerByAccountId(ctx context.Context, in system_master.ModifyPartnerInput) (code int32, message string, err error) {
+	err = g.DB().Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
+		_, _, err = utility.DBModifyByWhere(dao.UcPartner.Ctx(ctx), utility.DBModifyByWhereInput{
+			Data: g.Map{
+				"level_id":       in.LevelId,
+				"promotion_type": in.PromotionType,
+			},
+			Where: "account_id = ?",
+			Args:  in.AccountId,
+		})
+
+		if err != nil {
+			return err
+		}
+
+		_, _, err = service.UcEmployee().ModifyEmployeeByAccountId(ctx, system_master.ModifyEmployeeInput{
+			AccountId: in.AccountId,
+			Name:      in.Name,
+			Tel:       in.Tel,
+		})
+
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return -1, "", nil
+	}
+
+	return 0, "修改合伙人成功", nil
 }

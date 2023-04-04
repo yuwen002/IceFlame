@@ -61,6 +61,16 @@ type CreateEmployeeInput struct {
 	Tel      string
 }
 
+// ModifyEmployeeInput
+// @Description: 修改员工信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-04-04 17:41:21
+type ModifyEmployeeInput struct {
+	AccountId uint64
+	Name      string
+	Tel       string
+}
+
 type EmployeeOutput struct {
 	Password     string
 	Name         string

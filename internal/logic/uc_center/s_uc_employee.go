@@ -272,3 +272,36 @@ func (s *sUcEmployee) CreateEmployee(ctx context.Context, in system_master.Creat
 
 	return 0, "数据写入成功", lastInsertId, nil
 }
+
+// ModifyEmployeeByAccountId
+//
+// @Title 按ID修改员工信息
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-04-04 17:47:43
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sUcEmployee) ModifyEmployeeByAccountId(ctx context.Context, in system_master.ModifyEmployeeInput) (code int32, message string, err error) {
+	// 验证修改电话是否存在
+	code, message, err = s.ExistsTel(ctx, in.Tel)
+	if err != nil {
+		return -1, "", err
+	}
+
+	if code == 0 || code >= 2 {
+		return 1, "修改电话已存在", nil
+	}
+
+	return utility.DBModifyByWhere(dao.UcEmployee.Ctx(ctx), utility.DBModifyByWhereInput{
+		Data: g.Map{
+			"name": in.Name,
+			"tel":  in.Tel,
+		},
+		Where: "account_id = ?",
+		Args:  in.AccountId,
+	})
+}

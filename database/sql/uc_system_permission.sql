@@ -11,7 +11,7 @@
  Target Server Version : 50738
  File Encoding         : 65001
 
- Date: 31/03/2023 10:53:00
+ Date: 04/04/2023 17:19:50
 */
 
 SET NAMES utf8mb4;
@@ -35,7 +35,7 @@ CREATE TABLE `uc_system_permission`  (
   `created_at` datetime NULL DEFAULT NULL,
   `updated_at` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 60 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '后台系统权限模块列表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 66 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '后台系统权限模块列表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of uc_system_permission
@@ -99,5 +99,11 @@ INSERT INTO `uc_system_permission` VALUES (56, 55, '添加合伙人级别', 'man
 INSERT INTO `uc_system_permission` VALUES (57, 55, '编辑合伙人级别', 'manage.UcPartner.GetPartnerLevel', 'manage/partner/level/edit', 2, 0, NULL, 0, '二级按钮', '2023-03-30 18:07:21', '2023-03-30 18:07:21');
 INSERT INTO `uc_system_permission` VALUES (58, 55, '编辑合伙人级别', 'manage.UcPartner.EditPartnerLevel', 'manage/partner/level/edit', 3, 0, NULL, 0, '提交程序', '2023-03-30 18:18:52', '2023-03-30 18:18:52');
 INSERT INTO `uc_system_permission` VALUES (59, 55, '合伙人级别列表', 'manage.UcPartner.ListPartnerLevel', 'manage/partner/level/show', 1, 0, NULL, 0, '二级菜单', '2023-03-31 10:46:17', '2023-03-31 10:46:17');
+INSERT INTO `uc_system_permission` VALUES (60, 55, '添加员工角色', 'manage.UcEmployee.AddEmployeeRole', 'manage/employee/role/add', 2, 0, NULL, 0, '二级按钮', '2023-04-02 00:35:42', '2023-04-02 00:35:42');
+INSERT INTO `uc_system_permission` VALUES (61, 55, '编辑员工角色', 'manage.UcEmployee.GetEmployeeRole', 'manage/employee/role/edit', 2, 0, NULL, 0, '二级按钮', '2023-04-02 00:55:31', '2023-04-02 00:55:31');
+INSERT INTO `uc_system_permission` VALUES (62, 55, '编辑员工角色', 'manage.UcEmployee.EditEmployeeRole', 'manage/employee/role/edit', 3, 0, NULL, 0, '提交程序', '2023-04-02 00:55:52', '2023-04-02 00:55:52');
+INSERT INTO `uc_system_permission` VALUES (63, 55, '员工角色列表', 'manage.UcEmployee.ListEmployeeRole', 'manage/employee/role/show', 1, 0, NULL, 0, '二级菜单', '2023-04-02 00:56:14', '2023-04-02 00:56:14');
+INSERT INTO `uc_system_permission` VALUES (64, 55, '添加合伙人', 'manage.UcPartner.AddPartner', 'manage/partner/add', 2, 0, NULL, 0, '二级按钮', '2023-04-03 16:14:17', '2023-04-03 16:14:17');
+INSERT INTO `uc_system_permission` VALUES (65, 55, '编辑合伙人', 'manage.UcPartner.GetPartner', 'manage/partner/edit', 2, 0, NULL, 0, '二级按钮', '2023-04-04 14:39:42', '2023-04-04 14:39:42');
 
 SET FOREIGN_KEY_CHECKS = 1;
