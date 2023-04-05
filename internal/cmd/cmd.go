@@ -187,6 +187,7 @@ var (
 						// 合伙人管理
 						manage.UcPartner.AddPartner,
 						manage.UcPartner.GetPartner,
+						manage.UcPartner.EditPartner,
 					)
 				},
 			)

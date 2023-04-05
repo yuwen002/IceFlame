@@ -453,3 +453,32 @@ func (s *sUcPartner) ModifyPartnerByAccountId(ctx context.Context, in system_mas
 
 	return 0, "修改合伙人成功", nil
 }
+
+// ListPartner
+//
+// @Title 合伙人列表
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-04-06 00:06:17
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return out
+// @return err
+func (s *sUcPartner) ListPartner(ctx context.Context, in system_master.ListPartnerInput) (code int32, message string, out []*system_master.PartnerOutput, err error) {
+	err = dao.UcPartner.Ctx(ctx).As("a").Fields(
+		"a.account_id, a.level_id, a.team_1st, a.team_2nd, a.promotion_type, b.name, b.tel, b.invite_code, a.created_at, a.updated_at",
+	).InnerJoin("uc_employee as b", "a.account_id = b.account_id").Order("a.id desc").Page(in.Page, in.Size).Scan(&out)
+
+	if err != nil {
+		return -1, "", nil, err
+	}
+
+	if len(out) == 0 {
+		return 1, "查询数据不存在", nil, err
+	}
+
+	return 0, "查询数据成功", out, nil
+}

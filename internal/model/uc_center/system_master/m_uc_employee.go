@@ -69,6 +69,7 @@ type ModifyEmployeeInput struct {
 	AccountId uint64
 	Name      string
 	Tel       string
+	Status    uint8
 }
 
 type EmployeeOutput struct {

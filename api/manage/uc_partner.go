@@ -80,5 +80,6 @@ type EditPartnerReq struct {
 	Tel           string `p:"tel" v:"required|phone#用户电话不能为空|请填写正确电话"`
 	LevelId       uint16 `p:"level_id" v:"required|min:0|integer#级别ID不能为空|ID要大于等于0|ID只为整数"`
 	PromotionType uint8  `p:"promotion_type" v:"min:0|integer|in:0,1#晋级方式ID要大于等于0|晋级方式ID只为整数|晋级方式传入数据错误"`
+	Status        uint8  `p:"status" v:"required|in:0,1#用户状态不能为空|用户状态值错误"`
 }
 type EditPartnerRes struct{}

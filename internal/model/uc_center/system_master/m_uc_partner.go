@@ -59,12 +59,40 @@ type CreatePartnerInput struct {
 	PromotionType uint8
 }
 
+// ModifyPartnerInput
+// @Description: 修改合伙人
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-04-05 23:39:50
 type ModifyPartnerInput struct {
 	AccountId     uint64
 	LevelId       uint16
 	Name          string
 	Tel           string
 	PromotionType uint8
+}
+
+// ListPartnerInput
+// @Description: 合伙人列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-04-05 23:40:55
+type ListPartnerInput struct {
+	Page int
+	Size int
+}
+
+type ListPartnerOutput struct {
+	AccountId     uint64      `json:"account_id"`
+	LevelId       uint16      `json:"level_id"`
+	LevelName     string      `json:"level_name"`
+	Team1st       uint32      `json:"team_1st"`
+	Team2nd       uint32      `json:"team_2nd"`
+	Name          string      `json:"name"`
+	Tel           string      `json:"tel"`
+	InviteCode    string      `json:"invite_code"`
+	PromotionType uint8       `json:"promotion_type"`
+	Status        uint8       `json:"status"`
+	CreatedAt     *gtime.Time `json:"created_at"`
+	UpdatedAt     *gtime.Time `json:"updated_at"`
 }
 
 // PartnerOutput
@@ -84,6 +112,7 @@ type PartnerOutput struct {
 	Tel           string      `json:"tel"`
 	InviteCode    string      `json:"invite_code"`
 	PromotionType uint8       `json:"promotion_type"`
+	Status        uint8       `json:"status"`
 	CreatedAt     *gtime.Time `json:"created_at"`
 	UpdatedAt     *gtime.Time `json:"updated_at"`
 }

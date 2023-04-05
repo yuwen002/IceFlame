@@ -8,6 +8,8 @@ import (
 	"ice_flame/internal/service"
 	"ice_flame/utility"
 
+	"github.com/gogf/gf/v2/util/gconv"
+
 	"github.com/gogf/gf/v2/util/grand"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -92,6 +94,61 @@ func (s *sUcEmployee) ExistsInviteCode(ctx context.Context, inviteCode string) (
 		})
 
 		return code, message, err
+	})
+
+	return code, message, err
+}
+
+// AccountIdCastTel
+//
+// @Title account id转换员工注册电话
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-04-05 00:35:28
+// @receiver s
+// @param ctx
+// @param accountId
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sUcEmployee) AccountIdCastTel(ctx context.Context, accountId uint64) (code int32, message string, output interface{}, err error) {
+	code, message, output, err = utility.RCCastHashData(utility.RedisCastData{
+		Config: s.redisConfig,
+		Key:    dao.UcEmployee.Table() + ":account_id_cast_tel",
+		Field:  gconv.String(accountId),
+	}, func(condition interface{}) (code int32, message string, output interface{}, err error) {
+		code, message, out, err := utility.DBGetMapById(dao.UcEmployee.Ctx(ctx), utility.DBGetByIdInput{
+			Field: "tel",
+			Where: "account_id=?",
+			Args:  condition,
+		})
+
+		return code, message, out["tel"], err
+	})
+
+	return code, message, output, err
+}
+
+// UpdateAccountIdCastTel
+//
+// @Title 更新account id转换信息的电话
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Data 2023-04-05 00:46:16
+// @receiver s
+// @param ctx
+// @param accountId
+// @param tel
+// @return code
+// @return message
+// @return err
+func (s *sUcEmployee) UpdateAccountIdCastTel(ctx context.Context, accountId uint64, tel string) (code int32, message string, err error) {
+	code, message, err = utility.RCUpdateCastHashData(utility.RedisCastData{
+		Config: s.redisConfig,
+		Key:    dao.UcEmployee.Table() + ":account_id_cast_tel",
+		Field:  gconv.String(accountId),
+		Data:   tel,
 	})
 
 	return code, message, err
@@ -286,17 +343,42 @@ func (s *sUcEmployee) CreateEmployee(ctx context.Context, in system_master.Creat
 // @return message
 // @return err
 func (s *sUcEmployee) ModifyEmployeeByAccountId(ctx context.Context, in system_master.ModifyEmployeeInput) (code int32, message string, err error) {
-	// 验证修改电话是否存在
-	code, message, err = s.ExistsTel(ctx, in.Tel)
+	// 转换用户数据，用account id换取电话
+	code, message, output, err := s.AccountIdCastTel(ctx, in.AccountId)
+	if code != 0 {
+		return code, message, err
+	}
+
+	tel := gconv.String(output)
+	// 判断电话号信息是否变更，变更需要验证新电话号是否存在
+	if tel != in.Tel {
+		// 验证修改电话是否存在
+		code, message, err = s.ExistsTel(ctx, in.Tel)
+		if err != nil {
+			return -1, "", err
+		}
+
+		if code == 0 || code >= 2 {
+			return 1, "修改电话已存在", nil
+		}
+	}
+
+	// tel 未更新，主账户不更新电话
+	data := g.Map{"status": in.Status}
+	if code == 1 {
+		data["tel"] = s.prefix + in.Tel
+	}
+	// 修改主表信息
+	_, _, err = utility.DBModifyById(dao.UcAccount.Ctx(ctx), utility.DBModifyByIdInput{
+		Data:  data,
+		Where: in.AccountId,
+	})
+
 	if err != nil {
 		return -1, "", err
 	}
 
-	if code == 0 || code >= 2 {
-		return 1, "修改电话已存在", nil
-	}
-
-	return utility.DBModifyByWhere(dao.UcEmployee.Ctx(ctx), utility.DBModifyByWhereInput{
+	_, _, err = utility.DBModifyByWhere(dao.UcEmployee.Ctx(ctx), utility.DBModifyByWhereInput{
 		Data: g.Map{
 			"name": in.Name,
 			"tel":  in.Tel,
@@ -304,4 +386,14 @@ func (s *sUcEmployee) ModifyEmployeeByAccountId(ctx context.Context, in system_m
 		Where: "account_id = ?",
 		Args:  in.AccountId,
 	})
+	if err != nil {
+		return -1, "", err
+	}
+
+	// 更新电话转换信息
+	if tel != in.Tel {
+		_, _, _ = s.UpdateAccountIdCastTel(ctx, in.AccountId, in.Tel)
+	}
+
+	return 0, "修改成功", nil
 }
