@@ -15,6 +15,7 @@ type (
 		MiddlewareVerifyPermission(r *ghttp.Request)
 	}
 	IMiddleware interface {
+		MiddlewareCORS(r *ghttp.Request)
 		MiddlewareHandlerResponse(r *ghttp.Request)
 	}
 )

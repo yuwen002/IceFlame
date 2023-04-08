@@ -23,7 +23,7 @@ var (
 		Func: func(ctx context.Context, parser *gcmd.Parser) (err error) {
 			s := g.Server()
 			s.Group("/", func(group *ghttp.RouterGroup) {
-				group.Middleware(ghttp.MiddlewareHandlerResponse)
+				group.Middleware(service.Middleware().MiddlewareCORS, ghttp.MiddlewareHandlerResponse)
 				group.Bind(
 					controller.Hello,
 
@@ -66,7 +66,7 @@ var (
 			// 后台管理分组
 			s.Group("/manage",
 				func(group *ghttp.RouterGroup) {
-					group.Middleware(service.Middleware().MiddlewareHandlerResponse)
+					group.Middleware(service.Middleware().MiddlewareCORS, service.Middleware().MiddlewareHandlerResponse)
 					group.Bind(
 						manage.UcSystemMaster.Register,
 						manage.UcSystemMaster.LoginTelPassword,

@@ -22,6 +22,11 @@ func init() {
 type sMiddleware struct {
 }
 
+func (s *sMiddleware) MiddlewareCORS(r *ghttp.Request) {
+	r.Response.CORSDefault()
+	r.Middleware.Next()
+}
+
 func (s *sMiddleware) MiddlewareHandlerResponse(r *ghttp.Request) {
 	r.Middleware.Next()
 
