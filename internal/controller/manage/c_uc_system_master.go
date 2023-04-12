@@ -442,3 +442,34 @@ func (c *cUcSystemMaster) UnlockSystemMaster(ctx context.Context, req *manage.Un
 
 	return
 }
+
+// GetSystemMasterInfo
+//
+// @Title 获取用户详细信息
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-04-12 14:38:00
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMaster) GetSystemMasterInfo(ctx context.Context, req *manage.GetSystemMasterInfoReq) (res *manage.GetSystemMasterInfoRes, err error) {
+	code, message, out, err := service.UcSystemMaster().GetSystemMasterByAccountId(ctx, gconv.Uint64(ctx.Value("master_id")))
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    g.Map{"info": out},
+	})
+
+	return
+}

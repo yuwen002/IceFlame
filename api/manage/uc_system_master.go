@@ -130,3 +130,13 @@ type UnlockSystemMasterReq struct {
 	AccountId uint64 `p:"account_id" v:"required|min:1|integer#ID不能为空|ID要大于等于1|ID只为正整数"`
 }
 type UnlockSystemMasterRes struct{}
+
+// GetSystemMasterInfoReq
+// @Description:获取用户详细信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-04-12 14:30:53
+type GetSystemMasterInfoReq struct {
+	g.Meta `path:"/master/info" tags:"获取用户详细信息" method:"get" summary:"获取用户详细信息"`
+}
+type GetSystemMasterInfoRes struct {
+}

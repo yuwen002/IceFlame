@@ -75,21 +75,27 @@ func (s *sAuthMiddleware) concatModule(args ...string) string {
 // @receiver s
 // @param r
 func (s *sAuthMiddleware) MiddlewareAuthMaster(r *ghttp.Request) {
-	token := r.Get("token")
+	token := r.Header.Get("Authorization")
+	if token == "" {
+		token = r.Get("token").String()
+	}
+
 	// token 未传入
-	if token.String() == "" {
+	if token == "" {
 		r.Response.WriteJsonExit(g.Map{
 			"code":    -1,
 			"message": "token不能为空",
 		})
 	}
-	claims, err := utility.ParseToken(token.String(), consts.MasterSecretKey)
+	claims, err := utility.ParseToken(token, consts.MasterSecretKey)
 	if err != nil {
 		r.Response.WriteJsonExit(g.Map{
 			"code":    -1,
 			"message": err.Error(),
 		})
 	}
+
+	fmt.Println(claims)
 
 	r.SetCtxVar("master_id", claims.Id)
 	r.SetCtxVar("user_info", claims.UserInfo)
