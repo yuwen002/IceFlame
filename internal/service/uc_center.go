@@ -11,6 +11,11 @@ import (
 )
 
 type (
+	IUcEmployeeEwallet interface {
+		ExistsEwallet(ctx context.Context, accountId uint64) (code int32, message string, err error)
+		SetHash(in system_master.EmployeeEwalletHash) (code int32, message string, hash string, err error)
+		CreateEmployeeEwallet(ctx context.Context, accountId uint64) (code int32, message string, err error)
+	}
 	IUcPartner interface {
 		ExistsAccountId(ctx context.Context, accountId uint64) (code int32, message string, err error)
 		CreatePartnerLevel(ctx context.Context, in system_master.CreatePartnerLevelInput) (code int32, message string, err error)
@@ -96,21 +101,38 @@ type (
 		CreateEmployee(ctx context.Context, in system_master.CreateEmployeeInput) (code int32, message string, lastInsertId int64, err error)
 		ModifyEmployeeByAccountId(ctx context.Context, in system_master.ModifyEmployeeInput) (code int32, message string, err error)
 	}
-	IUcEmployeeEwallet interface {
-		ExistsEwallet(ctx context.Context, accountId uint64) (code int32, message string, err error)
-		SetHash(in system_master.EmployeeEwalletHash) (code int32, message string, hash string, err error)
-		CreateEmployeeEwallet(ctx context.Context, accountId uint64) (code int32, message string, err error)
-	}
 )
 
 var (
+	localUcEmployee            IUcEmployee
+	localUcEmployeeEwallet     IUcEmployeeEwallet
 	localUcPartner             IUcPartner
 	localUcSystemMaster        IUcSystemMaster
 	localUcSystemMasterAuth    IUcSystemMasterAuth
 	localUcSystemMasterVisitor IUcSystemMasterVisitor
-	localUcEmployee            IUcEmployee
-	localUcEmployeeEwallet     IUcEmployeeEwallet
 )
+
+func UcSystemMasterAuth() IUcSystemMasterAuth {
+	if localUcSystemMasterAuth == nil {
+		panic("implement not found for interface IUcSystemMasterAuth, forgot register?")
+	}
+	return localUcSystemMasterAuth
+}
+
+func RegisterUcSystemMasterAuth(i IUcSystemMasterAuth) {
+	localUcSystemMasterAuth = i
+}
+
+func UcSystemMasterVisitor() IUcSystemMasterVisitor {
+	if localUcSystemMasterVisitor == nil {
+		panic("implement not found for interface IUcSystemMasterVisitor, forgot register?")
+	}
+	return localUcSystemMasterVisitor
+}
+
+func RegisterUcSystemMasterVisitor(i IUcSystemMasterVisitor) {
+	localUcSystemMasterVisitor = i
+}
 
 func UcEmployee() IUcEmployee {
 	if localUcEmployee == nil {
@@ -154,26 +176,4 @@ func UcSystemMaster() IUcSystemMaster {
 
 func RegisterUcSystemMaster(i IUcSystemMaster) {
 	localUcSystemMaster = i
-}
-
-func UcSystemMasterAuth() IUcSystemMasterAuth {
-	if localUcSystemMasterAuth == nil {
-		panic("implement not found for interface IUcSystemMasterAuth, forgot register?")
-	}
-	return localUcSystemMasterAuth
-}
-
-func RegisterUcSystemMasterAuth(i IUcSystemMasterAuth) {
-	localUcSystemMasterAuth = i
-}
-
-func UcSystemMasterVisitor() IUcSystemMasterVisitor {
-	if localUcSystemMasterVisitor == nil {
-		panic("implement not found for interface IUcSystemMasterVisitor, forgot register?")
-	}
-	return localUcSystemMasterVisitor
-}
-
-func RegisterUcSystemMasterVisitor(i IUcSystemMasterVisitor) {
-	localUcSystemMasterVisitor = i
 }

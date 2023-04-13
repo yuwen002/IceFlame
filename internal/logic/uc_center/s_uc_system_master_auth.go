@@ -598,6 +598,7 @@ func (s *sUcSystemMasterAuth) GetMasterMenu(ctx context.Context, accountId uint6
 				parent.Children = append(parent.Children, m[menu[index].Id])
 			}
 		}
+
 		return 0, "查询成功", output, nil
 	}
 

@@ -75,7 +75,13 @@ func (s *sAuthMiddleware) concatModule(args ...string) string {
 // @receiver s
 // @param r
 func (s *sAuthMiddleware) MiddlewareAuthMaster(r *ghttp.Request) {
+	// 处理token Authorization
 	token := r.Header.Get("Authorization")
+	// 去掉Bearer
+	if len(token) > 7 && token[:7] == "Bearer " {
+		token = token[7:]
+	}
+
 	if token == "" {
 		token = r.Get("token").String()
 	}
