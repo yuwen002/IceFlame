@@ -99,7 +99,7 @@ type UcAccount struct {
 	gmeta.Meta   `orm:"table:uc_account"`
 	Id           uint64     `json:"id"`
 	Username     string     `json:"username"`
-	RealNameType string     `json:"real_name_type"`
+	RealNameType int8       `json:"real_name_type"`
 	Status       uint8      `json:"status"`
 	CreatedAt    gtime.Time `json:"created_at"`
 	UpdatedAt    gtime.Time `json:"updated_at"`
