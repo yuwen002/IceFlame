@@ -88,7 +88,7 @@ type UcSystemMaster struct {
 	AccountId  uint64     `json:"account_id"`
 	Name       string     `json:"name"`
 	Tel        string     `json:"tel"`
-	UcAccount  *UcAccount `orm:"with:id=account_id"`
+	UcAccount  *UcAccount `orm:"with:id=account_id" json:"uc_account"`
 }
 
 // UcAccount
