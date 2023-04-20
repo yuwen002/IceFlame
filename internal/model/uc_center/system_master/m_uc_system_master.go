@@ -73,7 +73,7 @@ type ListSystemMasterOutput struct {
 	Name         string     `json:"name"`
 	Tel          string     `json:"tel"`
 	Status       uint8      `json:"status"`
-	RealNameType string     `json:"real_name_type"`
+	RealNameType int8       `json:"real_name_type"`
 	CreatedAt    gtime.Time `json:"created_at"`
 	UpdatedAt    gtime.Time `json:"updated_at"`
 }
