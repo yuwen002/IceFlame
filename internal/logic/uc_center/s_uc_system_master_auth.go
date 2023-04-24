@@ -558,7 +558,7 @@ func (s *sUcSystemMasterAuth) GetPermissionByRoleId(ctx context.Context, roleId 
 func (s *sUcSystemMasterAuth) GetMenuAll(ctx context.Context) (code int32, message string, output []*system_master.GetMenuAllOutput, err error) {
 	code, message, err = utility.DBGetAllStructByWhere(dao.UcSystemPermission.Ctx(ctx), utility.DBGetAllByWhereInput{
 		Field: "id, fid, name, uri",
-		Where: "status=0 and type=1",
+		Where: "status=0",
 		Order: "fid asc, sort desc",
 	}, &output)
 
