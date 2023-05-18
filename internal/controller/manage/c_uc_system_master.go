@@ -220,7 +220,7 @@ func (c *cUcSystemMaster) ListSystemMaster(ctx context.Context, req *manage.List
 	if req.Size == 0 {
 		req.Size = 10
 	}
-	code, message, out, err := service.UcSystemMaster().ListSystemMaster(ctx, system_master.ListSystemMasterInput{
+	code, message, out, total, err := service.UcSystemMaster().ListSystemMaster(ctx, system_master.ListSystemMasterInput{
 		Size: req.Size,
 		Page: req.Page,
 	})
@@ -243,7 +243,7 @@ func (c *cUcSystemMaster) ListSystemMaster(ctx context.Context, req *manage.List
 	json.WriteJsonExit(g.Map{
 		"code":    code,
 		"message": message,
-		"data":    g.Map{"list": out},
+		"data":    g.Map{"list": out, "total": total},
 	})
 	return
 }

@@ -635,14 +635,19 @@ func (s *sUcSystemMaster) ModifyPasswordSelfById(ctx context.Context, in system_
 // @return message
 // @return out
 // @return err
-func (s *sUcSystemMaster) ListSystemMaster(ctx context.Context, in system_master.ListSystemMasterInput) (code int32, message string, out []system_master.ListSystemMasterOutput, err error) {
+func (s *sUcSystemMaster) ListSystemMaster(ctx context.Context, in system_master.ListSystemMasterInput) (code int32, message string, out []system_master.ListSystemMasterOutput, total int, err error) {
+	total, err = dao.UcSystemMaster.Ctx(ctx).Where("supper_master = 0 and account_id != ?", ctx.Value("master_id")).Count()
+	if err != nil {
+		return -1, "", nil, 0, err
+	}
+
 	var systemMaster []*system_master.UcSystemMaster
 	err = dao.UcSystemMaster.Ctx(ctx).With(system_master.UcSystemMaster{}.UcAccount).Where(
 		"supper_master = 0 and account_id != ?",
 		ctx.Value("master_id"),
 	).Page(in.Page, in.Size).Order("id desc").Scan(&systemMaster)
 	if err != nil {
-		return -1, "", nil, err
+		return -1, "", nil, 0, err
 	}
 
 	for _, v := range systemMaster {
@@ -660,7 +665,7 @@ func (s *sUcSystemMaster) ListSystemMaster(ctx context.Context, in system_master
 		})
 	}
 
-	return 0, "查询成功", out, nil
+	return 0, "查询成功", out, total, nil
 }
 
 // GetSystemMasterByAccountId
