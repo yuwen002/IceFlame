@@ -301,6 +301,7 @@ func (c *cUcSystemMaster) EditSystemMaster(ctx context.Context, req *manage.Edit
 		AccountId: req.AccountId,
 		Tel:       req.Tel,
 		Name:      req.Name,
+		Status:    req.Status,
 	})
 
 	// 访问日志写入
