@@ -574,6 +574,37 @@ func (c *cUcSystemMasterAuth) ListPermission(ctx context.Context, req *manage.Li
 	return
 }
 
+// GetFirstPermissionList
+//
+// @Title 一级权限信息列表
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-06-30 11:15:31
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cUcSystemMasterAuth) GetFirstPermissionList(ctx context.Context, req *manage.GetFirstPermissionListReq) (res *manage.GetFirstPermissionListRes, err error) {
+	code, message, output, err := service.UcSystemMasterAuth().ListFirstPermission(ctx)
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    g.Map{"list": output},
+	})
+
+	return
+}
+
 // EditPermissionRelation
 //
 // @Title 编辑权限信息列表

@@ -165,6 +165,15 @@ type ListPermissionReq struct {
 }
 type ListPermissionRes struct{}
 
+// GetFirstPermissionListReq
+// @Description:
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-06-30 14:30:10
+type GetFirstPermissionListReq struct {
+	g.Meta `path:"/master/auth/show_first_permission" tags:"一级权限列表" method:"get" summary:"一级权限列表"`
+}
+type GetFirstPermissionListRes struct{}
+
 // EditPermissionRelationReq
 // @Description: 按角色ID权限信息修改
 // @Author liuxingyu <yuwen002@163.com>

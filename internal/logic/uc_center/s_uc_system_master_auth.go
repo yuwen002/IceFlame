@@ -381,6 +381,27 @@ func (s *sUcSystemMasterAuth) ListPermission(ctx context.Context, in system_mast
 	return code, message, output, err
 }
 
+// ListFirstPermission
+//
+// @Title 权限信息一级菜单列表
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-06-30 11:11:06
+// @receiver s
+// @param ctx
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sUcSystemMasterAuth) ListFirstPermission(ctx context.Context) (code int32, message string, output []*system_master.ListPermissionOutput, err error) {
+	code, message, err = utility.DBGetAllStructByWhere(dao.UcSystemPermission.Ctx(ctx), utility.DBGetAllByWhereInput{
+		Order: "sort desc, id desc",
+		Where: "status = 0 and fid = 0",
+	}, &output)
+
+	return code, message, output, err
+}
+
 // ModifyPermissionRelation
 //
 // @Title 角色权限信息关联

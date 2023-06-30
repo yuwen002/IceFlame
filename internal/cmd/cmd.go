@@ -119,6 +119,7 @@ var (
 						manage.UcSystemMasterAuth.GetEditPermission,
 						manage.UcSystemMasterAuth.EditPermission,
 						manage.UcSystemMasterAuth.ListPermission,
+						manage.UcSystemMasterAuth.GetFirstPermissionList,
 
 						// 权限分配
 						manage.UcSystemMasterAuth.EditPermissionRelation,
