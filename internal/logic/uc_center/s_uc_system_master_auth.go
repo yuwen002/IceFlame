@@ -368,7 +368,11 @@ func (s *sUcSystemMasterAuth) ModifyPermissionById(ctx context.Context, in syste
 // @return message
 // @return output
 // @return err
-func (s *sUcSystemMasterAuth) ListPermission(ctx context.Context, in system_master.ListPermissionInput) (code int32, message string, output []*system_master.ListPermissionOutput, err error) {
+func (s *sUcSystemMasterAuth) ListPermission(ctx context.Context, in system_master.ListPermissionInput) (code int32, message string, output []*system_master.ListPermissionOutput, total int, err error) {
+	total, err = dao.UcSystemPermission.Ctx(ctx).Count()
+	if err != nil {
+		return -1, "", nil, 0, err
+	}
 	code, message, err = utility.DBGetAllStructByWhere(dao.UcSystemPermission.Ctx(ctx), utility.DBGetAllByWhereInput{
 		Order:    "id asc",
 		PageType: 1,
@@ -378,7 +382,7 @@ func (s *sUcSystemMasterAuth) ListPermission(ctx context.Context, in system_mast
 		},
 	}, &output)
 
-	return code, message, output, err
+	return code, message, output, total, err
 }
 
 // ListFirstPermission

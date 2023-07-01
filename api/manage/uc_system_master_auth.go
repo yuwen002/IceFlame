@@ -116,12 +116,12 @@ type DeleteRoleRelationRes struct{}
 // @Date 2023-03-09 17:44:16
 type AddPermissionReq struct {
 	g.Meta `path:"/master/auth/add_permission" tags:"添加权限" method:"post" summary:"添加权限"`
-	Fid    uint32 `p:"fid" v:"required|min:0|integer#父类ID不能为空|ID要大于等于0|ID只为整数"`
+	Fid    uint32 `p:"fid" v:"required|min:0|integer#父类ID不能为空|父类ID要大于等于0|ID只为整数"`
 	Name   string `p:"name" v:"required#权限名称不能为空"`
 	Module string `p:"module"`
 	Uri    string `p:"uri"`
 	Type   uint8  `p:"type" v:"in:1,2,3#请输入正确的菜单分组"`
-	Sort   uint32 `p:"sort" v:"min:0|integer#ID要大于等于0|ID只为整数"`
+	Sort   uint32 `p:"sort" v:"min:0|integer#排序要大于等于0|排序只为整数"`
 	Remark string `p:"remark"`
 }
 type AddPermissionRes struct{}

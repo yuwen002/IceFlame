@@ -545,7 +545,7 @@ func (c *cUcSystemMasterAuth) EditPermission(ctx context.Context, req *manage.Ed
 // @return res
 // @return err
 func (c *cUcSystemMasterAuth) ListPermission(ctx context.Context, req *manage.ListPermissionReq) (res *manage.ListRoleRes, err error) {
-	code, message, output, err := service.UcSystemMasterAuth().ListPermission(ctx, system_master.ListPermissionInput{
+	code, message, output, total, err := service.UcSystemMasterAuth().ListPermission(ctx, system_master.ListPermissionInput{
 		Page: req.Page,
 		Size: req.Size,
 	})
@@ -568,7 +568,10 @@ func (c *cUcSystemMasterAuth) ListPermission(ctx context.Context, req *manage.Li
 	json.WriteJsonExit(g.Map{
 		"code":    code,
 		"message": message,
-		"data":    g.Map{"list": output},
+		"data": g.Map{
+			"list":  output,
+			"total": total,
+		},
 	})
 
 	return
