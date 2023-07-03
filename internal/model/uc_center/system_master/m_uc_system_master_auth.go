@@ -179,7 +179,11 @@ type ListPermissionOutput struct {
 	Id        uint32      `json:"id"`
 	Fid       uint32      `json:"fid"`
 	Name      string      `json:"name"`
+	Module    string      `json:"module"`
+	Uri       string      `json:"uri"`
+	Type      uint8       `json:"type"`
 	Status    uint8       `json:"status"`
+	Sort      uint32      `json:"sort"`
 	Remark    string      `json:"remark"`
 	CreatedAt *gtime.Time `json:"created_at"`
 	UpdatedAt *gtime.Time `json:"updated_at"`
