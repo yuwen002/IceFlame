@@ -101,8 +101,6 @@ func (s *sAuthMiddleware) MiddlewareAuthMaster(r *ghttp.Request) {
 		})
 	}
 
-	fmt.Println(claims)
-
 	r.SetCtxVar("master_id", claims.Id)
 	r.SetCtxVar("user_info", claims.UserInfo)
 	r.Middleware.Next()
