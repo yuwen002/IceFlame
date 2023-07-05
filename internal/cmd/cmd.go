@@ -107,6 +107,7 @@ var (
 						manage.UcSystemMasterAuth.EditRole,
 						manage.UcSystemMasterAuth.ListRole,
 						manage.UcSystemMasterAuth.GetListRole,
+
 						// 角色关联
 						manage.UcSystemMasterAuth.AddRoleRelation,
 						manage.UcSystemMasterAuth.GetEditRoleRelation,
@@ -118,6 +119,7 @@ var (
 						manage.UcSystemMasterAuth.AddPermission,
 						manage.UcSystemMasterAuth.GetEditPermission,
 						manage.UcSystemMasterAuth.EditPermission,
+						manage.UcSystemMasterAuth.EditStatusPermission,
 						manage.UcSystemMasterAuth.ListPermission,
 						manage.UcSystemMasterAuth.GetFirstPermissionList,
 

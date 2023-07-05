@@ -533,6 +533,35 @@ func (c *cUcSystemMasterAuth) EditPermission(ctx context.Context, req *manage.Ed
 	return
 }
 
+func (c *cUcSystemMasterAuth) EditStatusPermission(ctx context.Context, req *manage.EditPermissionStatusReq) (res *manage.EditPermissionStatusRes, err error) {
+	code, message, err := service.UcSystemMasterAuth().ModifyStatusPermissionById(ctx, system_master.ModifyStatusPermissionByIdInput{
+		Id:     req.Id,
+		Status: req.Status,
+	})
+
+	// 访问日志写入
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 4,
+		Description:   "提交编辑菜单状态信息",
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}
+
 // ListPermission
 //
 // @Title 查看权限信息列表

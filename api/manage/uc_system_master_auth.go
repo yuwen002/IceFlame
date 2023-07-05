@@ -154,6 +154,17 @@ type EditPermissionReq struct {
 }
 type EditPermissionRes struct{}
 
+// EditPermissionStatusReq
+// @Description: 修改权限状态
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-07-05 16:57:49
+type EditPermissionStatusReq struct {
+	g.Meta `path:"/master/auth/edit_status_permission" tags:"修改权限状态" method:"put" summary:"修改权限状态"`
+	Id     uint32 `p:"id" v:"required|min:0|integer#ID不能为空|ID要大于等于0|ID只为整数"`
+	Status uint8  `p:"status" v:"required|in:0,1#权限状态不能为空|权限状态输入不正确"`
+}
+type EditPermissionStatusRes struct{}
+
 // ListPermissionReq
 // @Description: 权限信息列表
 // @Author liuxingyu <yuwen002@163.com>

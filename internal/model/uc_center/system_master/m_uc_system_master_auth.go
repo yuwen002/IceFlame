@@ -162,6 +162,15 @@ type ModifyPermissionByIdInput struct {
 	Remark string
 }
 
+// ModifyStatusPermissionByIdInput
+// @Description: 按ID权限状态菜单信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-07-05 17:29:22
+type ModifyStatusPermissionByIdInput struct {
+	Id     uint32
+	Status uint8
+}
+
 // ListPermissionInput
 // @Description: 权限菜单列表
 // @Author liuxingyu <yuwen002@163.com>

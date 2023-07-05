@@ -355,6 +355,13 @@ func (s *sUcSystemMasterAuth) ModifyPermissionById(ctx context.Context, in syste
 	})
 }
 
+func (s *sUcSystemMasterAuth) ModifyStatusPermissionById(ctx context.Context, in system_master.ModifyStatusPermissionByIdInput) (code int32, message string, err error) {
+	return utility.DBModifyById(dao.UcSystemPermission.Ctx(ctx), utility.DBModifyByIdInput{
+		Data:  in,
+		Where: in.Id,
+	})
+}
+
 // ListPermission
 //
 // @Title 权限信息列表
