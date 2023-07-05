@@ -140,3 +140,13 @@ type GetSystemMasterInfoReq struct {
 }
 type GetSystemMasterInfoRes struct {
 }
+
+// GetSystemMasterAllReq
+// @Description: 获取用户信息列表
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-07-05 18:24:17
+type GetSystemMasterAllReq struct {
+	g.Meta `path:"/master/get_all" tags:"获取用户信息列表" method:"get" summary:"获取用户信息列表"`
+}
+type GetSystemMasterAllRes struct {
+}

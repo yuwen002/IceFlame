@@ -819,3 +819,13 @@ func (s *sUcSystemMaster) ModifyStatusByAccountId(ctx context.Context, in system
 		Where: in.AccountId,
 	})
 }
+
+func (s *sUcSystemMaster) GetAll(ctx context.Context) (code int32, message string, output *system_master.UcSystemMaster, err error) {
+	code, message, err = utility.DBGetAllStructByWhere(dao.UcSystemMaster.Ctx(ctx), utility.DBGetAllByWhereInput{
+		Field: "account_id,name",
+		Where: ""
+		Order: "id asc",
+	}, &output)
+
+	return code, message, output, err
+}

@@ -474,3 +474,23 @@ func (c *cUcSystemMaster) GetSystemMasterInfo(ctx context.Context, req *manage.G
 
 	return
 }
+
+func (c *cUcSystemMaster) GetSystemMasterAll(ctx context.Context, req *manage.GetSystemMasterAllReq) (res *manage.GetSystemMasterAllRes, err error) {
+	code, message, out, err := service.UcSystemMaster().GetSystemMasterByAccountId(ctx, gconv.Uint64(ctx.Value("master_id")))
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+		"data":    g.Map{"info": out},
+	})
+
+	return
+}
