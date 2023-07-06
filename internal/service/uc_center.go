@@ -11,48 +11,6 @@ import (
 )
 
 type (
-	IUcSystemMasterAuth interface {
-		CreateRole(ctx context.Context, in system_master.CreateRoleInput) (code int32, message string, err error)
-		GetRoleById(ctx context.Context, id uint16) (code int32, message string, output system_master.GetRoleByIdOutput, err error)
-		ModifyRoleById(ctx context.Context, in system_master.ModifyRoleByIdInput) (code int32, message string, err error)
-		ListRole(ctx context.Context, in system_master.ListRoleInput) (code int32, message string, output []*system_master.ListRoleOutput, err error)
-		GetRoleAll(ctx context.Context) (code int32, message string, output []*system_master.GetRoleAllOutput, err error)
-		CreateRoleRelation(ctx context.Context, in system_master.CreateRoleRelationInput) (code int32, message string, err error)
-		GetRoleRelationById(ctx context.Context, id uint32) (code int32, message string, output system_master.GetRoleRelationByIdOutput, err error)
-		ModifyRoleRelationById(ctx context.Context, in system_master.ModifyRoleRelationByIdInput) (code int32, message string, err error)
-		ListRoleRelation(ctx context.Context, in system_master.ListRoleRelationInput) (code int32, message string, output []*system_master.ListRoleRelationOutput, err error)
-		DeleteRoleRelationById(ctx context.Context, in system_master.DeleteRoleRelationInput) (code int32, message string, err error)
-		CreatePermission(ctx context.Context, in system_master.CreateListPermissionInput) (code int32, message string, err error)
-		GetPermissionById(ctx context.Context, id uint32) (code int32, message string, output system_master.GetPermissionByIdOutput, err error)
-		ModifyPermissionById(ctx context.Context, in system_master.ModifyPermissionByIdInput) (code int32, message string, err error)
-		ModifyStatusPermissionById(ctx context.Context, in system_master.ModifyStatusPermissionByIdInput) (code int32, message string, err error)
-		ListPermission(ctx context.Context, in system_master.ListPermissionInput) (code int32, message string, output []*system_master.ListPermissionOutput, total int, err error)
-		ListFirstPermission(ctx context.Context) (code int32, message string, output []*system_master.ListPermissionOutput, err error)
-		ModifyPermissionRelation(ctx context.Context, in system_master.ModifyPermissionRelationInput) (code int32, message string, err error)
-		GetPermissionAll(ctx context.Context) (code int32, message string, output []*system_master.GetPermissionAllOutput, err error)
-		GetPermissionByRoleId(ctx context.Context, roleId uint16) (code int32, message string, output []*system_master.GetPermissionAllOutput, err error)
-		GetMenuAll(ctx context.Context) (code int32, message string, output []*system_master.GetMenuAllOutput, err error)
-		GetMasterMenu(ctx context.Context, accountId uint64) (code int32, message string, output []*system_master.GetMenuAllOutput, err error)
-		GetRolePermissionByAccountId(ctx context.Context, accountId uint64) (code int32, message string, output []uint32, err error)
-		CreatePermissionExclude(ctx context.Context, in system_master.CreatePermissionExcludeInput) (code int32, message string, err error)
-		GetPermissionExcludeById(ctx context.Context, id uint16) (code int32, message string, output *system_master.GetPermissionExcludeByIdOutput, err error)
-		ModifyPermissionExcludeById(ctx context.Context, in system_master.ModifyPermissionExcludeByIdInput) (code int32, message string, err error)
-		ListPermissionExclude(ctx context.Context, in system_master.ListPermissionExcludeInput) (code int32, message string, output []*system_master.ListPermissionExcludeOutput, err error)
-		DeletePermissionExcludeById(ctx context.Context, id uint16) (code int32, message string, err error)
-		GetPermissionExcludeAll(ctx context.Context) (code int32, message string, output []*system_master.ListPermissionExcludeOutput, err error)
-	}
-	IUcSystemMasterVisitor interface {
-		CreateVisitCategory(ctx context.Context, in system_master.CreateVisitCategoryInput) (code int32, message string, err error)
-		GetVisitCategoryById(ctx context.Context, id uint16) (code int32, message string, out *system_master.GetVisitCategoryByIdInput, err error)
-		ModifyVisitCategoryById(ctx context.Context, in system_master.ModifyVisitCategoryByIdInput) (code int32, message string, err error)
-		ListVisitCategory(ctx context.Context, in system_master.ListVisitCategoryInput) (code int32, message string, output []*system_master.ListVisitCategoryOutput, err error)
-		GetRCacheVisitCategory(ctx context.Context) (code int32, message string, output map[string]interface{}, err error)
-		GetRCacheVisitCategoryById(id string) (code int32, message string, output map[string]interface{}, err error)
-		DelRCacheVisitCategory() (code int32, message string, err error)
-		DelRCacheVisitCategoryById(id string) (code int32, message string, err error)
-		CreateVisitorLogs(ctx context.Context, in system_master.CreateVisitorLogsInput) (code int32, message string, err error)
-		ListVisitorLogs(ctx context.Context, in system_master.ListVisitorLogsInput) (code int32, message string, output []*system_master.ListVisitorLogsOutput, err error)
-	}
 	IUcEmployee interface {
 		ExistsTel(ctx context.Context, tel string) (code int32, message string, err error)
 		ExistsInviteCode(ctx context.Context, inviteCode string) (code int32, message string, err error)
@@ -102,40 +60,60 @@ type (
 		ModifySystemMasterByAccountId(ctx context.Context, in system_master.ModifySystemMasterByAccountIdInput) (code int32, message string, err error)
 		ResetPasswordByAccountId(ctx context.Context, in system_master.ResetPasswordByAccountIdInput) (code int32, message string, err error)
 		ModifyStatusByAccountId(ctx context.Context, in system_master.ModifyStatusByAccountIdInput) (code int32, message string, err error)
-		GetAll(ctx context.Context) (code int32, message string, output *system_master.UcSystemMaster, err error)
+		GetAll(ctx context.Context) (code int32, message string, output []*system_master.UcSystemMaster, err error)
+	}
+	IUcSystemMasterAuth interface {
+		CreateRole(ctx context.Context, in system_master.CreateRoleInput) (code int32, message string, err error)
+		GetRoleById(ctx context.Context, id uint16) (code int32, message string, output system_master.GetRoleByIdOutput, err error)
+		ModifyRoleById(ctx context.Context, in system_master.ModifyRoleByIdInput) (code int32, message string, err error)
+		ListRole(ctx context.Context, in system_master.ListRoleInput) (code int32, message string, output []*system_master.ListRoleOutput, err error)
+		GetRoleAll(ctx context.Context) (code int32, message string, output []*system_master.GetRoleAllOutput, err error)
+		CreateRoleRelation(ctx context.Context, in system_master.CreateRoleRelationInput) (code int32, message string, err error)
+		GetRoleRelationById(ctx context.Context, id uint32) (code int32, message string, output system_master.GetRoleRelationByIdOutput, err error)
+		ModifyRoleRelationById(ctx context.Context, in system_master.ModifyRoleRelationByIdInput) (code int32, message string, err error)
+		ListRoleRelation(ctx context.Context, in system_master.ListRoleRelationInput) (code int32, message string, output []*system_master.ListRoleRelationOutput, err error)
+		DeleteRoleRelationById(ctx context.Context, in system_master.DeleteRoleRelationInput) (code int32, message string, err error)
+		CreatePermission(ctx context.Context, in system_master.CreateListPermissionInput) (code int32, message string, err error)
+		GetPermissionById(ctx context.Context, id uint32) (code int32, message string, output system_master.GetPermissionByIdOutput, err error)
+		ModifyPermissionById(ctx context.Context, in system_master.ModifyPermissionByIdInput) (code int32, message string, err error)
+		ModifyStatusPermissionById(ctx context.Context, in system_master.ModifyStatusPermissionByIdInput) (code int32, message string, err error)
+		ListPermission(ctx context.Context, in system_master.ListPermissionInput) (code int32, message string, output []*system_master.ListPermissionOutput, total int, err error)
+		ListFirstPermission(ctx context.Context) (code int32, message string, output []*system_master.ListPermissionOutput, err error)
+		ModifyPermissionRelation(ctx context.Context, in system_master.ModifyPermissionRelationInput) (code int32, message string, err error)
+		GetPermissionAll(ctx context.Context) (code int32, message string, output []*system_master.GetPermissionAllOutput, err error)
+		GetPermissionByRoleId(ctx context.Context, roleId uint16) (code int32, message string, output []*system_master.GetPermissionAllOutput, err error)
+		GetMenuAll(ctx context.Context) (code int32, message string, output []*system_master.GetMenuAllOutput, err error)
+		GetMasterMenu(ctx context.Context, accountId uint64) (code int32, message string, output []*system_master.GetMenuAllOutput, err error)
+		GetRolePermissionByAccountId(ctx context.Context, accountId uint64) (code int32, message string, output []uint32, err error)
+		CreatePermissionExclude(ctx context.Context, in system_master.CreatePermissionExcludeInput) (code int32, message string, err error)
+		GetPermissionExcludeById(ctx context.Context, id uint16) (code int32, message string, output *system_master.GetPermissionExcludeByIdOutput, err error)
+		ModifyPermissionExcludeById(ctx context.Context, in system_master.ModifyPermissionExcludeByIdInput) (code int32, message string, err error)
+		ListPermissionExclude(ctx context.Context, in system_master.ListPermissionExcludeInput) (code int32, message string, output []*system_master.ListPermissionExcludeOutput, err error)
+		DeletePermissionExcludeById(ctx context.Context, id uint16) (code int32, message string, err error)
+		GetPermissionExcludeAll(ctx context.Context) (code int32, message string, output []*system_master.ListPermissionExcludeOutput, err error)
+	}
+	IUcSystemMasterVisitor interface {
+		CreateVisitCategory(ctx context.Context, in system_master.CreateVisitCategoryInput) (code int32, message string, err error)
+		GetVisitCategoryById(ctx context.Context, id uint16) (code int32, message string, out *system_master.GetVisitCategoryByIdInput, err error)
+		ModifyVisitCategoryById(ctx context.Context, in system_master.ModifyVisitCategoryByIdInput) (code int32, message string, err error)
+		ListVisitCategory(ctx context.Context, in system_master.ListVisitCategoryInput) (code int32, message string, output []*system_master.ListVisitCategoryOutput, err error)
+		GetRCacheVisitCategory(ctx context.Context) (code int32, message string, output map[string]interface{}, err error)
+		GetRCacheVisitCategoryById(id string) (code int32, message string, output map[string]interface{}, err error)
+		DelRCacheVisitCategory() (code int32, message string, err error)
+		DelRCacheVisitCategoryById(id string) (code int32, message string, err error)
+		CreateVisitorLogs(ctx context.Context, in system_master.CreateVisitorLogsInput) (code int32, message string, err error)
+		ListVisitorLogs(ctx context.Context, in system_master.ListVisitorLogsInput) (code int32, message string, output []*system_master.ListVisitorLogsOutput, err error)
 	}
 )
 
 var (
-	localUcSystemMasterAuth    IUcSystemMasterAuth
 	localUcSystemMasterVisitor IUcSystemMasterVisitor
 	localUcEmployee            IUcEmployee
 	localUcEmployeeEwallet     IUcEmployeeEwallet
 	localUcPartner             IUcPartner
 	localUcSystemMaster        IUcSystemMaster
+	localUcSystemMasterAuth    IUcSystemMasterAuth
 )
-
-func UcSystemMasterAuth() IUcSystemMasterAuth {
-	if localUcSystemMasterAuth == nil {
-		panic("implement not found for interface IUcSystemMasterAuth, forgot register?")
-	}
-	return localUcSystemMasterAuth
-}
-
-func RegisterUcSystemMasterAuth(i IUcSystemMasterAuth) {
-	localUcSystemMasterAuth = i
-}
-
-func UcSystemMasterVisitor() IUcSystemMasterVisitor {
-	if localUcSystemMasterVisitor == nil {
-		panic("implement not found for interface IUcSystemMasterVisitor, forgot register?")
-	}
-	return localUcSystemMasterVisitor
-}
-
-func RegisterUcSystemMasterVisitor(i IUcSystemMasterVisitor) {
-	localUcSystemMasterVisitor = i
-}
 
 func UcEmployee() IUcEmployee {
 	if localUcEmployee == nil {
@@ -179,4 +157,26 @@ func UcSystemMaster() IUcSystemMaster {
 
 func RegisterUcSystemMaster(i IUcSystemMaster) {
 	localUcSystemMaster = i
+}
+
+func UcSystemMasterAuth() IUcSystemMasterAuth {
+	if localUcSystemMasterAuth == nil {
+		panic("implement not found for interface IUcSystemMasterAuth, forgot register?")
+	}
+	return localUcSystemMasterAuth
+}
+
+func RegisterUcSystemMasterAuth(i IUcSystemMasterAuth) {
+	localUcSystemMasterAuth = i
+}
+
+func UcSystemMasterVisitor() IUcSystemMasterVisitor {
+	if localUcSystemMasterVisitor == nil {
+		panic("implement not found for interface IUcSystemMasterVisitor, forgot register?")
+	}
+	return localUcSystemMasterVisitor
+}
+
+func RegisterUcSystemMasterVisitor(i IUcSystemMasterVisitor) {
+	localUcSystemMasterVisitor = i
 }

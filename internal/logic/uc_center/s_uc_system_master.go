@@ -820,10 +820,21 @@ func (s *sUcSystemMaster) ModifyStatusByAccountId(ctx context.Context, in system
 	})
 }
 
-func (s *sUcSystemMaster) GetAll(ctx context.Context) (code int32, message string, output *system_master.UcSystemMaster, err error) {
+// GetAll
+//
+// @Title 获取所有管理员列表
+// @Description
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-07-06 13:57:47
+// @receiver s
+// @param ctx
+// @return code
+// @return message
+// @return output
+// @return err
+func (s *sUcSystemMaster) GetAll(ctx context.Context) (code int32, message string, output []*system_master.UcSystemMaster, err error) {
 	code, message, err = utility.DBGetAllStructByWhere(dao.UcSystemMaster.Ctx(ctx), utility.DBGetAllByWhereInput{
 		Field: "account_id,name",
-		Where: ""
 		Order: "id asc",
 	}, &output)
 

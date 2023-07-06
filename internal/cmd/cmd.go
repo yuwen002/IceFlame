@@ -92,6 +92,7 @@ var (
 						manage.UcSystemMaster.EditStatus,
 						manage.UcSystemMaster.UnlockSystemMaster,
 						manage.UcSystemMaster.GetSystemMasterInfo,
+						manage.UcSystemMaster.GetSystemMasterAll,
 
 						// 操作日志
 						manage.UcSystemMasterVisitor.AddVisitCategory,
