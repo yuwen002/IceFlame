@@ -504,7 +504,7 @@ func (s *sUcSystemMasterAuth) GetPermissionAll(ctx context.Context) (code int32,
 	code, message, err = utility.DBGetAllStructByWhere(dao.UcSystemPermission.Ctx(ctx), utility.DBGetAllByWhereInput{
 		Field: "id,fid,name,module,uri",
 		Where: "status=0 and type in (1,2)",
-		Order: "fid asc, sort desc",
+		Order: "fid asc, sort desc, id asc",
 	}, &output)
 
 	if code != 0 {

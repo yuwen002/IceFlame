@@ -11,19 +11,6 @@ import (
 )
 
 type (
-	IUcEmployee interface {
-		ExistsTel(ctx context.Context, tel string) (code int32, message string, err error)
-		ExistsInviteCode(ctx context.Context, inviteCode string) (code int32, message string, err error)
-		AccountIdCastTel(ctx context.Context, accountId uint64) (code int32, message string, output interface{}, err error)
-		UpdateAccountIdCastTel(ctx context.Context, accountId uint64, tel string) (code int32, message string, err error)
-		CreateEmployeeRole(ctx context.Context, in system_master.CreateEmployeeRoleInput) (code int32, message string, err error)
-		GetEmployeeRoleById(ctx context.Context, id uint16) (code int32, message string, out *system_master.GetEmployeeRoleOutput, err error)
-		ModifyEmployeeRoleById(ctx context.Context, in system_master.ModifyRoleByIdInput) (code int32, message string, err error)
-		ListEmployeeRole(ctx context.Context, in system_master.ListEmployeeRoleInput) (code int32, message string, out []*system_master.GetEmployeeRoleOutput, err error)
-		CreateEmployeeRoleRelation(ctx context.Context, in system_master.CreateEmployeeRoleRelationInput) (code int32, message string, err error)
-		CreateEmployee(ctx context.Context, in system_master.CreateEmployeeInput) (code int32, message string, lastInsertId int64, err error)
-		ModifyEmployeeByAccountId(ctx context.Context, in system_master.ModifyEmployeeInput) (code int32, message string, err error)
-	}
 	IUcEmployeeEwallet interface {
 		ExistsEwallet(ctx context.Context, accountId uint64) (code int32, message string, err error)
 		SetHash(in system_master.EmployeeEwalletHash) (code int32, message string, hash string, err error)
@@ -104,15 +91,28 @@ type (
 		CreateVisitorLogs(ctx context.Context, in system_master.CreateVisitorLogsInput) (code int32, message string, err error)
 		ListVisitorLogs(ctx context.Context, in system_master.ListVisitorLogsInput) (code int32, message string, output []*system_master.ListVisitorLogsOutput, err error)
 	}
+	IUcEmployee interface {
+		ExistsTel(ctx context.Context, tel string) (code int32, message string, err error)
+		ExistsInviteCode(ctx context.Context, inviteCode string) (code int32, message string, err error)
+		AccountIdCastTel(ctx context.Context, accountId uint64) (code int32, message string, output interface{}, err error)
+		UpdateAccountIdCastTel(ctx context.Context, accountId uint64, tel string) (code int32, message string, err error)
+		CreateEmployeeRole(ctx context.Context, in system_master.CreateEmployeeRoleInput) (code int32, message string, err error)
+		GetEmployeeRoleById(ctx context.Context, id uint16) (code int32, message string, out *system_master.GetEmployeeRoleOutput, err error)
+		ModifyEmployeeRoleById(ctx context.Context, in system_master.ModifyRoleByIdInput) (code int32, message string, err error)
+		ListEmployeeRole(ctx context.Context, in system_master.ListEmployeeRoleInput) (code int32, message string, out []*system_master.GetEmployeeRoleOutput, err error)
+		CreateEmployeeRoleRelation(ctx context.Context, in system_master.CreateEmployeeRoleRelationInput) (code int32, message string, err error)
+		CreateEmployee(ctx context.Context, in system_master.CreateEmployeeInput) (code int32, message string, lastInsertId int64, err error)
+		ModifyEmployeeByAccountId(ctx context.Context, in system_master.ModifyEmployeeInput) (code int32, message string, err error)
+	}
 )
 
 var (
-	localUcSystemMasterVisitor IUcSystemMasterVisitor
-	localUcEmployee            IUcEmployee
-	localUcEmployeeEwallet     IUcEmployeeEwallet
 	localUcPartner             IUcPartner
 	localUcSystemMaster        IUcSystemMaster
 	localUcSystemMasterAuth    IUcSystemMasterAuth
+	localUcSystemMasterVisitor IUcSystemMasterVisitor
+	localUcEmployee            IUcEmployee
+	localUcEmployeeEwallet     IUcEmployeeEwallet
 )
 
 func UcEmployee() IUcEmployee {
