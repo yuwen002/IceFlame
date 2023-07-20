@@ -140,7 +140,7 @@ func (c *cUcSystemMasterVisitor) EditVisitCategory(ctx context.Context, req *man
 // @return res
 // @return err
 func (c *cUcSystemMasterVisitor) ListVisitCategory(ctx context.Context, req *manage.ListVisitCategoryReq) (res *manage.ListVisitCategoryRes, err error) {
-	code, message, output, err := service.UcSystemMasterVisitor().ListVisitCategory(ctx, system_master.ListVisitCategoryInput{
+	code, message, output, total, err := service.UcSystemMasterVisitor().ListVisitCategory(ctx, system_master.ListVisitCategoryInput{
 		Page: req.Page,
 		Size: req.Size,
 	})
@@ -163,7 +163,7 @@ func (c *cUcSystemMasterVisitor) ListVisitCategory(ctx context.Context, req *man
 	json.WriteJsonExit(g.Map{
 		"code":    code,
 		"message": message,
-		"data":    g.Map{"list": output},
+		"data":    g.Map{"list": output, "total": total},
 	})
 
 	return

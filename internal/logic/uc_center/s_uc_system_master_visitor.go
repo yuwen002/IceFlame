@@ -132,7 +132,12 @@ func (s *sUcSystemMasterVisitor) ModifyVisitCategoryById(ctx context.Context, in
 // @Date 2023-03-01 17:31:21
 // @receiver s
 // @param ctx
-func (s *sUcSystemMasterVisitor) ListVisitCategory(ctx context.Context, in system_master.ListVisitCategoryInput) (code int32, message string, output []*system_master.ListVisitCategoryOutput, err error) {
+func (s *sUcSystemMasterVisitor) ListVisitCategory(ctx context.Context, in system_master.ListVisitCategoryInput) (code int32, message string, output []*system_master.ListVisitCategoryOutput, total int, err error) {
+	total, err = dao.UcSystemMasterVisitCategory.Ctx(ctx).Count()
+	if err != nil {
+		return -1, "", nil, 0, err
+	}
+
 	var out []*system_master.ListVisitCategoryOutput
 	code, message, err = utility.DBGetAllStructByWhere(dao.UcSystemMasterVisitCategory.Ctx(ctx), utility.DBGetAllByWhereInput{
 		Order:    "id asc",
@@ -144,10 +149,10 @@ func (s *sUcSystemMasterVisitor) ListVisitCategory(ctx context.Context, in syste
 	}, &out)
 
 	if code != 0 {
-		return code, message, nil, err
+		return code, message, nil, 0, err
 	}
 
-	return code, message, out, nil
+	return code, message, out, total, nil
 }
 
 // GetRCacheVisitCategory

@@ -1,5 +1,7 @@
 package system_master
 
+import "github.com/gogf/gf/v2/os/gtime"
+
 // CreateVisitCategoryInput
 // @Description: 添加访问标题
 // @Author liuxingyu <yuwen002@163.com>
@@ -40,10 +42,10 @@ type ListVisitCategoryInput struct {
 // @Author liuxingyu <yuwen002@163.com>
 // @Date 2023-03-01 17:28:25
 type ListVisitCategoryOutput struct {
-	Id        uint16
-	Title     string
-	CreatedAt string
-	UpdatedAt string
+	Id        uint16      `json:"id"`
+	Title     string      `json:"title"`
+	CreatedAt *gtime.Time `json:"created_at"`
+	UpdatedAt *gtime.Time `json:"updated_at"`
 }
 
 // DeleteVisitCategoryInput
