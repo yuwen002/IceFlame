@@ -948,7 +948,7 @@ func (db *DB) GetAllCountByWhere(condition DBGetAllCountInput) (code int32, mess
 		return -1, "", 0, err
 	}
 
-	return 0, "查询数据成功", 0, nil
+	return 0, "查询数据成功", total, nil
 }
 
 // ConditionModifyById
