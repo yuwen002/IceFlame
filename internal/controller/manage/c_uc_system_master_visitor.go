@@ -217,7 +217,7 @@ func (c *cUcSystemMasterVisitor) DeleteCacheVisitCategory(ctx context.Context, r
 // @return res
 // @return err
 func (c *cUcSystemMasterVisitor) ListVisitorLogs(ctx context.Context, req *manage.ListVisitorLogsReq) (res *manage.ListSystemMasterRes, err error) {
-	code, message, output, err := service.UcSystemMasterVisitor().ListVisitorLogs(ctx, system_master.ListVisitorLogsInput{
+	code, message, output, total, err := service.UcSystemMasterVisitor().ListVisitorLogs(ctx, system_master.ListVisitorLogsInput{
 		AccountId:     req.Id,
 		OsCategory:    req.OsCategory,
 		VisitCategory: req.VisitCategory,
@@ -243,7 +243,7 @@ func (c *cUcSystemMasterVisitor) ListVisitorLogs(ctx context.Context, req *manag
 	json.WriteJsonExit(g.Map{
 		"code":    code,
 		"message": message,
-		"data":    g.Map{"list": output},
+		"data":    g.Map{"list": output, "total": total},
 	})
 	return
 }

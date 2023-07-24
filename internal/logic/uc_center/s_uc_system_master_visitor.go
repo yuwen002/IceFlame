@@ -295,7 +295,7 @@ func (s *sUcSystemMasterVisitor) CreateVisitorLogs(ctx context.Context, in syste
 // @return message
 // @return output
 // @return err
-func (s *sUcSystemMasterVisitor) ListVisitorLogs(ctx context.Context, in system_master.ListVisitorLogsInput) (code int32, message string, output []*system_master.ListVisitorLogsOutput, err error) {
+func (s *sUcSystemMasterVisitor) ListVisitorLogs(ctx context.Context, in system_master.ListVisitorLogsInput) (code int32, message string, output []*system_master.ListVisitorLogsOutput, total int, err error) {
 	// 判断查询条件
 	var condition []string
 
@@ -319,6 +319,11 @@ func (s *sUcSystemMasterVisitor) ListVisitorLogs(ctx context.Context, in system_
 		where = strings.Join(condition, " and ")
 	}
 
+	code, message, total, err = utility.DBGetAllCount(dao.UcSystemMasterVisitorLogs.Ctx(ctx), utility.DBGetAllCountInput{Where: where})
+	if code != 0 {
+		return code, message, nil, 0, err
+	}
+
 	code, message, err = utility.DBGetAllStructByWhere(dao.UcSystemMasterVisitorLogs.Ctx(ctx), utility.DBGetAllByWhereInput{
 		Field:        "*, INET6_NTOA(ip_long) as ip_long",
 		Where:        where,
@@ -328,12 +333,12 @@ func (s *sUcSystemMasterVisitor) ListVisitorLogs(ctx context.Context, in system_
 	}, &output)
 
 	if code != 0 {
-		return code, message, nil, err
+		return code, message, nil, 0, err
 	}
 
 	code, message, visitCategory, err := s.GetRCacheVisitCategory(ctx)
 	if code != 0 {
-		return code, message, nil, err
+		return code, message, nil, 0, err
 	}
 
 	for index := range output {
@@ -341,5 +346,5 @@ func (s *sUcSystemMasterVisitor) ListVisitorLogs(ctx context.Context, in system_
 		output[index].VisitCategoryName = gconv.String(visitCategory[gconv.String(output[index].VisitCategory)])
 	}
 
-	return code, message, output, err
+	return code, message, output, total, err
 }

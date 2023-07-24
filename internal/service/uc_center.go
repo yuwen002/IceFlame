@@ -11,6 +11,31 @@ import (
 )
 
 type (
+	IUcSystemMasterVisitor interface {
+		CreateVisitCategory(ctx context.Context, in system_master.CreateVisitCategoryInput) (code int32, message string, err error)
+		GetVisitCategoryById(ctx context.Context, id uint16) (code int32, message string, out *system_master.GetVisitCategoryByIdInput, err error)
+		ModifyVisitCategoryById(ctx context.Context, in system_master.ModifyVisitCategoryByIdInput) (code int32, message string, err error)
+		ListVisitCategory(ctx context.Context, in system_master.ListVisitCategoryInput) (code int32, message string, output []*system_master.ListVisitCategoryOutput, total int, err error)
+		GetRCacheVisitCategory(ctx context.Context) (code int32, message string, output map[string]interface{}, err error)
+		GetRCacheVisitCategoryById(id string) (code int32, message string, output map[string]interface{}, err error)
+		DelRCacheVisitCategory() (code int32, message string, err error)
+		DelRCacheVisitCategoryById(id string) (code int32, message string, err error)
+		CreateVisitorLogs(ctx context.Context, in system_master.CreateVisitorLogsInput) (code int32, message string, err error)
+		ListVisitorLogs(ctx context.Context, in system_master.ListVisitorLogsInput) (code int32, message string, output []*system_master.ListVisitorLogsOutput, total int, err error)
+	}
+	IUcEmployee interface {
+		ExistsTel(ctx context.Context, tel string) (code int32, message string, err error)
+		ExistsInviteCode(ctx context.Context, inviteCode string) (code int32, message string, err error)
+		AccountIdCastTel(ctx context.Context, accountId uint64) (code int32, message string, output interface{}, err error)
+		UpdateAccountIdCastTel(ctx context.Context, accountId uint64, tel string) (code int32, message string, err error)
+		CreateEmployeeRole(ctx context.Context, in system_master.CreateEmployeeRoleInput) (code int32, message string, err error)
+		GetEmployeeRoleById(ctx context.Context, id uint16) (code int32, message string, out *system_master.GetEmployeeRoleOutput, err error)
+		ModifyEmployeeRoleById(ctx context.Context, in system_master.ModifyRoleByIdInput) (code int32, message string, err error)
+		ListEmployeeRole(ctx context.Context, in system_master.ListEmployeeRoleInput) (code int32, message string, out []*system_master.GetEmployeeRoleOutput, err error)
+		CreateEmployeeRoleRelation(ctx context.Context, in system_master.CreateEmployeeRoleRelationInput) (code int32, message string, err error)
+		CreateEmployee(ctx context.Context, in system_master.CreateEmployeeInput) (code int32, message string, lastInsertId int64, err error)
+		ModifyEmployeeByAccountId(ctx context.Context, in system_master.ModifyEmployeeInput) (code int32, message string, err error)
+	}
 	IUcEmployeeEwallet interface {
 		ExistsEwallet(ctx context.Context, accountId uint64) (code int32, message string, err error)
 		SetHash(in system_master.EmployeeEwalletHash) (code int32, message string, hash string, err error)
@@ -79,41 +104,38 @@ type (
 		DeletePermissionExcludeById(ctx context.Context, id uint16) (code int32, message string, err error)
 		GetPermissionExcludeAll(ctx context.Context) (code int32, message string, output []*system_master.ListPermissionExcludeOutput, err error)
 	}
-	IUcSystemMasterVisitor interface {
-		CreateVisitCategory(ctx context.Context, in system_master.CreateVisitCategoryInput) (code int32, message string, err error)
-		GetVisitCategoryById(ctx context.Context, id uint16) (code int32, message string, out *system_master.GetVisitCategoryByIdInput, err error)
-		ModifyVisitCategoryById(ctx context.Context, in system_master.ModifyVisitCategoryByIdInput) (code int32, message string, err error)
-		ListVisitCategory(ctx context.Context, in system_master.ListVisitCategoryInput) (code int32, message string, output []*system_master.ListVisitCategoryOutput, total int, err error)
-		GetRCacheVisitCategory(ctx context.Context) (code int32, message string, output map[string]interface{}, err error)
-		GetRCacheVisitCategoryById(id string) (code int32, message string, output map[string]interface{}, err error)
-		DelRCacheVisitCategory() (code int32, message string, err error)
-		DelRCacheVisitCategoryById(id string) (code int32, message string, err error)
-		CreateVisitorLogs(ctx context.Context, in system_master.CreateVisitorLogsInput) (code int32, message string, err error)
-		ListVisitorLogs(ctx context.Context, in system_master.ListVisitorLogsInput) (code int32, message string, output []*system_master.ListVisitorLogsOutput, err error)
-	}
-	IUcEmployee interface {
-		ExistsTel(ctx context.Context, tel string) (code int32, message string, err error)
-		ExistsInviteCode(ctx context.Context, inviteCode string) (code int32, message string, err error)
-		AccountIdCastTel(ctx context.Context, accountId uint64) (code int32, message string, output interface{}, err error)
-		UpdateAccountIdCastTel(ctx context.Context, accountId uint64, tel string) (code int32, message string, err error)
-		CreateEmployeeRole(ctx context.Context, in system_master.CreateEmployeeRoleInput) (code int32, message string, err error)
-		GetEmployeeRoleById(ctx context.Context, id uint16) (code int32, message string, out *system_master.GetEmployeeRoleOutput, err error)
-		ModifyEmployeeRoleById(ctx context.Context, in system_master.ModifyRoleByIdInput) (code int32, message string, err error)
-		ListEmployeeRole(ctx context.Context, in system_master.ListEmployeeRoleInput) (code int32, message string, out []*system_master.GetEmployeeRoleOutput, err error)
-		CreateEmployeeRoleRelation(ctx context.Context, in system_master.CreateEmployeeRoleRelationInput) (code int32, message string, err error)
-		CreateEmployee(ctx context.Context, in system_master.CreateEmployeeInput) (code int32, message string, lastInsertId int64, err error)
-		ModifyEmployeeByAccountId(ctx context.Context, in system_master.ModifyEmployeeInput) (code int32, message string, err error)
-	}
 )
 
 var (
+	localUcSystemMaster        IUcSystemMaster
 	localUcSystemMasterAuth    IUcSystemMasterAuth
 	localUcSystemMasterVisitor IUcSystemMasterVisitor
 	localUcEmployee            IUcEmployee
 	localUcEmployeeEwallet     IUcEmployeeEwallet
 	localUcPartner             IUcPartner
-	localUcSystemMaster        IUcSystemMaster
 )
+
+func UcSystemMaster() IUcSystemMaster {
+	if localUcSystemMaster == nil {
+		panic("implement not found for interface IUcSystemMaster, forgot register?")
+	}
+	return localUcSystemMaster
+}
+
+func RegisterUcSystemMaster(i IUcSystemMaster) {
+	localUcSystemMaster = i
+}
+
+func UcSystemMasterAuth() IUcSystemMasterAuth {
+	if localUcSystemMasterAuth == nil {
+		panic("implement not found for interface IUcSystemMasterAuth, forgot register?")
+	}
+	return localUcSystemMasterAuth
+}
+
+func RegisterUcSystemMasterAuth(i IUcSystemMasterAuth) {
+	localUcSystemMasterAuth = i
+}
 
 func UcSystemMasterVisitor() IUcSystemMasterVisitor {
 	if localUcSystemMasterVisitor == nil {
@@ -157,26 +179,4 @@ func UcPartner() IUcPartner {
 
 func RegisterUcPartner(i IUcPartner) {
 	localUcPartner = i
-}
-
-func UcSystemMaster() IUcSystemMaster {
-	if localUcSystemMaster == nil {
-		panic("implement not found for interface IUcSystemMaster, forgot register?")
-	}
-	return localUcSystemMaster
-}
-
-func RegisterUcSystemMaster(i IUcSystemMaster) {
-	localUcSystemMaster = i
-}
-
-func UcSystemMasterAuth() IUcSystemMasterAuth {
-	if localUcSystemMasterAuth == nil {
-		panic("implement not found for interface IUcSystemMasterAuth, forgot register?")
-	}
-	return localUcSystemMasterAuth
-}
-
-func RegisterUcSystemMasterAuth(i IUcSystemMasterAuth) {
-	localUcSystemMasterAuth = i
 }

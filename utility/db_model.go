@@ -96,6 +96,16 @@ type DBGetAllByWhereInput struct {
 	DBLimit                  // 分页，偏移量
 }
 
+// DBGetAllCountInput
+// @Description:
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-07-24 17:45:38
+type DBGetAllCountInput struct {
+	Field string      // 查询字段
+	Where interface{} // 查询条件
+	Args  interface{} // 查询参数
+}
+
 // DBModifyByIdInput
 // @Description: 按ID修改单条数据
 // @Author liuxingyu <yuwen002@163.com>
@@ -906,6 +916,41 @@ func (db *DB) GetAllMapByWhere(condition DBGetAllByWhereInput) (code int32, mess
 	return 0, "查询数据成功", res.List(), nil
 }
 
+// GetAllCountByWhere
+//
+// @Title 按条件获取条数
+// @Description 按条件获取条数
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-07-24 17:52:31
+// @receiver db
+// @param condition
+// @return code
+// @return message
+// @return total
+// @return err
+func (db *DB) GetAllCountByWhere(condition DBGetAllCountInput) (code int32, message string, total int, err error) {
+	// 查询字段判断
+	if condition.Field != "" {
+		db.M = db.M.Fields(condition.Field)
+	}
+
+	// 条件判断
+	if condition.Args == nil {
+		if condition.Where != nil {
+			db.M = db.M.Where(condition.Where)
+		}
+	} else {
+		db.M = db.M.Where(condition.Where, condition.Args)
+	}
+
+	total, err = db.M.Count()
+	if err != nil {
+		return -1, "", 0, err
+	}
+
+	return 0, "查询数据成功", 0, nil
+}
+
 // ConditionModifyById
 //
 // @Title 条件按ID修改数据
@@ -1633,6 +1678,23 @@ func DBGetAllStructByWhere(m *gdb.Model, condition DBGetAllByWhereInput, output 
 func DBGetAllMapByWhere(m *gdb.Model, condition DBGetAllByWhereInput) (code int32, message string, output []map[string]interface{}, err error) {
 	db := DB{M: m}
 	return db.GetAllMapByWhere(condition)
+}
+
+// DBGetAllCount
+//
+// @Title 按条件获取条数
+// @Description 按条件获取条数
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-07-24 17:57:14
+// @param m
+// @param condition
+// @return code
+// @return message
+// @return total
+// @return err
+func DBGetAllCount(m *gdb.Model, condition DBGetAllCountInput) (code int32, message string, total int, err error) {
+	db := DB{M: m}
+	return db.GetAllCountByWhere(condition)
 }
 
 // DBModifyById
