@@ -2,6 +2,7 @@ package uc_center
 
 import (
 	"context"
+	"fmt"
 	"ice_flame/internal/dao"
 	"ice_flame/internal/model/uc_center/system_master"
 	"ice_flame/internal/service"
@@ -182,6 +183,7 @@ func (s *sUcSystemMasterVisitor) GetRCacheVisitCategory(ctx context.Context) (co
 			Field: "id, title",
 			Order: "id asc",
 		})
+		fmt.Println(out)
 		if code != 0 {
 			return code, message, nil, err
 		}
