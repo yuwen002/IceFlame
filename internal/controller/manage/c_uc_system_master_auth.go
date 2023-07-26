@@ -926,7 +926,7 @@ func (c *cUcSystemMasterAuth) DeletePermissionExclude(ctx context.Context, req *
 	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
 		AccountId:     gconv.Uint64(ctx.Value("master_id")),
 		VisitCategory: 4,
-		Description:   "删除排除权限信息列表",
+		Description:   "删除排除权限信息",
 	})
 
 	code, message, err := service.UcSystemMasterAuth().DeletePermissionExcludeById(ctx, req.Id)
