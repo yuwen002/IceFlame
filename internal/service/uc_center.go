@@ -107,24 +107,13 @@ type (
 )
 
 var (
+	localUcEmployee            IUcEmployee
 	localUcEmployeeEwallet     IUcEmployeeEwallet
 	localUcPartner             IUcPartner
 	localUcSystemMaster        IUcSystemMaster
 	localUcSystemMasterAuth    IUcSystemMasterAuth
 	localUcSystemMasterVisitor IUcSystemMasterVisitor
-	localUcEmployee            IUcEmployee
 )
-
-func UcEmployeeEwallet() IUcEmployeeEwallet {
-	if localUcEmployeeEwallet == nil {
-		panic("implement not found for interface IUcEmployeeEwallet, forgot register?")
-	}
-	return localUcEmployeeEwallet
-}
-
-func RegisterUcEmployeeEwallet(i IUcEmployeeEwallet) {
-	localUcEmployeeEwallet = i
-}
 
 func UcPartner() IUcPartner {
 	if localUcPartner == nil {
@@ -179,4 +168,15 @@ func UcEmployee() IUcEmployee {
 
 func RegisterUcEmployee(i IUcEmployee) {
 	localUcEmployee = i
+}
+
+func UcEmployeeEwallet() IUcEmployeeEwallet {
+	if localUcEmployeeEwallet == nil {
+		panic("implement not found for interface IUcEmployeeEwallet, forgot register?")
+	}
+	return localUcEmployeeEwallet
+}
+
+func RegisterUcEmployeeEwallet(i IUcEmployeeEwallet) {
+	localUcEmployeeEwallet = i
 }

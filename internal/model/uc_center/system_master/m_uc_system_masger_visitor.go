@@ -86,6 +86,7 @@ type ListVisitorLogsInput struct {
 type ListVisitorLogsOutput struct {
 	Id                uint64 `json:"id"`
 	AccountId         uint64 `json:"account_id"`
+	SystemMasterName  string `json:"system_master_name"`
 	OsCategory        int8   `json:"os_category"`
 	OsCategoryName    string `json:"os_category_name"`
 	VisitCategory     int16  `json:"visit_category"`

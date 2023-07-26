@@ -326,7 +326,7 @@ func (s *sUcSystemMasterVisitor) ListVisitorLogs(ctx context.Context, in system_
 	}
 
 	code, message, err = utility.DBGetAllStructByWhere(dao.UcSystemMasterVisitorLogs.Ctx(ctx), utility.DBGetAllByWhereInput{
-		Field:        "*, INET6_NTOA(ip_long) as ip_long",
+		Field:        "*, INET_NTOA(ip_long) as ip_long",
 		Where:        where,
 		Order:        "id desc",
 		PageType:     1,
@@ -343,6 +343,15 @@ func (s *sUcSystemMasterVisitor) ListVisitorLogs(ctx context.Context, in system_
 	}
 
 	for index := range output {
+		code, message, systemMaster, err := utility.DBGetMapRCacheById(dao.UcSystemMaster.Ctx(ctx), utility.DBGetByIdInput{
+			Where: "account_id=?",
+			Args:  output[index].AccountId,
+		})
+		if code != 0 {
+			return code, message, nil, 0, err
+		}
+
+		output[index].SystemMasterName = gconv.String(systemMaster["name"])
 		output[index].OsCategoryName = utility.GetOsCategoryName(output[index].OsCategory)
 		output[index].VisitCategoryName = gconv.String(visitCategory[gconv.String(output[index].VisitCategory)])
 	}
