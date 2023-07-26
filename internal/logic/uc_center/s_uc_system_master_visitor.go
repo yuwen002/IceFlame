@@ -2,7 +2,6 @@ package uc_center
 
 import (
 	"context"
-	"fmt"
 	"ice_flame/internal/dao"
 	"ice_flame/internal/model/uc_center/system_master"
 	"ice_flame/internal/service"
@@ -183,11 +182,11 @@ func (s *sUcSystemMasterVisitor) GetRCacheVisitCategory(ctx context.Context) (co
 			Field: "id, title",
 			Order: "id asc",
 		})
-		fmt.Println(out)
 		if code != 0 {
 			return code, message, nil, err
 		}
 
+		outData := make(map[string]interface{})
 		// 缓存信息写入
 		for index := range out {
 			id := gconv.String(out[index]["id"])
@@ -200,10 +199,10 @@ func (s *sUcSystemMasterVisitor) GetRCacheVisitCategory(ctx context.Context) (co
 			if err != nil {
 				return 0, "", nil, err
 			}
-			output[id] = out[index]["title"]
+			outData[id] = out[index]["title"]
 		}
 
-		return 0, "取出数据成功", output, nil
+		return 0, "取出数据成功", outData, nil
 	}
 
 	return 0, "取出数据成功", output, nil
