@@ -163,7 +163,7 @@ func (c *cArticle) ListSinglePage(ctx context.Context, req *manage.ListSinglePag
 		Description:   "查看单页信息列表",
 	})
 
-	code, message, out, err := service.SinglePage().List(ctx, article.ListSinglePageInput{
+	code, message, out, total, err := service.SinglePage().List(ctx, article.ListSinglePageInput{
 		Page: req.Page,
 		Size: req.Size,
 	})
@@ -179,7 +179,7 @@ func (c *cArticle) ListSinglePage(ctx context.Context, req *manage.ListSinglePag
 	json.WriteJsonExit(g.Map{
 		"code":    code,
 		"message": message,
-		"data":    g.Map{"list": out},
+		"data":    g.Map{"list": out, "total": total},
 	})
 
 	return
