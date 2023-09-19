@@ -46,6 +46,15 @@ type ModifySinglePageInput struct {
 	Status      int8
 }
 
+// ModifyStatusSinglePageInput
+// @Description: 修改单页信息状态
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-09-19 11:48:41
+type ModifyStatusSinglePageInput struct {
+	Id     uint32
+	Status int8
+}
+
 // ListSinglePageInput
 // @Description:分类信息列表
 // @Author liuxingyu <yuwen002@163.com>

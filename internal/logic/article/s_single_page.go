@@ -74,6 +74,25 @@ func (s *sSinglePage) ModifyById(ctx context.Context, in article.ModifySinglePag
 	})
 }
 
+// ModifyStatusById
+//
+// @Title 按ID修改单页状态信息
+// @Description 按ID修改单页状态信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-09-19 14:07:25
+// @receiver s
+// @param ctx
+// @param in
+// @return code
+// @return message
+// @return err
+func (s *sSinglePage) ModifyStatusById(ctx context.Context, in article.ModifyStatusSinglePageInput) (code int32, message string, err error) {
+	return utility.DBModifyById(dao.SinglePage.Ctx(ctx), utility.DBModifyByIdInput{
+		Data:  in,
+		Where: in.Id,
+	})
+}
+
 // List
 //
 // @Title 单页信息列表

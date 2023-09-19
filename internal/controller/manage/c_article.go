@@ -144,6 +144,46 @@ func (c *cArticle) EditSinglePage(ctx context.Context, req *manage.EditSinglePag
 	return
 }
 
+// EditStatusSinglePage
+//
+// @Title 编辑单页状态信息
+// @Description 编辑单页状态信息
+// @Author liuxingyu <yuwen002@163.com>
+// @Date 2023-08-31 16:48:16
+// @receiver c
+// @param ctx
+// @param req
+// @return res
+// @return err
+func (c *cArticle) EditStatusSinglePage(ctx context.Context, req *manage.EditStatusSinglePageReq) (res *manage.EditStatusSinglePageRes, err error) {
+	// 访问日志写入
+	_, _, _ = service.UcSystemMasterVisitor().CreateVisitorLogs(ctx, system_master.CreateVisitorLogsInput{
+		AccountId:     gconv.Uint64(ctx.Value("master_id")),
+		VisitCategory: 5,
+		Description:   "编辑单页状态信息",
+	})
+
+	code, message, err := service.SinglePage().ModifyStatusById(ctx, article.ModifyStatusSinglePageInput{
+		Id:     req.Id,
+		Status: req.Status,
+	})
+
+	var json = g.RequestFromCtx(ctx).Response
+	if err != nil {
+		json.WriteJsonExit(g.Map{
+			"code":    code,
+			"message": err.Error(),
+		})
+	}
+
+	json.WriteJsonExit(g.Map{
+		"code":    code,
+		"message": message,
+	})
+
+	return
+}
+
 // ListSinglePage
 //
 // @Title 单页信息列表

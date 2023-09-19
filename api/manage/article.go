@@ -44,6 +44,14 @@ type EditSinglePageReq struct {
 type EditSinglePageRes struct {
 }
 
+type EditStatusSinglePageReq struct {
+	g.Meta `path:"/article/single_page/edit/status" tags:"编辑单页状态信息" method:"put" summary:"编辑单页状态信息"`
+	Id     uint32 `p:"id" v:"required|min:0|integer#ID不能为空|ID要大于等于0|ID只为整数"`
+	Status int8   `p:"status" v:"required|in:0,1#频道状态不能为空|频道状态值错误"`
+}
+type EditStatusSinglePageRes struct {
+}
+
 // ListSinglePageReq
 // @Description: 单页信息列表
 // @Author liuxingyu <yuwen002@163.com>
