@@ -106,7 +106,14 @@ func (s *sSinglePage) ModifyStatusById(ctx context.Context, in article.ModifySta
 // @return message
 // @return output
 // @return err
-func (s *sSinglePage) List(ctx context.Context, in article.ListSinglePageInput) (code int32, message string, output []*article.SinglePageOutput, err error) {
+func (s *sSinglePage) List(ctx context.Context, in article.ListSinglePageInput) (code int32, message string, output []*article.SinglePageOutput, total int, err error) {
+	code, message, total, err = utility.DBGetAllCount(dao.SinglePage.Ctx(ctx), utility.DBGetAllCountInput{
+		Field: "id",
+	})
+	if err != nil {
+		return -1, "", nil, 0, err
+	}
+
 	code, message, err = utility.DBGetAllStructByWhere(dao.SinglePage.Ctx(ctx), utility.DBGetAllByWhereInput{
 		Order:    "id asc",
 		PageType: 1,
@@ -116,7 +123,11 @@ func (s *sSinglePage) List(ctx context.Context, in article.ListSinglePageInput) 
 		},
 	}, &output)
 
-	return code, message, output, err
+	if code != 0 {
+		return code, message, nil, 0, err
+	}
+
+	return code, message, output, total, err
 }
 
 // Delete
