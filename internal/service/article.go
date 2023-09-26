@@ -42,7 +42,7 @@ type (
 		GetById(ctx context.Context, id uint32) (code int32, message string, output *article.SinglePageOutput, err error)
 		ModifyById(ctx context.Context, in article.ModifySinglePageInput) (code int32, message string, err error)
 		ModifyStatusById(ctx context.Context, in article.ModifyStatusSinglePageInput) (code int32, message string, err error)
-		List(ctx context.Context, in article.ListSinglePageInput) (code int32, message string, output []*article.SinglePageOutput, err error)
+		List(ctx context.Context, in article.ListSinglePageInput) (code int32, message string, output []*article.SinglePageOutput, total int, err error)
 		Delete(ctx context.Context, id uint32) (code int32, message string, err error)
 	}
 )
