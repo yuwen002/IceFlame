@@ -145,6 +145,7 @@ var (
 						manage.Article.EditSinglePage,
 						manage.Article.ListSinglePage,
 						manage.Article.DeleteSinglePage,
+						manage.Article.EditStatusSinglePage,
 
 						// 频道管理
 						manage.Article.AddArticleChannel,
